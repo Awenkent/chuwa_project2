@@ -1,105 +1,77 @@
-const User = require("../models/userModel");
-const Product = require("../models/productModel");
+const Employee = require("../models/employeeModel");
 
-const getAllUsers = async (req, res) => {
+const getAllEmployees = async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
+    const employees = await Employee.find();
+    res.status(200).json(employees);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server Error:"+ err.message });
-  }
-};
-
-const getCartFromUser = async (req, res, next) => {
-  try {
-    const user = await User.findById(req.id);
-    const cartPromises = user.shoppingCart.map((item)=>{
-      return Product.findById(item).then((product)=>product)
-    })
-   
-    Promise.all(cartPromises).then((shoppingCart)=>{
-    
-      res.status(200).json(shoppingCart);
-    })
-   
-  } catch (err) {
-    console.log(err.message);
     res.status(500).json({ message: "Server Error:" + err.message });
   }
 };
 
-const getOneUser = async (req, res) => {
+const getOneEmployee = async (req, res) => {
   try {
-    const user = await User.findById(req.id).select(["userName","shoppingCart","role"]);
-    const cartPromises = user.shoppingCart.map((item)=>{
-      return Product.findById(item).then((product)=>product)
-    })
- 
-    Promise.all(cartPromises).then((shoppingCart)=>{
-   
-      let obj = {...(user._doc)}
-      obj.shoppingCart = shoppingCart
-   
-      res.status(200).json(obj);
-    })
-   
+    const employee = await Employee.findById(req.id).select([
+      "userName",
+      "role",
+    ]);
+    res.status(200).json(employee);
   } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: "Error on getting User:" + err.message });
+    console.log(err);
+    res
+      .status(500)
+      .json({ message: "Error on getting Employee:" + err.message });
   }
 };
 
-const createUser = async (req, res) => {
+const createEmployee = async (req, res) => {
   try {
-    const user = new User(req.body);
+    const employee = new Employee(req.body);
 
-    if (!user.userName || !user.password || !user.role) {
-      return res.status(400).json({ message: "Bad Request: missing parameters" });
+    if (!employee.userName || !employee.password) {
+      return res
+        .status(400)
+        .json({ message: "Bad Request: missing parameters" });
     }
-    await user.save();
-    res.status(201).json(user);
+    await employee.save();
+    res.status(201).json(employee);
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ message: "Error on creating User:" + err.message });
+    res
+      .status(500)
+      .json({ message: "Error on creating Employee:" + err.message });
   }
 };
 
-const updateUser = async (req, res) => {
+const updateEmployee = async (req, res) => {
   try {
-    
-    const user = await User.findByIdAndUpdate(req.id, req.body,{new: true});
-
-    const cartPromises = user.shoppingCart.map((item)=>{
-      return Product.findById(item).then((product)=>product)
-    })
- 
-    Promise.all(cartPromises).then((shoppingCart)=>{
-   
-      let obj = {...(user._doc)}
-      obj.shoppingCart = shoppingCart
-      res.status(200).json(obj);
-    })
-  
+    const employee = await Employee.findByIdAndUpdate(req.id, req.body, {
+      new: true,
+    });
+    res.status(200).json(obj);
   } catch (err) {
-    res.status(500).json({ message: "Error on updating User:"+err.message });
+    res
+      .status(500)
+      .json({ message: "Error on updating Employee:" + err.message });
   }
 };
 
-const deleteUser = async (req, res) => {
+const deleteEmployee = async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.id);
-    res.status(200).json({ message: "User deleted" });
+    await Employee.findByIdAndDelete(req.id);
+    res.status(200).json({ message: "Employee deleted" });
   } catch (err) {
-    res.status(500).json({ message: "Error on deleting User:"+err.message });
+    res
+      .status(500)
+      .json({ message: "Error on deleting Employee:" + err.message });
   }
 };
 
 module.exports = {
-  getCartFromUser,
-  getAllUsers,
-  getOneUser,
-  createUser,
-  updateUser,
-  deleteUser,
+  getAllEmployees,
+  getOneEmployee,
+  createEmployee,
+  updateEmployee,
+  deleteEmployee,
 };
