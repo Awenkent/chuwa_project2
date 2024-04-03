@@ -41,7 +41,8 @@ const employeeSchema = new Schema({
   preferredName: String,
   profilePictureLink: {
     type: String,
-    default: "https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg",
+    default:
+      "https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg",
   },
   currentAddress: {
     building: String,
@@ -79,16 +80,6 @@ const employeeSchema = new Schema({
 
   reference: [
     {
-      firstName: String,
-      lastName: String,
-      middleName: String,
-      phone: String,
-      email: String,
-      relationship: String,
-    },
-  ],
-  emergencyContacts: [
-    {
       firstName: {
         type: String,
         required: true,
@@ -106,6 +97,28 @@ const employeeSchema = new Schema({
       },
     },
   ],
+  emergencyContacts: {
+    type: [
+      {
+        firstName: {
+          type: String,
+          required: true,
+        },
+        lastName: {
+          type: String,
+          required: true,
+        },
+        middleName: String,
+        phone: String,
+        email: String,
+        relationship: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+    required: true,
+  },
   documents: [String],
   nextSteps: String,
   feedback: String,
