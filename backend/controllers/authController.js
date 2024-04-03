@@ -24,6 +24,7 @@ const doLogin = async (req, res, next) => {
       employee: {
         id: employee._id,
         userName: employee.userName,
+        role:employee.role,
       },
     };
 
