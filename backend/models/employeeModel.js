@@ -71,13 +71,12 @@ const employeeSchema = new Schema({
     required: true,
   },
   workAuth: {
-    type: String,
+    status: String,
+    startDate: Date,
+    endDate: Date,
     required: true,
   },
-  workAuthDate: {
-    type: [Date],
-    default: [],
-  },
+
   reference: [
     {
       firstName: String,
