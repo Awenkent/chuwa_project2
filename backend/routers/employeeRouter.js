@@ -2,21 +2,19 @@ const express = require("express");
 const router = express.Router();
 const {
   createEmployee,
-  getProfile,
-  updateProfile,
+  getOneEmployee,
+  updateEmployee,
 } = require("../controllers/employeeController");
 
 const { doLogin } = require("../controllers/authenticationController");
-const { verify } = require("../controllers/verify");
 const authentication = require("../middlewares/authentication");
 
 router.post("/signin", doLogin);
 
 // for employee
-router.post("/signup", verify, createEmployee);
-router.get("/profile", authentication, getProfile); // get the profile for current employee
-router.put("/profile", authentication, updateProfile);
-
-
+router.post("/signup", authentication, createEmployee);
+router.get("/", authentication, getOneEmployee); // get the profile for current employee
+router.put("/onboarding", authentication, updateEmployee);
+router.put("/personalInfo", authentication, updateEmployee);
 
 module.exports = router;
