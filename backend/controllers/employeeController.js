@@ -12,7 +12,7 @@ const getAllEmployees = async (req, res) => {
 
 const getOneEmployee = async (req, res) => {
   try {
-    const employee = await Employee.findById(req.id).select([
+    const employee = await Employee.findById(req.employee?.id).select([
       "userName",
       "role",
     ]);
@@ -46,7 +46,7 @@ const createEmployee = async (req, res) => {
 
 const updateEmployee = async (req, res) => {
   try {
-    const employee = await Employee.findByIdAndUpdate(req.id, req.body, {
+    const employee = await Employee.findByIdAndUpdate(req.employee?.id, req.body, {
       new: true,
     });
     res.status(200).json(obj);
@@ -59,7 +59,7 @@ const updateEmployee = async (req, res) => {
 
 const deleteEmployee = async (req, res) => {
   try {
-    await Employee.findByIdAndDelete(req.id);
+    await Employee.findByIdAndDelete(req.employee?.id);
     res.status(200).json({ message: "Employee deleted" });
   } catch (err) {
     res
