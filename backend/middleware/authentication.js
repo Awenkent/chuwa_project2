@@ -18,8 +18,7 @@ module.exports = async (req, res, next) => {
     const decoded = await jwt.verify(token, process.env.SECRET);
 
     // Add user id from payload
-    req.id = decoded.employee?.id;
-    req.role = decoded.employee?.role;
+    req.employee = decoded.employee;
     
     console.log(decoded);
     next();

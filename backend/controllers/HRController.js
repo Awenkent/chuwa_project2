@@ -1,4 +1,6 @@
 const Employee = require("../models/employeeModel");
+const jwt = require("jsonwebtoken");
+require("dotenv").config({ path: ".env" });
 
 const getAllEmployees = async (req, res) => {
   try {
@@ -6,10 +8,9 @@ const getAllEmployees = async (req, res) => {
     res.status(200).json(employees);
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Server Error:" + err.message });
+    res.status(500).json({ message: "Failed to get all employee profiles. Server Error:" + err.message });
   }
 };
-
 
 const createEmployee = async (req, res) => {
   try {
@@ -30,11 +31,15 @@ const createEmployee = async (req, res) => {
   }
 };
 
-const updateEmployee = async (req, res) => {
+const updateAnyProfile = async (req, res) => {
   try {
-    const employee = await Employee.findByIdAndUpdate(req.id, req.body, {
-      new: true,
-    });
+    const employee = await Employee.findByIdAndUpdate(
+      req.params?.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
     res.status(200).json(obj);
   } catch (err) {
     res
@@ -42,10 +47,27 @@ const updateEmployee = async (req, res) => {
       .json({ message: "Error on updating Employee:" + err.message });
   }
 };
+const getNewEmployeeToken = async (req, res) => {
+  try {
+    const payload = {
+      HR: {
+        userNmae: req.employee?.userName,
+      },
+    };
+    const token = await jwt.sign(payload, process.env.SECRET, {
+      expiresIn: "3h",
+    });
+    res.status(200).json({ token });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to generate a Registration Token:" + err.message });
+  }
+};
 
 const deleteEmployee = async (req, res) => {
   try {
-    await Employee.findByIdAndDelete(req.id);
+    await Employee.findByIdAndDelete(req.params?.id);
     res.status(200).json({ message: "Employee deleted" });
   } catch (err) {
     res
@@ -56,8 +78,8 @@ const deleteEmployee = async (req, res) => {
 
 module.exports = {
   getAllEmployees,
-  getOneEmployee,
   createEmployee,
-  updateEmployee,
+  updateAnyProfile,
+  getNewEmployeeToken,
   deleteEmployee,
 };
