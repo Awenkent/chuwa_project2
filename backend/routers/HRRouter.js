@@ -4,7 +4,7 @@ const {
     getAllEmployees,
     updateAnyProfile,
     getNewEmployeeToken,
-} = require("../controllers/HRController");
+} = require("../controllers/hrController");
 
 
 const authentication = require("../middlewares/authentication");
