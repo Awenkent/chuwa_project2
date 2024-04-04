@@ -22,7 +22,7 @@ app.listen(port, () => {
       "\t(put) /employee/profile : update the profile for current employee\n" +
       "\t(get) /HR/allProfiles : (HR) get all profiles\n" +
       "\t(put) /HR/profile/:id : (HR) update a profile\n" +
-      "\t(get) /HR/new : (HR) get a Registration Token for new employee\n"+
+      "\t(get) /HR/new : (HR) get a Registration Token for new employee\n" +
       "\t(post) /HR/employee : (HR) create a employee account\n" +
       "\t(delete) /HR/employee/:id : (HR) delete a employee account\n"
   );
