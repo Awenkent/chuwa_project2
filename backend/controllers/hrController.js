@@ -51,7 +51,8 @@ const getNewEmployeeToken = async (req, res) => {
   try {
     const payload = {
       HR: {
-        userNmae: req.employee?.userName,
+        userName: req.employee?.userName,
+        role:req.employee?.role,
       },
     };
     const token = await jwt.sign(payload, process.env.SECRET, {
