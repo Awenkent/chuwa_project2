@@ -36,7 +36,7 @@ export default function App() {
         <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} />
           <Route path="/profile" element={<PersonalProfile />} />
           <Route path="/application" element={<Application />} />
-        <Route path="/signup" element={<Signup  />} />
+        <Route path="/signup/:signupToken" element={<Signup  />} />
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>
