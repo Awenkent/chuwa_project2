@@ -17,6 +17,6 @@ router.put("/profile", authentication, authorization, updateAnyProfile); //only 
 router.get("/new", authentication, authorization, getNewEmployeeToken); //
 
 router.post("/employee", authentication, authorization, createEmployee); //
-router.delete("/employee/:id", authentication, authorization, deleteEmployee); //
+router.delete("/employee", authentication, authorization, deleteEmployee); //
 
 module.exports = router;

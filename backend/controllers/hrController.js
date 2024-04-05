@@ -41,7 +41,10 @@ const updateAnyProfile = async (req, res) => {
         new: true,
       }
     );
-    res.status(200).json(req.body);
+    if(!employee){
+      return res.status(401).json({message:"Employee not find"});
+    }
+    res.status(200).json(employee);
   } catch (err) {
     res
       .status(500)
@@ -69,7 +72,7 @@ const getNewEmployeeToken = async (req, res) => {
 
 const deleteEmployee = async (req, res) => {
   try {
-    await Employee.findByIdAndDelete(req.params?.id);
+    await Employee.findByIdAndDelete(req.body._id);
     res.status(200).json({ message: "Employee deleted" });
   } catch (err) {
     res
