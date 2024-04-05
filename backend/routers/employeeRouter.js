@@ -7,12 +7,12 @@ const {
 } = require("../controllers/employeeController");
 
 const { doLogin } = require("../controllers/authenticationController");
-const authentication = require("../middlewares/authentication");
+const authentication = require("../middleware/authentication");
 
 router.post("/signin", doLogin);
 
 // for employee
-router.post("/signup", authentication, createEmployee);
+router.post("/signup", createEmployee);
 router.get("/", authentication, getOneEmployee); // get the profile for current employee
 router.put("/onboarding", authentication, updateEmployee);
 router.put("/personalInfo", authentication, updateEmployee);

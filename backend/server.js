@@ -2,7 +2,7 @@ const express = require("express");
 const connectDB = require("./db");
 const app = express();
 const cors = require("cors");
-const port = 4000;
+const port = 3000;
 const hrRouter = require("./routers/hrRouter");
 const employeeRouter = require("./routers/employeeRouter");
 connectDB();
