@@ -33,14 +33,15 @@ const createEmployee = async (req, res) => {
 
 const updateAnyProfile = async (req, res) => {
   try {
+    console.log("req.body._id: "+req.body._id);
     const employee = await Employee.findByIdAndUpdate(
-      req.params?.id,
+      req.body._id,
       req.body,
       {
         new: true,
       }
     );
-    res.status(200).json(obj);
+    res.status(200).json(req.body);
   } catch (err) {
     res
       .status(500)
