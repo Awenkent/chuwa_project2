@@ -14,7 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { useNavigate } from "react-router-dom";
-
+import { useParams } from 'react-router-dom';
 import { Input } from "@mui/material";
 
 export default function signup(props) {
@@ -23,6 +23,8 @@ export default function signup(props) {
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
   const emailRef = useRef(null);
+  let { signupToken } = useParams();
+  console.log("signupToken"+signupToken);
   const [errorState, setErrorState] = useState({
     errorCount: 0,
     usernameError: "",
@@ -42,7 +44,8 @@ export default function signup(props) {
     let email = emailRef.current.value;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     //const signupToken = localStorage.getItem("signupToken");
-    const signupToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJIUiI6eyJ1c2VyTmFtZSI6InRlc3QiLCJyb2xlIjoiaHIifSwiaWF0IjoxNzEyMzUzMTQzLCJleHAiOjE3MTIzNjM5NDN9.w0zyYa90tcYVgqdRcoIE9LvtiuhOcZ0_Y2Wc46FaeEM";
+    //const signupToken="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJIUiI6eyJ1c2VyTmFtZSI6InRlc3QiLCJyb2xlIjoiaHIifSwiaWF0IjoxNzEyMzUzMTQzLCJleHAiOjE3MTIzNjM5NDN9.w0zyYa90tcYVgqdRcoIE9LvtiuhOcZ0_Y2Wc46FaeEM";
+    //const signupToken="";
     let errorObj = {
       errorCount: 0,
       usernameError: "",
