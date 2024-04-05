@@ -4,11 +4,6 @@ const { Schema } = mongoose;
 
 // Define the schema
 const otherInfoSchema = new mongoose.Schema({
-  applicationStatus: {
-    type: String,
-    enum: ["Never submitted", "Pending", "Approved", "Rejected"],
-    required: true,
-  },
   firstName: {
     type: String,
     required: true,
@@ -157,6 +152,11 @@ const employeeSchema = new mongoose.Schema(
       unique: true,
       required: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    },
+    applicationStatus: {
+      type: String,
+      enum: ["Never submitted", "Pending", "Approved", "Rejected"],
+      required: true,
     },
     otherInfo: otherInfoSchema,
   },
