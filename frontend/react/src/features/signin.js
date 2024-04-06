@@ -17,13 +17,17 @@ import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
 import { Input } from "@mui/material";
-import { setEmployee, selectEmployee } from "../redux/employeeSlice";
+import {
+  setEmployee,
+  selectEmployee,
+  fetchCurrentEmployee,
+} from "../redux/employeeSlice";
 export default function Signin(props) {
   const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
   const usernameRef = useRef(null);
   const passwordRef = useRef(null);
-  const adminRef = useRef(null);
+
   const [errorState, setErrorState] = useState({
     errorCount: 0,
     usernameError: "",
@@ -37,7 +41,11 @@ export default function Signin(props) {
   const navigate = useNavigate();
   console.log(employee);
 
-  useEffect(() => {}, []);
+  // useEffect(() => {
+  //   if (employee.username === null && props.case === "change-password") {
+  //     dispatch(fetchCurrentEmployee());
+  //   }
+  // }, []);
 
   const handleSignin = () => {
     var username = usernameRef.current.value;
