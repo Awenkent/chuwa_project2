@@ -64,7 +64,7 @@ const getNewEmployeeToken = async (req, res) => {
     const token = await jwt.sign(payload, process.env.SECRET, {
       expiresIn: "3h",
     });
-    const signupLink = `http://localhost:3000/employee/signup/${token}`;
+    const signupLink = `http://localhost:3000/signup/${token}`;
     // Email content
     const mailOptions = {
       from: "weizhouwen5@gmail.com",
