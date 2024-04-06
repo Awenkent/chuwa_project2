@@ -18,12 +18,14 @@ import {
   selectEmployee,
 } from "./redux/employeeSlice";
 export default function App() {
-  /*
+  const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
   useEffect(() => {
-        dispatch(fetchCurrentEmployee())        
-  }, []);
-*/
+    dispatch(fetchCurrentEmployee())        
+}, []);
+
+console.log(employee)
+ 
   return (
     <BrowserRouter>
  

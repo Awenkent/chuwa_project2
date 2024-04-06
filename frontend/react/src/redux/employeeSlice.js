@@ -4,8 +4,8 @@ export const fetchCurrentEmployee = createAsyncThunk(
   "employee/fetchCurrentEmployee",
   async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:4000/employee", {
-      method: "POST",
+    const response = await fetch("http://localhost:4000/employee/", {
+      method: "GET",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
         Authorization: `Bearer ${token}`,
@@ -195,7 +195,8 @@ export const employeeSlice = createSlice({
         console.log("fetch current employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.employees = action.payload;
+        state.employee.employeeName = action.payload.userName;
+        state.employee.role = action.payload.role;
       })
       .addCase(fetchCurrentEmployee.rejected, (state, action) => {
         state.status = "failed";
