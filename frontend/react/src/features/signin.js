@@ -92,7 +92,7 @@ export default function Signin(props) {
           return res.json().then((json) => {
             console.log(JSON.stringify(json));
             localStorage.setItem("token", json.token);
-            localStorage.setItem("email", json.email);
+            // localStorage.setItem("email", json.email);
             alert("Login successful!");
             navigate("/");
           });
