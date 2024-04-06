@@ -167,7 +167,6 @@ export default function productManage(props) {
     errorCount: 0,
     firstNameError: "",
     lastNameError: "",
-    middleNameError: "",
     preferredNameError: "",
     profilePictureLinkError: "",
     emailError: "",
@@ -189,8 +188,6 @@ export default function productManage(props) {
       errorCount: 0,
       firstNameError: "",
       lastNameError: "",
-      middleNameError: "",
-      preferredNameError: "",
       profilePictureLinkError: "",
       emailError: "",
       SSNError: "",
@@ -216,15 +213,8 @@ export default function productManage(props) {
       errorObj.lastNameError = "Last Name cannot be empty.";
     }
 
-    if (!middleName) {
-      errorObj.errorCount += 1;
-      errorObj.middleNameError = "Middle Name cannot be empty.";
-    }
 
-    if (!preferredName) {
-      errorObj.errorCount += 1;
-      errorObj.preferredNameError = "Preferred Name cannot be empty.";
-    }
+    
 
     if (!profilePictureLink) {
       errorObj.errorCount += 1;
@@ -440,36 +430,74 @@ export default function productManage(props) {
                 gap: 3,
               }}
             >
-              <h2>Name</h2>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  First Name
-                </InputLabel>
-                <TextField
-                  style={{ marginTop: "20px" }}
-                  size="small"
-                  id="name-input"
-                  value={firstName}
-                  onChange={handleFirstNameChange}
-                  error={!!errorState.firstNameError}
-                  helperText={errorState.firstNameError}
-                />
-              </FormControl>
+              <section style={{ display: "flex", flexDirection: "column",width: "100%"}}>
+                <h2 style={{ alignSelf: "flex-start" }}>Name</h2>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div style={{ flex: 1, marginRight: "10px" }}>
+                    <FormControl variant="standard" fullWidth>
+                      <InputLabel shrink htmlFor="firstName-input" style={{ fontWeight: "bold" }}>
+                        First Name <span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <TextField
+                        style={{ marginTop: "20px" }}
+                        size="small"
+                        id="firstName-input"
+                        value={firstName}
+                        onChange={handleFirstNameChange}
+                        error={!!errorState.firstNameError}
+                        helperText={errorState.firstNameError}
+                      />
+                    </FormControl>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <FormControl variant="standard" fullWidth>
+                      <InputLabel shrink htmlFor="lastName-input" style={{ fontWeight: "bold" }}>
+                        Last Name <span style={{ color: "red" }}>*</span>
+                      </InputLabel>
+                      <TextField
+                        style={{ marginTop: "20px" }}
+                        size="small"
+                        id="lastName-input"
+                        value={lastName}
+                        onChange={handleLastNameChange}
+                        error={!!errorState.lastNameError}
+                        helperText={errorState.lastNameError}
+                      />
+                    </FormControl>
+                  </div>
+                </div>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div style={{ flex: 1, marginRight: "10px" }}>
+                    <FormControl variant="standard" fullWidth>
+                      <InputLabel shrink htmlFor="middleName-input">
+                        Middle Name
+                      </InputLabel>
+                      <TextField
+                        style={{ marginTop: "20px" }}
+                        size="small"
+                        id="middleName-input"
+                        value={middleName}
+                        onChange={handleMiddleNameChange}
+                      />
+                    </FormControl>
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <FormControl variant="standard" fullWidth>
+                      <InputLabel shrink htmlFor="preferredName-input">
+                        Preferred Name
+                      </InputLabel>
+                      <TextField
+                        style={{ marginTop: "20px" }}
+                        size="small"
+                        id="preferredName-input"
+                        value={preferredName}
+                        onChange={handlePreferredNameChange}
+                      />
+                    </FormControl>
+                  </div>
+                </div>
+              </section>
 
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="lastName-input">
-                  Last Name
-                </InputLabel>
-                <TextField
-                  style={{ marginTop: "20px" }}
-                  size="small"
-                  id="lastName-input"
-                  value={lastName}
-                  onChange={handleLastNameChange}
-                  error={!!errorState.lastNameError}
-                  helperText={errorState.lastNameError}
-                />
-              </FormControl>
               <div
                 style={{
                   width: "100%",
@@ -529,7 +557,7 @@ export default function productManage(props) {
                 fullWidth
                 onClick={handleUpdateProfile}
               >
-                { "Update Product"}
+                {"Update Product"}
               </Button>
             </Box>
           </div>
