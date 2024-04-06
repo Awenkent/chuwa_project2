@@ -122,10 +122,11 @@ export default function application(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const watchUSResidency = watch("employeeResidency");
-  const watchProfilePicture= watch("employeeProfilePicture",(employee.personalProfile? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636"))
+  const watchProfilePicture= watch("employeeProfilePicture")
   const [imagePreview,setImagePreview] = useState(employee.personalProfile.employeeProfilePicture? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
+  const [files,setFiles] = useState([]);
 
-
+  console.log(employee)
   const handleEmployeeProfileImageUpload = ()=>
   {
      setImagePreview(watchProfilePicture)
@@ -256,15 +257,12 @@ export default function application(props) {
 
  const onSubmit = (data) => {
   console.log(data)
+  console.log(files)
   dispatch(setEmployee({employeeName:"ff", role : "hr", applicationStatus:"approved"}))
   dispatch(setEmployeeProfile(data))
   navigate("/")
 }
 
-    if(employee.applicationStatus === "never")
-    {
-
-    }
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
         <h2>{location.state ?"Update Product" : "Create Product"}</h2>
@@ -398,10 +396,8 @@ export default function application(props) {
         size="small"
         defaultValue={employee.personalProfile? employee.personalProfile.employeeGender:"NoAnswer"}
         style={{ marginTop: "12px" }}  {...register("employeeGender")} 
-
       >
-       
-         
+
             <MenuItem key={"Male"} value={"Male"}>
               {"Male"}
             </MenuItem>
@@ -420,12 +416,15 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Profile Image
                 </InputLabel>
-                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:""} {...register("employeeProfilePicture")} size="small" id="name-input"  endAdornment={ 
+                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:""} {...register("employeeProfilePicture", { required: true, maxLength: 120})} size="small" id="name-input" 
+                error = {!!(errors?.employeeProfilePicture)} helperText={           
+                  (errors?.employeeProfilePicture?.type) ?  errorToPropMapping[errors?.employeeProfilePicture?.type]+ " Example: MM/DD/YYYY" :"" 
+                }
+                endAdornment={ 
                 <InputAdornment position="end">
                       <Button
                         size="small"
                         component="label"
-                        
                         role={undefined}
                         variant="contained"
                         tabIndex={-1}
@@ -433,7 +432,6 @@ export default function application(props) {
                         startIcon={<CloudUploadIcon />}
                       >
                         Upload
-                       
                       </Button>
                     </InputAdornment>}/>
               
@@ -448,14 +446,20 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Building/Apt Number
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt", { required: true, maxLength: 120})} size="small" id="name-input" 
+                 error = {!!(errors?.employeeBuildingApt)} helperText={           
+                  (errors?.employeeBuildingApt?.type) ?  errorToPropMapping[errors?.employeeBuildingApt?.type]:"" 
+                }/>
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Street Name
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName", { required: true, maxLength: 120})} size="small" id="name-input" 
+                 error = {!!(errors?.employeeStreetName)} helperText={           
+                  (errors?.employeeStreetName?.type) ?  errorToPropMapping[errors?.employeeStreetName?.type]:"" 
+                }/>
               </FormControl>
               <div
                 style={{
@@ -468,21 +472,31 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                  City
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:""} {...register("employeeCity")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:""} {...register("employeeCity", { required: true, maxLength: 120})} size="small" id="name-input" 
+                error = {!!(errors?.employeeCity)} helperText={           
+                  (errors?.employeeCity?.type) ?  errorToPropMapping[errors?.employeeCity?.type]:"" 
+                }/>
               </FormControl>
           
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  State
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:""} {...register("employeeState")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:""} {...register("employeeState", { required: true, maxLength: 120})} size="small" id="name-input" 
+                   error = {!!(errors?.employeeState)} helperText={           
+                    (errors?.employeeState?.type) ?  errorToPropMapping[errors?.employeeState?.type]:"" 
+                  }/>
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Zip
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip", { required: true, maxLength: 120})} size="small" id="name-input" 
+                   error = {!!(errors?.employeeZip)} helperText={           
+                    (errors?.employeeZip?.type) ?  errorToPropMapping[errors?.employeeZip?.type]:"" 
+                  }/>
+                
               </FormControl>
               </div>
               </div>
@@ -554,7 +568,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Work Permit
                 </InputLabel>
-                <FileUpload />   
+                <FileUpload fileHandler = {setFiles}/>   
               </FormControl>)
               :
               <></>

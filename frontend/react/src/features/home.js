@@ -16,7 +16,7 @@ export default function Home()
     console.log(employee.
       applicationStatus)
     
-    if(employee.applicationStatus !== "approved")
+    if(employee.applicationStatus !== "Approved")
     {
         return <Navigate to="/application" />;
     }

@@ -12,7 +12,7 @@ export default function ProtectLayer({ children }) {
   const dispatch = useDispatch();
 
   console.log(employee)
-  if (employee.employeeName === null) {
+  if (employee.username === null) {
     return <Navigate to="/signin" />;
   }
     return <div>{children}</div>;

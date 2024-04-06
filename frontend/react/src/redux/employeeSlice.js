@@ -99,7 +99,7 @@ export const createEmployee = createAsyncThunk(
 const defaultState = {
 
   employee :{
-  employeeName: null,
+  userName: null,
   role: "Employee",
   applicationStatus:"Never submitted",
   personalProfile:
@@ -136,10 +136,9 @@ export const employeeSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       console.log(action);
-      state.employee.employeeName = action.payload.employeeName;
-      state.employee.role = action.payload.role;
+     
 
-      state.employee.applicationStatus = action.payload.applicationStatus
+      state.employee = action.payload
      
     },
     setEmployeeProfile :(state,action) =>{
