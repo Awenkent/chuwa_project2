@@ -11,6 +11,7 @@ export default function ProtectLayer({ children }) {
   const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
 
+  console.log(employee)
   if (employee.employeeName === null) {
     return <Navigate to="/signin" />;
   }

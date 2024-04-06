@@ -41,11 +41,13 @@ export default function Signin(props) {
   const navigate = useNavigate();
   console.log(employee);
 
-  // useEffect(() => {
-  //   if (employee.username === null && props.case === "change-password") {
-  //     dispatch(fetchCurrentEmployee());
-  //   }
-  // }, []);
+  if(employee.employeeName !== null)
+  {
+    navigate("/");
+  }
+  useEffect(() => {
+    dispatch(fetchCurrentEmployee())        
+}, [employee]);
 
   const handleSignin = () => {
     var username = usernameRef.current.value;

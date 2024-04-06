@@ -20,11 +20,9 @@ import {
 export default function App() {
   const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchCurrentEmployee())        
-}, []);
 
-console.log(employee)
+
+
  
   return (
     <BrowserRouter>
