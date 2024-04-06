@@ -12,12 +12,16 @@ import {
 export default function Home()
 {
     const employee = useSelector(selectEmployee);
+    console.log(employee)
+    console.log(employee.
+      applicationStatus)
+    
     if(employee.applicationStatus !== "approved")
     {
         return <Navigate to="/application" />;
     }
     return (
-      <div style={{backgroundImage: 'url()'}}>
+      <div>
       <Navigation/>
       
       <Outlet />

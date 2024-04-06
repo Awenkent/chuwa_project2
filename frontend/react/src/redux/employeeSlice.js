@@ -248,6 +248,6 @@ export const { setEmployee,setEmployeeProfile} = employeeSlice.actions;
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 
-export const selectEmployee = (state) => state.employee;
+export const selectEmployee = (state) => state.employee.employee;
 
 export default employeeSlice.reducer;
