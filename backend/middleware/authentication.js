@@ -10,8 +10,8 @@ module.exports = async (req, res, next) => {
 
   // Check if token exists
   if (!token) {
-    console.log("No token found, user identified as anonymous");
-    res.status(400).json({ msg: "No token found" });
+   
+    return res.status(400).json({ msg: "No token found" });
   }
   try {
     // Verify token

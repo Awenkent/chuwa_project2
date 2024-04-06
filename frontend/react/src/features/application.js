@@ -121,8 +121,9 @@ export default function application(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const watchUSResidency = watch("employeeResidency");
   const watchProfilePicture= watch("employeeProfilePicture",(employee.personalProfile? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636"))
-  const [imagePreview,setImagePreview] = useState(employee.personalProfile? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
+  const [imagePreview,setImagePreview] = useState(employee.personalProfile.employeeProfilePicture? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
 
 
   const handleEmployeeProfileImageUpload = ()=>
@@ -287,6 +288,7 @@ export default function application(props) {
                 gap: 3,
               }}
             >
+                  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
                <div
                 style={{
                   width: "100%",
@@ -294,6 +296,7 @@ export default function application(props) {
                   justifyContent: "start",
                   gap: "20px",
                 }}>
+                   
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   First Name
@@ -440,6 +443,7 @@ export default function application(props) {
               <img height={150} src={imagePreview}></img>
                 </div>
               <div>
+              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Address</h5></div>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Building/Apt Number
@@ -453,7 +457,13 @@ export default function application(props) {
                 </InputLabel>
                 <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName")} size="small" id="name-input" />
               </FormControl>
-
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  City
@@ -475,6 +485,8 @@ export default function application(props) {
                 <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip")} size="small" id="name-input" />
               </FormControl>
               </div>
+              </div>
+              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5  style={{margin:"10px 0"}}>Reference</h5></div>
 
               <div
                 style={{
@@ -485,11 +497,68 @@ export default function application(props) {
                 }}>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
+                  First Name
+                </InputLabel>
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeReferenceFirstName:""} style={{ marginTop: "20px" }} {...register("employeeReferenceFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeReferenceFirstName)} helperText={           
+                  (errors?.employeeReferenceFirstName?.type) ?  errorToPropMapping[errors?.employeeReferenceFirstName?.type]:"" 
+                }
+                />
+        
+   
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Middle Name
+                </InputLabel>
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeReferenceMiddleName:"" } style={{ marginTop: "20px" }}  {...register("employeeReferenceMiddleName",{maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeReferenceMiddleName)} helperText={           
+                  (errors?.employeeReferenceMiddleName?.type) ?  errorToPropMapping[errors?.employeeReferenceMiddleName?.type]:"" 
+                }/>
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Last Name
+                </InputLabel>
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeLastName:""} style={{ marginTop: "20px" }}  {...register("employeeReferenceLastName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeReferenceLastName)} helperText={           
+                  (errors?.employeeReferenceLastName?.type) ?  errorToPropMapping[errors?.employeeReferenceLastName?.type]:"" 
+                }/>
+              </FormControl>
+             </div>
+             <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+             <span>Permanent resident or citizen of the U.S? </span><input type="checkbox" {...register("employeeResidency")}></input>
+                
+</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+
+             
+          
+            {watchUSResidency?
+              
+              (<FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
                   Work Permit
                 </InputLabel>
-                <FileUpload />
-              </FormControl>
-                  
+                <FileUpload />   
+              </FormControl>)
+              :
+              <></>
+            }
          
               </div>
               <Button variant="contained" type = "submit" fullWidth>
