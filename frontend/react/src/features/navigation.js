@@ -19,8 +19,6 @@ import {
 
 export default function Header(props) {
   const searchRef = useRef();
-  const products = useSelector(selectProducts)
-  const totalPrice = useSelector(selectTotalPrice);
   const dispatch = useDispatch();
   const employee = useSelector(selectEmployee);
   const matches = useMediaQuery("(min-width:600px)");
@@ -104,8 +102,10 @@ export default function Header(props) {
             flexWrap: "nowrap",
           }}
         >
+
+
             <span className="notification">
-          <ManageAccountsOutlinedIcon className="icon clickable" fontSize="medium" onClick={handleDisplayUser}/>
+          <ManageAccountsOutlinedIcon className="icon clickable" fontSize="medium" onClick={()=>{navigate("/profile")}}/>
           </span>
           {employee.employeeName !== null?
           (<span className ="clickable" style={{ margin: "0 10px" ,whiteSpace:"nowrap"}} onClick={handleSignOut}>

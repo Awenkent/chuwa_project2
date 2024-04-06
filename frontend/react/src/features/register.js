@@ -21,6 +21,7 @@ import { useNavigate,useLocation } from "react-router-dom";
 import {
     setEmployee,
     selectEmployee,
+    setEmployeeProfile
   } from "../redux/employeeSlice";
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {

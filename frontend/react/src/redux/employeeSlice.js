@@ -42,6 +42,27 @@ const defaultState = {
   employee :{
   employeeName: null,
   role: "Employee",
+  applicationStatus:"Never submitted",
+  personalProfile:
+  {
+    employeeFirstName:"",
+    employeeMiddleName:"",
+    employeeLastName:"",
+    employeePhoneNumber:"",
+    employeeEmail:"",
+    employeeSSN:"",
+    employeeDateOfBirth:"",
+    empoyeeGender:"",
+    employeeProfileImage:"",
+    employeeBuildingAptNumber:"",
+    employeeStreetName:"",
+    employeeCity:"",
+    employeeState:"",
+    employeeZip:"",
+    employeeWorkPermit:[],
+    employeeReferencee:"",
+    employeeEmergencyContact:""
+  }
   },
   currentPage:1,
 }
@@ -57,10 +78,11 @@ export const employeeSlice = createSlice({
       console.log(action)
       state.employee.employeeName = action.payload.employeeName;
       state.employee.role = action.payload.role;
-    
+      state.employee.applicationStatus = action.payload.applicationStatus
+     
     },
-    setCurrentPage:(state,action) =>{
-      state.currentPage = action.payload
+    setEmployeeProfile :(state,action) =>{
+      state.employee.personalProfile = action.payload
     },
     setCartMerge: (state, action) => {
       state.cartMerged = false
@@ -87,7 +109,7 @@ export const employeeSlice = createSlice({
   }
 });
 
-export const { setEmployee} = employeeSlice.actions;
+export const { setEmployee,setEmployeeProfile} = employeeSlice.actions;
 
 
 // The function below is called a selector and allows us to select a value from

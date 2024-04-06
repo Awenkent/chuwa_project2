@@ -32,10 +32,14 @@ export default function App() {
       <div style={{minHeight: "800px"}}>
       <ErrorBoundary>
       <Routes>
-        <Route path="/signin" element={<Signin />} />   
-        <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} />
+        <Route path="/signin" element={<Signin />} /> 
+        
+        <Route path="/application" element={<Application />} />  
+        <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} >
+          
           <Route path="/profile" element={<PersonalProfile />} />
-          <Route path="/application" element={<Application />} />
+
+        </Route>
         <Route path="/register" element={<Register  />} />
         <Route path="*" element={<Error />} />
       </Routes>

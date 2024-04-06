@@ -10,12 +10,10 @@ export default function ProtectLayer({ children }) {
   const employee = useSelector(selectEmployee);
   
   console.log(employee)
-  if (employee.role !== "hr") {
+  if (employee.name === null) {
     return <Navigate to="/signin" />;
   }
-
     return <div>{children}</div>;
   
-
 }
  
