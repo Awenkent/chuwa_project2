@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ReactDOM from "https://cdn.skypack.dev/react-dom@17.0.1";
 import shortid from "https://cdn.skypack.dev/shortid@2.2.16";
-export default function FileUpload() 
+export default function FileUpload(props) 
 {
 
     const [Files, SetFiles] = useState([]);
@@ -28,6 +28,22 @@ export default function FileUpload()
             let file = e.target.files[i];
             reader.onloadend = () => {
               
+                if(props.fileHandler)
+                {
+                    props.fileHandler((preValue) => {
+                        return [
+                            ...preValue,
+                            {
+                                id: shortid.generate(),
+                                filename: e.target.files[i].name,
+                                filetype: e.target.files[i].type,
+                                fileimage: reader.result,
+                                datetime: e.target.files[i].lastModifiedDate.toLocaleString('en-IN'),
+                                filesize: filesizes(e.target.files[i].size)
+                            }
+                        ]
+                    });
+                }
                 SetFiles((preValue) => {
                     return [
                         ...preValue,

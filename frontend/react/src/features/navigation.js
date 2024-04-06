@@ -105,8 +105,13 @@ export default function Header(props) {
 
 
             <span className="notification">
+            Personal Information
           <ManageAccountsOutlinedIcon className="icon clickable" fontSize="medium" onClick={()=>{navigate("/profile")}}/>
+          Visa Status Management
+          <ShoppingCartOutlinedIcon className="icon clickable" fontSize="medium" onClick={handleDisplayCart}/>
           </span>
+
+          
           {employee.employeeName !== null?
           (<span className ="clickable" style={{ margin: "0 10px" ,whiteSpace:"nowrap"}} onClick={handleSignOut}>
              Sign Out
@@ -118,10 +123,10 @@ export default function Header(props) {
             )
           }
           
-        <span className="notification">
-           <ShoppingCartOutlinedIcon className="icon clickable" fontSize="medium" onClick={handleDisplayCart}/>
+
+        
    
-         </span>
+
          
           
         

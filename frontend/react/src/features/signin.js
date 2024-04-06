@@ -41,16 +41,15 @@ export default function Signin(props) {
   const navigate = useNavigate();
   console.log(employee);
 
-  // useEffect(() => {
-  //   if (employee.username === null && props.case === "change-password") {
-  //     dispatch(fetchCurrentEmployee());
-  //   }
-  // }, []);
+  if(employee.userName !== null)
+  {
+    navigate("/");
+  }
+
 
   const handleSignin = () => {
     var username = usernameRef.current.value;
     var password = passwordRef.current.value;
-
     let errorObj = {
       errorCount: 0,
     };
@@ -94,7 +93,9 @@ export default function Signin(props) {
             localStorage.setItem("token", json.token);
             // localStorage.setItem("email", json.email);
             alert("Login successful!");
-            navigate("/");
+            dispatch(fetchCurrentEmployee()).then(()=>{
+              navigate("/");
+            })
           });
         } else {
           return res.text().then((text) => {
