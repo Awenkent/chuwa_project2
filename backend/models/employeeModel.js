@@ -20,32 +20,7 @@ const otherInfoSchema = new mongoose.Schema({
       "https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg",
   },
   currentAddress: {
-    type: {
-      building: {
-        type: String,
-        required: true,
-      },
-      streetNumber: {
-        type: Number,
-        required: true,
-      },
-      streetName: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      state: {
-        type: String,
-        required: true,
-      },
-      zip: {
-        type: String,
-        required: true,
-      },
-    },
+    type: String,
     required: true,
   },
 
