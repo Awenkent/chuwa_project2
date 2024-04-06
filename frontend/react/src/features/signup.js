@@ -90,7 +90,7 @@ export default function signup(props) {
       email:email,
       applicationStatus:"Never submitted",
     };
-    fetch("http://localhost:3000/employee/signup", {
+    fetch("http://localhost:4000/employee/signup", {
       method: "POST",
       headers: {
         'Authorization' : `Bearer ${signupToken}`,
