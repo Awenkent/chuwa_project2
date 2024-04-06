@@ -3,7 +3,6 @@ import { useState,useRef,useEffect } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
-import FileUpload from "../components/fileUpload"
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
@@ -11,24 +10,19 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import { useForm, SubmitHandler } from "react-hook-form"
+
 import { useSelector, useDispatch } from "react-redux";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import { useNavigate,useLocation } from "react-router-dom";
 import {
     setEmployee,
     selectEmployee,
-    fetchEmployee,
     setEmployeeProfile
   } from "../redux/employeeSlice";
-
-
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
   "label + &": {
     marginTop: theme.spacing(3),
@@ -103,32 +97,29 @@ const TextareaAutosize = styled(BaseTextareaAutosize)(({ theme }) => ({
     },
   },
 }));
-export default function application(props) {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm()
-
-  const errorToPropMapping = {
-    "required": "This field is required",
-    "maxLength": "Max Length exceeded",
-    "pattern": "Incorrect Format"
-  }
-  
-  const employee = useSelector(selectEmployee);
+export default function productManage(props) {
+  const cart = useSelector(selectCart);
+  const user = useSelector(selectUser);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const watchProfilePicture= watch("employeeProfilePicture",(employee.personalProfile? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636"))
-  const [imagePreview,setImagePreview] = useState(employee.personalProfile? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
-
-
-  const handleEmployeeProfileImageUpload = ()=>
-  {
-     setImagePreview(watchProfilePicture)
-  }
+  
+  const [productName, setProductName] = useState(location.state?location.state.product.productName:"")
+  const [productDescription, setProductDescription]= useState(location.state?location.state.product.description:"")
+  const [productCategory, setProductCategory]= useState(location.state?location.state.product.category:"")
+  const [productPrice, setProductPrice]= useState(location.state?location.state.product.price:"")
+  const [productQuantity, setProductQuantity]= useState(location.state?location.state.product.quantity:"")
+  const [productImageLink, setProductImageLink]= useState(location.state?location.state.product.imageLink:"")
+  const [imagePreview,setImagePreview] = useState(location.state?location.state.product.imageLink:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
+  const [errorState, setErrorState] = useState({
+    errorCount :0,
+    productNameError: "",
+    descriptionError: "",
+    categoryError: "",
+    priceError: "",
+    imageLinkError: "",
+    quantityError: "",
+  });
   const handleDelete = ()=>{
     dispatch(deleteProducts(location.state.product._id)).then((res)=>{
       if(res.error)
@@ -240,30 +231,66 @@ export default function application(props) {
   })
   
  }
- 
+ const handleProductImageLinkUpload = ()=>
+ {
+    setImagePreview(productImageLink)
+ }
+  const handleProductNameChange = (e) =>
+  {
+    console.log("handleProductNameChange")
+    setProductName(e.target.value)
+    
+  }
+  
+  const handleProductDescriptionChange = (e) =>
+  {
+    console.log("handleProductDescriptionChange")
+    setProductDescription(e.target.value)
+  }
+  
+  const handleProductCategoryChange = (e) =>
+  {
+    console.log("handleProductCategoryChange")
+    setProductCategory(e.target.value)
+    
+  }
 
+  const handleProductPriceChange = (e) =>
+  {
+    console.log("handleProductPriceChange")
+    setProductPrice(e.target.value)
+  }
+  
+  const handleProductQuantityChange = (e) =>
+  {
+    console.log("handleProductQuantityChange")
+    setProductQuantity(e.target.value)
+    
+  }
+  const handleProductImageLinkChange = (e) =>
+  {
+  
+    console.log("handleProductImageLinkChange")
+    setProductImageLink(e.target.value)
 
+  }
+
+console.log(location.state)
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
    
-    if(employee.employeeName === null)
+    if(user.userName === null)
     {
-     // dispatch(fetchEmployee()); 
-   
+      dispatch(fetchUser()); 
+      dispatch(fetchProducts());
+      dispatch(fetchProductCount());
     }
+ 
+   
   }, []);
 
- const onSubmit = (data) => {
-  console.log(data)
-  dispatch(setEmployee({employeeName:"ff", role : "hr", applicationStatus:"approved"}))
-  dispatch(setEmployeeProfile(data))
-  navigate("/")
-}
 
-    if(employee.applicationStatus === "never")
-    {
-
-    }
+  if (matches) {
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
         <h2>{location.state ?"Update Product" : "Create Product"}</h2>
@@ -277,7 +304,6 @@ export default function application(props) {
           <div style={{ textAlign: "center" }}>
             <Box
               component="form"
-              onSubmit={handleSubmit(onSubmit)}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -287,224 +313,108 @@ export default function application(props) {
                 gap: 3,
               }}
             >
-               <div
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Product Name
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} size="small" id="name-input" value = {productName} onChange={handleProductNameChange} error = {!!errorState.productNameError} helperText={errorState.productNameError}/>
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Product Description
+                </InputLabel>
+                <TextareaAutosize aria-label="empty textarea" minRows={8} value = {productDescription} onChange={handleProductDescriptionChange} />
+              </FormControl>
+              <div
                 style={{
                   width: "100%",
                   display: "flex",
-                  justifyContent: "start",
+                  justifyContent: "space-between",
                   gap: "20px",
-                }}>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  First Name
-                </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeFirstName:""} style={{ marginTop: "20px" }} {...register("employeeFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeFirstName)} helperText={           
-                  (errors?.employeeFirstName?.type) ?  errorToPropMapping[errors?.employeeFirstName?.type]:"" 
-                }
-                />
-        
-   
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Middle Name
-                </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeMiddleName:"" } style={{ marginTop: "20px" }}  {...register("employeeMiddleName",{maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeMiddleName)} helperText={           
-                  (errors?.employeeMiddleName?.type) ?  errorToPropMapping[errors?.employeeMiddleName?.type]:"" 
-                }/>
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Last Name
-                </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeLastName:""} style={{ marginTop: "20px" }}  {...register("employeeLastName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeLastName)} helperText={           
-                  (errors?.employeeLastName?.type) ?  errorToPropMapping[errors?.employeeLastName?.type]:"" 
-                }/>
-              </FormControl>
-          
+                }}
+              >
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel shrink htmlFor="bootstrap-input">
+                    Category
+                  </InputLabel>
+                  <TextField id="category-input" style={{ marginTop: "20px" }} size="small" value = {productCategory} onChange={handleProductCategoryChange} error = {!!errorState.categoryError} helperText={errorState.categoryError}/>
+                </FormControl>
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel shrink htmlFor="bootstrap-input">
+                    Price
+                  </InputLabel>
+                  <TextField id="price-input" style={{ marginTop: "20px" }} size="small" value = {productPrice} onChange={handleProductPriceChange} error = {!!errorState.priceError} helperText={errorState.priceError}/>
+                </FormControl>
               </div>
 
               <div
                 style={{
                   width: "100%",
                   display: "flex",
-                  justifyContent: "start",
+                  justifyContent: "space-between",
                   gap: "20px",
-                }}>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Phone Number
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeePhoneNumber:""} {...register("employeePhoneNumber", { required: true, maxLength: 20 ,pattern:/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im})} size="small" id="name-input"
-                error = {!!(errors?.employeePhoneNumber)} helperText={           
-                  (errors?.employeePhoneNumber?.type) ?  errorToPropMapping[errors?.employeePhoneNumber?.type]+ " Example:(123)4567890":"" 
-                } />
-              </FormControl>
-              
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Email 
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeEmail:""} {...register("employeeEmail", { required: true, maxLength: 120 ,pattern:/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/})} size="small" id="name-input" 
-                   error = {!!(errors?.employeeEmail)} helperText={           
-                    (errors?.employeeEmail?.type) ?  errorToPropMapping[errors?.employeeEmail?.type]+ " Example:user@mail.com" :"" 
-                  }/>
-              </FormControl>
+                }}
+              >
+                <FormControl
+                  variant="standard"
+                  fullWidth
+                  style={{ flex: 0.75 }}
+                >
+                  <InputLabel shrink htmlFor="bootstrap-input">
+                    In Stock Quantity
+                  </InputLabel>
+                  <TextField id="quantity-input" style={{ marginTop: "20px" }} size="small" value = {productQuantity} onChange={handleProductQuantityChange} error = {!!errorState.quantityError} helperText={errorState.quantityError}/>
+                </FormControl>
+                <FormControl
+                  variant="standard"
+                  fullWidth
+                  style={{ flex: 1.25 }}
+                >
+                  <InputLabel shrink htmlFor="imageLink-input">
+                    Add Image Link
+                  </InputLabel>
+                  <BootstrapInput
+                    id="outlined-adornment-password"
+                    style={{ marginTop: "20px" }} 
+                    size="small"
+                    value = {productImageLink} 
+                    error = {!!errorState.imageLinkError} 
+                    helperText={errorState.imageLinkError}
+                    onChange={handleProductImageLinkChange}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <Button
+                          size="small"
+                          component="label"
+                          role={undefined}
+                          variant="contained"
+                          tabIndex={-1}
+                          onClick ={handleProductImageLinkUpload} 
+                          startIcon={<CloudUploadIcon />}
+                        >
+                          Upload
+                         
+                        </Button>
+                      </InputAdornment>
+                    }
+                  />
+                </FormControl>
               </div>
-             
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "start",
-                  gap: "20px",
-                }}>
               <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  SSN
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeSsn:""} {...register("employeeSsn", {required: true, maxLength: 20 ,pattern: /^\d{3}-\d{2}-\d{4}$/})} size="small" id="name-input" 
-                  error = {!!(errors?.employeeSsn)} helperText={           
-                    (errors?.employeeSsn?.type) ?  errorToPropMapping[errors?.employeeSsn?.type]+ " Example: 123-45-6778" :"" 
-                  }/>
+              <img src={imagePreview}></img>
               </FormControl>
-            
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Date of Birth
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeDateOfBirth:""} {...register("employeeDateOfBirth", { required: true, maxLength: 120 ,pattern:  /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/})} size="small" id="name-input" 
-                  error = {!!(errors?.employeeDateOfBirth)} helperText={           
-                    (errors?.employeeDateOfBirth?.type) ?  errorToPropMapping[errors?.employeeDateOfBirth?.type]+ " Example: MM/DD/YYYY" :"" 
-                  }/>
-              </FormControl>
-
-              <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Gender
-                </InputLabel>
-                <Select
-
-              labelId="demo-simple-select-helper-label"
-              id="demo-simple-select-helper"
-        size="small"
-        defaultValue={employee.personalProfile? employee.personalProfile.employeeGender:"NoAnswer"}
-        style={{ marginTop: "12px" }}  {...register("employeeGender")} 
-
-      >
-       
-         
-            <MenuItem key={"Male"} value={"Male"}>
-              {"Male"}
-            </MenuItem>
-            <MenuItem key={"Female"} value={"Female"}>
-              {"Female"}
-            </MenuItem>
-            <MenuItem key={"NoAnswer"} value={"NoAnswer"}>
-              {"Preferre not to answer"}
-            </MenuItem>
-            </Select>
-              
-              </FormControl>
-              </div>
-             
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Profile Image
-                </InputLabel>
-                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:""} {...register("employeeProfilePicture")} size="small" id="name-input"  endAdornment={ 
-                <InputAdornment position="end">
-                      <Button
-                        size="small"
-                        component="label"
-                        
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        onClick ={handleEmployeeProfileImageUpload} 
-                        startIcon={<CloudUploadIcon />}
-                      >
-                        Upload
-                       
-                      </Button>
-                    </InputAdornment>}/>
-              
-              </FormControl>
-              <div>
-                
-              <img height={150} src={imagePreview}></img>
-                </div>
-              <div>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Building/Apt Number
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt")} size="small" id="name-input" />
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Street Name
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName")} size="small" id="name-input" />
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 City
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:""} {...register("employeeCity")} size="small" id="name-input" />
-              </FormControl>
-          
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 State
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:""} {...register("employeeState")} size="small" id="name-input" />
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Zip
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip")} size="small" id="name-input" />
-              </FormControl>
-              </div>
-
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "start",
-                  gap: "20px",
-                }}>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Work Permit
-                </InputLabel>
-                <FileUpload />
-              </FormControl>
-                  
-         
-              </div>
-              <Button variant="contained" type = "submit" fullWidth>
-                Submit Application
+              <Button variant="contained" fullWidth onClick={handleProductCreation}>
+                   {location.state ?"Update Product" : "Add Product"}
               </Button>
-              
+              {location.state? <Button onClick={handleDelete}>delete Product</Button> :""}
             </Box>
           </div>
         </div>
       </div>
     );
-
-    /*
+  } else {
     return (
-      
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
             <h2>{location.state ?"Update Product" : "Create Product"}</h2>
         <div
@@ -600,8 +510,6 @@ export default function application(props) {
           </form>
         </div>
       </div>
-     
     );
-     */
-  
+  }
 }

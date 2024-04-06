@@ -6,9 +6,12 @@ import { setEmployee, selectEmployee } from "../redux/employeeSlice";
 export default function ProtectLayer({ children }) {
   const employee = useSelector(selectEmployee);
 
-  console.log(employee);
-  if (employee.role !== "hr") {
+  console.log(employee)
+  console.log(employee.name)
+  if (employee.name === null) {
     return <Navigate to="/signin" />;
   }
-  return <div>{children}</div>;
+    return <div>{children}</div>;
+  
+
 }
