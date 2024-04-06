@@ -13,7 +13,7 @@ import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchEmployee,
+  fetchAllEmployees,
   setEmployee,
   selectEmployee,
 } from "./redux/employeeSlice";
