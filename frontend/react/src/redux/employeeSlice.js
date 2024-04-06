@@ -97,10 +97,32 @@ export const createEmployee = createAsyncThunk(
 );
 
 const defaultState = {
-  employee: {
-    username: null,
-    role: "employee",
-    applicationStatus: null,
+  
+  employee :{
+  userName: null,
+  role: "Employee",
+  applicationStatus:"Never submitted",
+  personalProfile:
+  {
+    employeeFirstName:"",
+    employeeMiddleName:"",
+    employeeLastName:"",
+    employeePhoneNumber:"",
+    employeeEmail:"",
+    employeeSSN:"",
+    employeeDateOfBirth:"",
+    empoyeeGender:"",
+    employeeProfileImage:"",
+    employeeBuildingAptNumber:"",
+    employeeStreetName:"",
+    employeeCity:"",
+    employeeState:"",
+    employeeZip:"",
+    employeeWorkPermit:[],
+    employeeReferencee:"",
+    employeeEmergencyContact:""
+  }
+
   },
   // currentPage: 1,
 };
@@ -114,8 +136,13 @@ export const employeeSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       console.log(action);
-      state.employee = action.payload;
-      // state.employee.role = action.payload.role;
+      state.employee.userName = action.payload.userName
+      state.employee.role = action.payload.role
+      state.employee.personalProfile= action.payload
+     
+    },
+    setEmployeeProfile :(state,action) =>{
+      state.employee.personalProfile= action.payload
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
@@ -169,7 +196,10 @@ export const employeeSlice = createSlice({
         console.log("fetch current employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.employees = action.payload;
+        state.employee.userName = action.payload.userName;
+        state.employee.role = action.payload.role;
+        state.employee.applicationStatus = action.payload.applicationStatus
+        state.employee.personalProfile= action.payload
       })
       .addCase(fetchCurrentEmployee.rejected, (state, action) => {
         state.status = "failed";
@@ -186,7 +216,7 @@ export const employeeSlice = createSlice({
         console.log("update employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.employees = action.payload;
+        state.employee.applicationStatus = action.payload.applicationStatus;
       })
       .addCase(updateEmployee.rejected, (state, action) => {
         state.status = "failed";
@@ -214,12 +244,12 @@ export const employeeSlice = createSlice({
   },
 });
 
-export const { setEmployee } = employeeSlice.actions;
+export const { setEmployee ,setEmployeeProfile} = employeeSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 
-export const selectEmployee = (state) => state.employee;
+export const selectEmployee = (state) => state.employee.employee;
 
 export default employeeSlice.reducer;

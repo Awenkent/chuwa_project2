@@ -28,29 +28,30 @@ export default function App() {
 
   return (
     <BrowserRouter>
-      <div className="App" style={{ backgroundColor: "rgb(235,235,235)" }}>
-        <div style={{ minHeight: "800px" }}>
-          <ErrorBoundary>
-            <Routes>
-              <Route path="/signin" element={<Signin />} />
+ 
+     
+    <div className="App" style={{ backgroundColor: "rgb(235,235,235)" }}>
+     
+      <div style={{minHeight: "800px"}}>
+      <ErrorBoundary>
+      <Routes>
+        <Route path="/signin" element={<Signin />} /> 
+        
+        <Route path="/application" element={<Application />} />  
+        <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} >
+          
+          <Route path="/profile" element={<PersonalProfile />} />
+        </Route>
+       
+        <Route path="*" element={<Error />} />
+      </Routes>
+      </ErrorBoundary>
 
-              <Route path="/application" element={<Application />} />
-              <Route
-                path="/"
-                element={
-                  <ProtectLayer>
-                    <Home />
-                  </ProtectLayer>
-                }
-              >
-                <Route path="/profile" element={<PersonalProfile />} />
-              </Route>
-              <Route path="/signup/:signupToken" element={<Signup />} />
-              <Route path="*" element={<Error />} />
-            </Routes>
-          </ErrorBoundary>
-        </div>
       </div>
+    
+     
+    </div>
+ 
     </BrowserRouter>
   );
 }
