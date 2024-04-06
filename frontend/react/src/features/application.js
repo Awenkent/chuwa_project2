@@ -25,7 +25,8 @@ import {
     setEmployee,
     selectEmployee,
     fetchEmployee,
-    setEmployeeProfile
+    setEmployeeProfile,
+    updateEmployee
   } from "../redux/employeeSlice";
 
 
@@ -126,7 +127,6 @@ export default function application(props) {
   const [imagePreview,setImagePreview] = useState(employee.personalProfile.employeeProfilePicture? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
   const [files,setFiles] = useState([]);
 
-  console.log(employee)
   const handleEmployeeProfileImageUpload = ()=>
   {
      setImagePreview(watchProfilePicture)
@@ -257,12 +257,17 @@ export default function application(props) {
 
  const onSubmit = (data) => {
   console.log(data)
-  console.log(files)
-  dispatch(setEmployee({employeeName:"ff", role : "hr", applicationStatus:"approved"}))
+  console
+ 
   dispatch(setEmployeeProfile(data))
-  navigate("/")
+  dispatch(updateEmployee({applicationStatus :"Approved"})).then(()=>{ navigate("/")})
+ 
 }
 
+    if(employee.applicationStatus === "never")
+    {
+
+    }
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
         <h2>{location.state ?"Update Product" : "Create Product"}</h2>

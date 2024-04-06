@@ -41,13 +41,11 @@ export default function Signin(props) {
   const navigate = useNavigate();
   console.log(employee);
 
-  if(employee.username !== null)
+  if(employee.userName !== null)
   {
     navigate("/");
   }
-  useEffect(() => {
-          
-}, []);
+
 
   const handleSignin = () => {
     var username = usernameRef.current.value;
@@ -95,7 +93,9 @@ export default function Signin(props) {
             localStorage.setItem("token", json.token);
             // localStorage.setItem("email", json.email);
             alert("Login successful!");
-            dispatch(fetchCurrentEmployee())
+            dispatch(fetchCurrentEmployee()).then(()=>{
+              navigate("/");
+            })
           });
         } else {
           return res.text().then((text) => {

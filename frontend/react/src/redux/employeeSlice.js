@@ -136,9 +136,9 @@ export const employeeSlice = createSlice({
       // which detects changes to a "draft state" and produces a brand new
       // immutable state based off those changes
       console.log(action);
-     
-
-      state.employee = action.payload
+      state.employee.userName = action.payload.userName
+      state.employee.role = action.payload.role
+      state.employee.personalProfile= action.payload
      
     },
     setEmployeeProfile :(state,action) =>{
@@ -194,8 +194,10 @@ export const employeeSlice = createSlice({
         console.log("fetch current employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.employee.employeeName = action.payload.userName;
+        state.employee.userName = action.payload.userName;
         state.employee.role = action.payload.role;
+        state.employee.applicationStatus = action.payload.applicationStatus
+        state.employee.personalProfile= action.payload
       })
       .addCase(fetchCurrentEmployee.rejected, (state, action) => {
         state.status = "failed";
@@ -212,7 +214,7 @@ export const employeeSlice = createSlice({
         console.log("update employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.employees = action.payload;
+        state.employee.applicationStatus = action.payload.applicationStatus;
       })
       .addCase(updateEmployee.rejected, (state, action) => {
         state.status = "failed";

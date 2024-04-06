@@ -6,7 +6,7 @@ import Signin from "./features/signin";
 import  ErrorBoundary from "./features/errorBoundary";
 import ProtectLayer from "./features/protectLayer";
 import PersonalProfile from "./features/personalProfile"
-import Register from "./features/register"
+
 import Application from "./features/application"
 
 import { useEffect } from "react";
@@ -20,9 +20,11 @@ import {
 export default function App() {
   const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchCurrentEmployee())        
+}, []);
 
-
-
+console.log(employee)
  
   return (
     <BrowserRouter>
@@ -41,7 +43,7 @@ export default function App() {
           <Route path="/profile" element={<PersonalProfile />} />
 
         </Route>
-        <Route path="/register" element={<Register  />} />
+       
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>

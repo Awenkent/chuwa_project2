@@ -2,10 +2,7 @@ const Employee = require("../models/employeeModel");
 
 const getOneEmployee = async (req, res) => {
   try {
-    const employee = await Employee.findById(req.employee?.id).select([
-      "userName",
-      "role",
-    ]);
+    const employee = await Employee.findById(req.employee?.id);
     res.status(200).json(employee);
   } catch (err) {
     console.log(err);
