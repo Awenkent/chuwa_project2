@@ -2,7 +2,7 @@ const express = require("express");
 const connectDB = require("./db");
 const app = express();
 const cors = require("cors");
-const port = 3000;
+const port = 4000;
 const hrRouter = require("./routers/hrRouter");
 const employeeRouter = require("./routers/employeeRouter");
 connectDB();
@@ -21,9 +21,9 @@ app.listen(port, () => {
       "\t(get) /employee/profile : get the profile for current employee\n" +
       "\t(put) /employee/profile : update the profile for current employee\n" +
       "\t(get) /HR/allProfiles : (HR) get all profiles\n" +
-      "\t(put) /HR/profile/:id : (HR) update a profile\n" +
+      "\t(put) /HR/profile : (HR) update a profile\n" +
       "\t(get) /HR/new : (HR) get a Registration Token for new employee\n" +
       "\t(post) /HR/employee : (HR) create a employee account\n" +
-      "\t(delete) /HR/employee/:id : (HR) delete a employee account\n"
+      "\t(delete) /HR/employee : (HR) delete a employee account\n"
   );
 });

@@ -261,6 +261,9 @@ export default function application(props) {
 }
 
     if(employee.applicationStatus === "never")
+    {
+
+    }
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
         <h2>{location.state ?"Update Product" : "Create Product"}</h2>
@@ -414,7 +417,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Profile Image
                 </InputLabel>
-                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:":"} {...register("employeeProfilePicture")} size="small" id="name-input"  endAdornment={ 
+                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:""} {...register("employeeProfilePicture")} size="small" id="name-input"  endAdornment={ 
                 <InputAdornment position="end">
                       <Button
                         size="small"
@@ -441,35 +444,35 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Building/Apt Number
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:":"} {...register("employeeBuildingApt")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt")} size="small" id="name-input" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Street Name
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:":"} {...register("employeeStreetName")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName")} size="small" id="name-input" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  City
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:":"} {...register("employeeCity")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:""} {...register("employeeCity")} size="small" id="name-input" />
               </FormControl>
           
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  State
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:":"} {...register("employeeState")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:""} {...register("employeeState")} size="small" id="name-input" />
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Zip
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:":"} {...register("employeeZip")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip")} size="small" id="name-input" />
               </FormControl>
               </div>
 

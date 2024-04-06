@@ -13,16 +13,17 @@ import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
-  fetchEmployee,
+  fetchCurrentEmployee,
   setEmployee,
   selectEmployee,
 } from "./redux/employeeSlice";
 export default function App() {
+  /*
   const dispatch = useDispatch();
   useEffect(() => {
-        dispatch(fetchEmployee())        
+        dispatch(fetchCurrentEmployee())        
   }, []);
-
+*/
   return (
     <BrowserRouter>
  

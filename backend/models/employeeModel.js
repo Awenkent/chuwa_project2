@@ -4,11 +4,6 @@ const { Schema } = mongoose;
 
 // Define the schema
 const otherInfoSchema = new mongoose.Schema({
-  applicationStatus: {
-    type: String,
-    enum: ["Never submitted", "Pending", "Approved", "Rejected"],
-    required: true,
-  },
   firstName: {
     type: String,
     required: true,
@@ -25,32 +20,7 @@ const otherInfoSchema = new mongoose.Schema({
       "https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg",
   },
   currentAddress: {
-    type: {
-      building: {
-        type: String,
-        required: true,
-      },
-      streetNumber: {
-        type: Number,
-        required: true,
-      },
-      streetName: {
-        type: String,
-        required: true,
-      },
-      city: {
-        type: String,
-        required: true,
-      },
-      state: {
-        type: String,
-        required: true,
-      },
-      zip: {
-        type: String,
-        required: true,
-      },
-    },
+    type: String,
     required: true,
   },
 
@@ -157,6 +127,11 @@ const employeeSchema = new mongoose.Schema(
       unique: true,
       required: true,
       match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+    },
+    applicationStatus: {
+      type: String,
+      enum: ["Never submitted", "Pending", "Approved", "Rejected"],
+      required: true,
     },
     otherInfo: otherInfoSchema,
   },
