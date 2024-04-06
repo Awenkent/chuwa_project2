@@ -3,6 +3,7 @@ import { useState,useRef,useEffect } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
+import FileUpload from "../components/fileUpload"
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
@@ -17,11 +18,14 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import { useNavigate,useLocation } from "react-router-dom";
 import {
     setEmployee,
     selectEmployee,
     fetchEmployee,
+    setEmployeeProfile
   } from "../redux/employeeSlice";
 
 
@@ -100,7 +104,6 @@ const TextareaAutosize = styled(BaseTextareaAutosize)(({ theme }) => ({
   },
 }));
 export default function application(props) {
- 
   const {
     register,
     handleSubmit,
@@ -113,16 +116,19 @@ export default function application(props) {
     "maxLength": "Max Length exceeded",
     "pattern": "Incorrect Format"
   }
-
+  
   const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const watchUSResidency = watch("employeeResidency");
+  const watchProfilePicture= watch("employeeProfilePicture",(employee.personalProfile? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636"))
+  const [imagePreview,setImagePreview] = useState(employee.personalProfile.employeeProfilePicture? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
+
 
   const handleEmployeeProfileImageUpload = ()=>
   {
-     setImagePreview(employeeProfilePicture)
+     setImagePreview(watchProfilePicture)
   }
   const handleDelete = ()=>{
     dispatch(deleteProducts(location.state.product._id)).then((res)=>{
@@ -237,7 +243,7 @@ export default function application(props) {
  }
  
 
-console.log(location.state)
+
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
    
@@ -246,12 +252,19 @@ console.log(location.state)
      // dispatch(fetchEmployee()); 
    
     }
- 
-   
   }, []);
 
- const onSubmit = (data) => console.log(data)
+ const onSubmit = (data) => {
+  console.log(data)
+  dispatch(setEmployee({employeeName:"ff", role : "hr", applicationStatus:"approved"}))
+  dispatch(setEmployeeProfile(data))
+  navigate("/")
+}
 
+    if(employee.applicationStatus === "never")
+    {
+
+    }
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
         <h2>{location.state ?"Update Product" : "Create Product"}</h2>
@@ -275,6 +288,7 @@ console.log(location.state)
                 gap: 3,
               }}
             >
+                  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
                <div
                 style={{
                   width: "100%",
@@ -282,11 +296,12 @@ console.log(location.state)
                   justifyContent: "start",
                   gap: "20px",
                 }}>
+                   
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   First Name
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} {...register("employeeFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeFirstName:""} style={{ marginTop: "20px" }} {...register("employeeFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
                 error = {!!(errors?.employeeFirstName)} helperText={           
                   (errors?.employeeFirstName?.type) ?  errorToPropMapping[errors?.employeeFirstName?.type]:"" 
                 }
@@ -299,62 +314,23 @@ console.log(location.state)
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Middle Name
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeMiddleName")} size="small" id="name-input" />
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeMiddleName:"" } style={{ marginTop: "20px" }}  {...register("employeeMiddleName",{maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeMiddleName)} helperText={           
+                  (errors?.employeeMiddleName?.type) ?  errorToPropMapping[errors?.employeeMiddleName?.type]:"" 
+                }/>
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Last Name
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeLastName")} size="small" id="name-input" />
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeLastName:""} style={{ marginTop: "20px" }}  {...register("employeeLastName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeLastName)} helperText={           
+                  (errors?.employeeLastName?.type) ?  errorToPropMapping[errors?.employeeLastName?.type]:"" 
+                }/>
               </FormControl>
           
               </div>
-
-
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "start",
-                  gap: "20px",
-                }}>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Apt/Building Number
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }} {...register("employeeAptBuilding")} size="small" id="name-input" />
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Street Name
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeStreet")} size="small" id="name-input" />
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 City
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeCity")} size="small" id="name-input" />
-              </FormControl>
-          
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 State
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeState")} size="small" id="name-input" />
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                 Zip
-                </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeZip")} size="small" id="name-input" />
-              </FormControl>
-              </div>
-
 
               <div
                 style={{
@@ -367,17 +343,23 @@ console.log(location.state)
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Phone Number
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} {...register("employeePhoneNumber")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeePhoneNumber:""} {...register("employeePhoneNumber", { required: true, maxLength: 20 ,pattern:/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im})} size="small" id="name-input"
+                error = {!!(errors?.employeePhoneNumber)} helperText={           
+                  (errors?.employeePhoneNumber?.type) ?  errorToPropMapping[errors?.employeePhoneNumber?.type]+ " Example:(123)4567890":"" 
+                } />
               </FormControl>
-
+              
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Email 
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeEmail")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeEmail:""} {...register("employeeEmail", { required: true, maxLength: 120 ,pattern:/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/})} size="small" id="name-input" 
+                   error = {!!(errors?.employeeEmail)} helperText={           
+                    (errors?.employeeEmail?.type) ?  errorToPropMapping[errors?.employeeEmail?.type]+ " Example:user@mail.com" :"" 
+                  }/>
               </FormControl>
               </div>
-
+             
               <div
                 style={{
                   width: "100%",
@@ -389,12 +371,200 @@ console.log(location.state)
                 <InputLabel shrink htmlFor="bootstrap-input">
                   SSN
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }}  {...register("employeeSSN")} size="small" id="name-input" />
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeSsn:""} {...register("employeeSsn", {required: true, maxLength: 20 ,pattern: /^\d{3}-\d{2}-\d{4}$/})} size="small" id="name-input" 
+                  error = {!!(errors?.employeeSsn)} helperText={           
+                    (errors?.employeeSsn?.type) ?  errorToPropMapping[errors?.employeeSsn?.type]+ " Example: 123-45-6778" :"" 
+                  }/>
+              </FormControl>
+            
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Date of Birth
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeDateOfBirth:""} {...register("employeeDateOfBirth", { required: true, maxLength: 120 ,pattern:  /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/})} size="small" id="name-input" 
+                  error = {!!(errors?.employeeDateOfBirth)} helperText={           
+                    (errors?.employeeDateOfBirth?.type) ?  errorToPropMapping[errors?.employeeDateOfBirth?.type]+ " Example: MM/DD/YYYY" :"" 
+                  }/>
+              </FormControl>
+
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Gender
+                </InputLabel>
+                <Select
+
+              labelId="demo-simple-select-helper-label"
+              id="demo-simple-select-helper"
+        size="small"
+        defaultValue={employee.personalProfile? employee.personalProfile.employeeGender:"NoAnswer"}
+        style={{ marginTop: "12px" }}  {...register("employeeGender")} 
+
+      >
+       
+         
+            <MenuItem key={"Male"} value={"Male"}>
+              {"Male"}
+            </MenuItem>
+            <MenuItem key={"Female"} value={"Female"}>
+              {"Female"}
+            </MenuItem>
+            <MenuItem key={"NoAnswer"} value={"NoAnswer"}>
+              {"Preferre not to answer"}
+            </MenuItem>
+            </Select>
+              
+              </FormControl>
+              </div>
+             
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Profile Image
+                </InputLabel>
+                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:""} {...register("employeeProfilePicture")} size="small" id="name-input"  endAdornment={ 
+                <InputAdornment position="end">
+                      <Button
+                        size="small"
+                        component="label"
+                        
+                        role={undefined}
+                        variant="contained"
+                        tabIndex={-1}
+                        onClick ={handleEmployeeProfileImageUpload} 
+                        startIcon={<CloudUploadIcon />}
+                      >
+                        Upload
+                       
+                      </Button>
+                    </InputAdornment>}/>
+              
+              </FormControl>
+              <div>
+                
+              <img height={150} src={imagePreview}></img>
+                </div>
+              <div>
+              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Address</h5></div>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Building/Apt Number
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt")} size="small" id="name-input" />
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Street Name
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName")} size="small" id="name-input" />
+              </FormControl>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 City
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:""} {...register("employeeCity")} size="small" id="name-input" />
               </FormControl>
           
-              </div>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 State
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:""} {...register("employeeState")} size="small" id="name-input" />
+              </FormControl>
 
-              <input type="submit" />
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Zip
+                </InputLabel>
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip")} size="small" id="name-input" />
+              </FormControl>
+              </div>
+              </div>
+              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5  style={{margin:"10px 0"}}>Reference</h5></div>
+
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  First Name
+                </InputLabel>
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeReferenceFirstName:""} style={{ marginTop: "20px" }} {...register("employeeReferenceFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeReferenceFirstName)} helperText={           
+                  (errors?.employeeReferenceFirstName?.type) ?  errorToPropMapping[errors?.employeeReferenceFirstName?.type]:"" 
+                }
+                />
+        
+   
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Middle Name
+                </InputLabel>
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeReferenceMiddleName:"" } style={{ marginTop: "20px" }}  {...register("employeeReferenceMiddleName",{maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeReferenceMiddleName)} helperText={           
+                  (errors?.employeeReferenceMiddleName?.type) ?  errorToPropMapping[errors?.employeeReferenceMiddleName?.type]:"" 
+                }/>
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                 Last Name
+                </InputLabel>
+                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeLastName:""} style={{ marginTop: "20px" }}  {...register("employeeReferenceLastName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
+                error = {!!(errors?.employeeReferenceLastName)} helperText={           
+                  (errors?.employeeReferenceLastName?.type) ?  errorToPropMapping[errors?.employeeReferenceLastName?.type]:"" 
+                }/>
+              </FormControl>
+             </div>
+             <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+             <span>Permanent resident or citizen of the U.S? </span><input type="checkbox" {...register("employeeResidency")}></input>
+                
+</div>
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+
+             
+          
+            {watchUSResidency?
+              
+              (<FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Work Permit
+                </InputLabel>
+                <FileUpload />   
+              </FormControl>)
+              :
+              <></>
+            }
+         
+              </div>
+              <Button variant="contained" type = "submit" fullWidth>
+                Submit Application
+              </Button>
+              
             </Box>
           </div>
         </div>
