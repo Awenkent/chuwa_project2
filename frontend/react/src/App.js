@@ -45,7 +45,7 @@ export default function App() {
               >
                 <Route path="/profile" element={<PersonalProfile />} />
               </Route>
-              <Route path="/register" element={<Signup />} />
+              <Route path="/signup" element={<Signup />} />
               <Route path="*" element={<Error />} />
             </Routes>
           </ErrorBoundary>
