@@ -1,15 +1,5 @@
 const Employee = require("../models/employeeModel");
 
-const getAllEmployees = async (req, res) => {
-  try {
-    const employees = await Employee.find();
-    res.status(200).json(employees);
-  } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: "Server Error:" + err.message });
-  }
-};
-
 const getOneEmployee = async (req, res) => {
   try {
     const employee = await Employee.findById(req.employee?.id).select([
@@ -46,10 +36,14 @@ const createEmployee = async (req, res) => {
 
 const updateEmployee = async (req, res) => {
   try {
-    const employee = await Employee.findByIdAndUpdate(req.employee?.id, req.body, {
-      new: true,
-    });
-    res.status(200).json(obj);
+    const employee = await Employee.findByIdAndUpdate(
+      req.employee?.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    res.status(200).json(employee);
   } catch (err) {
     res
       .status(500)
@@ -57,21 +51,8 @@ const updateEmployee = async (req, res) => {
   }
 };
 
-const deleteEmployee = async (req, res) => {
-  try {
-    await Employee.findByIdAndDelete(req.employee?.id);
-    res.status(200).json({ message: "Employee deleted" });
-  } catch (err) {
-    res
-      .status(500)
-      .json({ message: "Error on deleting Employee:" + err.message });
-  }
-};
-
 module.exports = {
-  getAllEmployees,
   getOneEmployee,
   createEmployee,
   updateEmployee,
-  deleteEmployee,
 };

@@ -3,11 +3,11 @@ import { Routes, Route, Link } from "react-router-dom";
 import Home from "./features/home";
 import Error from "./features/error";
 import Signin from "./features/signin";
-import  ErrorBoundary from "./features/errorBoundary";
+import ErrorBoundary from "./features/errorBoundary";
 import ProtectLayer from "./features/protectLayer";
-import PersonalProfile from "./features/personalProfile"
-import Signup from "./features/signup"
-import Application from "./features/application"
+import PersonalProfile from "./features/personalProfile";
+import Signup from "./features/signup";
+import Application from "./features/application";
 
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -20,32 +20,33 @@ import {
 export default function App() {
   const dispatch = useDispatch();
   useEffect(() => {
-        dispatch(fetchEmployee())        
+    dispatch(fetchAllEmployees());
   }, []);
 
   return (
     <BrowserRouter>
- 
-     
-    <div className="App" style={{ backgroundColor: "rgb(235,235,235)" }}>
-     
-      <div style={{minHeight: "800px"}}>
-      <ErrorBoundary>
-      <Routes>
-        <Route path="/signin" element={<Signin />} />   
-        <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} />
-          <Route path="/profile" element={<PersonalProfile />} />
-          <Route path="/application" element={<Application />} />
-        <Route path="/signup" element={<Signup  />} />
-        <Route path="*" element={<Error />} />
-      </Routes>
-      </ErrorBoundary>
+      <div className="App" style={{ backgroundColor: "rgb(235,235,235)" }}>
+        <div style={{ minHeight: "800px" }}>
+          <ErrorBoundary>
+            <Routes>
+              <Route path="/signin" element={<Signin />} />
+              <Route
+                path="/"
+                element={
+                  <ProtectLayer>
+                    <Home />
+                  </ProtectLayer>
+                }
+              />
+              <Route path="/profile" element={<PersonalProfile />} />
+              <Route path="/application" element={<Application />} />
+              <Route path="/hr" element={<HRportal />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="*" element={<Error />} />
+            </Routes>
+          </ErrorBoundary>
+        </div>
       </div>
-    
-     
-    </div>
- 
     </BrowserRouter>
-   
   );
 }
