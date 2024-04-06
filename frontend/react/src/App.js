@@ -42,6 +42,7 @@ export default function App() {
           
           <Route path="/profile" element={<PersonalProfile />} />
         </Route>
+        <Route path="/signup/:signupToken" element={<Signup />} />
        
         <Route path="*" element={<Error />} />
       </Routes>
