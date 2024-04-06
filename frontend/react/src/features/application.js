@@ -1,9 +1,9 @@
 import React from "react";
-import { useState,useRef,useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
-import FileUpload from "../components/fileUpload"
+import FileUpload from "../components/fileUpload";
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
@@ -11,7 +11,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import { useForm, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
@@ -20,7 +20,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { useNavigate,useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
     setEmployee,
     selectEmployee,
@@ -110,21 +110,24 @@ export default function application(props) {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm()
+  } = useForm();
 
   const errorToPropMapping = {
-    "required": "This field is required",
-    "maxLength": "Max Length exceeded",
-    "pattern": "Incorrect Format"
-  }
-  
+    required: "This field is required",
+    maxLength: "Max Length exceeded",
+    pattern: "Incorrect Format",
+  };
+
   const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const watchUSResidency = watch("employeeResidency");
   const watchProfilePicture= watch("employeeProfilePicture")
-  const [imagePreview,setImagePreview] = useState(employee.personalProfile.employeeProfilePicture? employee.personalProfile.employeeProfilePicture:"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
+  console.log(employee)
+  console.log(employee.personalProfile)
+  const [imagePreview,setImagePreview] = useState(employee?.personalProfile?.employeeProfileImage? employee.personalProfile.employeeProfileImage
+    :"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
   const [files,setFiles] = useState([]);
 
   const handleEmployeeProfileImageUpload = ()=>
@@ -156,108 +159,85 @@ export default function application(props) {
     quantityError: "",
   };
 
-  if(!productName)
-  {
-    errorObj.errorCount += 1;
-    errorObj.productNameError = "Product Name cannot be empty."
-  }
+    if (!productName) {
+      errorObj.errorCount += 1;
+      errorObj.productNameError = "Product Name cannot be empty.";
+    }
 
-  if(!productCategory)
-  {
-    errorObj.errorCount += 1;
-    errorObj.categoryError = "category Name cannot be empty."
-  }
+    if (!productCategory) {
+      errorObj.errorCount += 1;
+      errorObj.categoryError = "category Name cannot be empty.";
+    }
 
-  if(!productPrice)
-  {
-    errorObj.errorCount += 1;
-    errorObj.priceError = "Price cannot be empty."
-  }else if(productPrice <= 0)
-  {
-    errorObj.errorCount += 1;
-    errorObj.priceError = "Price should be at least greater than 0."
-  }
+    if (!productPrice) {
+      errorObj.errorCount += 1;
+      errorObj.priceError = "Price cannot be empty.";
+    } else if (productPrice <= 0) {
+      errorObj.errorCount += 1;
+      errorObj.priceError = "Price should be at least greater than 0.";
+    }
 
-  if(!productImageLink)
-  {
-    errorObj.errorCount += 1;
-    errorObj.imageLinkError = "ImageLink cannot be empty."
-  }
+    if (!productImageLink) {
+      errorObj.errorCount += 1;
+      errorObj.imageLinkError = "ImageLink cannot be empty.";
+    }
 
-  if(!productQuantity)
-  {
-    errorObj.errorCount += 1;
-    errorObj.quantityError = "Quantity cannot be empty."
-  }else if(productQuantity <= 0)
-  {
-    errorObj.errorCount += 1;
-    errorObj.quantityError = "Quantity shoud be at least 1."
-  }
+    if (!productQuantity) {
+      errorObj.errorCount += 1;
+      errorObj.quantityError = "Quantity cannot be empty.";
+    } else if (productQuantity <= 0) {
+      errorObj.errorCount += 1;
+      errorObj.quantityError = "Quantity shoud be at least 1.";
+    }
 
+    if (errorObj.errorCount > 0) {
+      setErrorState(() => {
+        return errorObj;
+      });
+      alert("One or more input is invalid, please try again");
+      return;
+    }
 
-
-  if(errorObj.errorCount > 0)
-  {
-    setErrorState(()=>{
-      return errorObj;
-    })
-    alert("One or more input is invalid, please try again")
-    return;
-  }
-
-  let productObj = {
-    productName: productName,
-    description:productDescription,
-    category:productCategory,
-    price:productPrice,
-    imageLink:productImageLink,
-    quantity: productQuantity
+    let productObj = {
+      productName: productName,
+      description: productDescription,
+      category: productCategory,
+      price: productPrice,
+      imageLink: productImageLink,
+      quantity: productQuantity,
+    };
+    location.state
+      ? dispatch(
+          updateProduct({ product: productObj, id: location.state.product._id })
+        ).then((res) => {
+          if (res.error) {
+            alert(res.error.message);
+          } else {
+            alert("product updated!");
+            navigate("/");
+          }
+        })
+      : dispatch(createProduct(productObj)).then((res) => {
+          console.log(res);
+          if (res.error) {
+            alert(res.error.message);
+          } else {
+            alert("product created!");
+            navigate("/");
+          }
+        });
   };
-  location.state? 
-  dispatch( updateProduct({product: productObj,id : location.state.product._id})).then((res)=>{
-    if(res.error)
-    { 
-      alert( res.error.message) 
-    }
-    else
-    {
-      alert("product updated!")
-      navigate("/")
-    }
-    
-  })
-  
-  : dispatch(createProduct(productObj)).then((res)=>{
-    
-    console.log(res)
-    if(res.error)
-    { 
-      alert( res.error.message) 
-    }
-    else
-    {
-    alert("product created!")
-    navigate("/")
-    }
-  })
-  
- }
- 
-
 
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
-   
-    if(employee.employeeName === null)
-    {
-     // dispatch(fetchEmployee()); 
-   
+    if (employee.employeeName === null) {
+      // dispatch(fetchEmployee());
     }
   }, []);
 
  const onSubmit = (data) => {
   console.log(data)
-  console
+ 
  
   dispatch(setEmployeeProfile(data))
   dispatch(updateEmployee({applicationStatus :"Approved"})).then(()=>{ navigate("/")})
@@ -304,90 +284,216 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   First Name
                 </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeFirstName:""} style={{ marginTop: "20px" }} {...register("employeeFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeFirstName)} helperText={           
-                  (errors?.employeeFirstName?.type) ?  errorToPropMapping[errors?.employeeFirstName?.type]:"" 
-                }
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeFirstName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeFirstName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeFirstName}
+                  helperText={
+                    errors?.employeeFirstName?.type
+                      ? errorToPropMapping[errors?.employeeFirstName?.type]
+                      : ""
+                  }
                 />
-        
-   
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                 Middle Name
+                  Middle Name
                 </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeMiddleName:"" } style={{ marginTop: "20px" }}  {...register("employeeMiddleName",{maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeMiddleName)} helperText={           
-                  (errors?.employeeMiddleName?.type) ?  errorToPropMapping[errors?.employeeMiddleName?.type]:"" 
-                }/>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeMiddleName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeMiddleName", {
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeMiddleName}
+                  helperText={
+                    errors?.employeeMiddleName?.type
+                      ? errorToPropMapping[errors?.employeeMiddleName?.type]
+                      : ""
+                  }
+                />
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                 Last Name
+                  Last Name
                 </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeLastName:""} style={{ marginTop: "20px" }}  {...register("employeeLastName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeLastName)} helperText={           
-                  (errors?.employeeLastName?.type) ?  errorToPropMapping[errors?.employeeLastName?.type]:"" 
-                }/>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeLastName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeLastName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeLastName}
+                  helperText={
+                    errors?.employeeLastName?.type
+                      ? errorToPropMapping[errors?.employeeLastName?.type]
+                      : ""
+                  }
+                />
               </FormControl>
-          
-              </div>
+            </div>
 
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "start",
-                  gap: "20px",
-                }}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Phone Number
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeePhoneNumber:""} {...register("employeePhoneNumber", { required: true, maxLength: 20 ,pattern:/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im})} size="small" id="name-input"
-                error = {!!(errors?.employeePhoneNumber)} helperText={           
-                  (errors?.employeePhoneNumber?.type) ?  errorToPropMapping[errors?.employeePhoneNumber?.type]+ " Example:(123)4567890":"" 
-                } />
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeePhoneNumber
+                      : ""
+                  }
+                  {...register("employeePhoneNumber", {
+                    required: true,
+                    maxLength: 20,
+                    pattern:
+                      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeePhoneNumber}
+                  helperText={
+                    errors?.employeePhoneNumber?.type
+                      ? errorToPropMapping[errors?.employeePhoneNumber?.type] +
+                        " Example:(123)4567890"
+                      : ""
+                  }
+                />
               </FormControl>
-              
+
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                  Email 
+                  Email
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeEmail:""} {...register("employeeEmail", { required: true, maxLength: 120 ,pattern:/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/})} size="small" id="name-input" 
-                   error = {!!(errors?.employeeEmail)} helperText={           
-                    (errors?.employeeEmail?.type) ?  errorToPropMapping[errors?.employeeEmail?.type]+ " Example:user@mail.com" :"" 
-                  }/>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeEmail
+                      : ""
+                  }
+                  {...register("employeeEmail", {
+                    required: true,
+                    maxLength: 120,
+                    pattern:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeEmail}
+                  helperText={
+                    errors?.employeeEmail?.type
+                      ? errorToPropMapping[errors?.employeeEmail?.type] +
+                        " Example:user@mail.com"
+                      : ""
+                  }
+                />
               </FormControl>
-              </div>
-             
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "start",
-                  gap: "20px",
-                }}>
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   SSN
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeSsn:""} {...register("employeeSsn", {required: true, maxLength: 20 ,pattern: /^\d{3}-\d{2}-\d{4}$/})} size="small" id="name-input" 
-                  error = {!!(errors?.employeeSsn)} helperText={           
-                    (errors?.employeeSsn?.type) ?  errorToPropMapping[errors?.employeeSsn?.type]+ " Example: 123-45-6778" :"" 
-                  }/>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeSsn
+                      : ""
+                  }
+                  {...register("employeeSsn", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^\d{3}-\d{2}-\d{4}$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeSsn}
+                  helperText={
+                    errors?.employeeSsn?.type
+                      ? errorToPropMapping[errors?.employeeSsn?.type] +
+                        " Example: 123-45-6778"
+                      : ""
+                  }
+                />
               </FormControl>
-            
+
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Date of Birth
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeDateOfBirth:""} {...register("employeeDateOfBirth", { required: true, maxLength: 120 ,pattern:  /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/})} size="small" id="name-input" 
-                  error = {!!(errors?.employeeDateOfBirth)} helperText={           
-                    (errors?.employeeDateOfBirth?.type) ?  errorToPropMapping[errors?.employeeDateOfBirth?.type]+ " Example: MM/DD/YYYY" :"" 
-                  }/>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeDateOfBirth
+                      : ""
+                  }
+                  {...register("employeeDateOfBirth", {
+                    required: true,
+                    maxLength: 120,
+                    pattern:
+                      /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeDateOfBirth}
+                  helperText={
+                    errors?.employeeDateOfBirth?.type
+                      ? errorToPropMapping[errors?.employeeDateOfBirth?.type] +
+                        " Example: MM/DD/YYYY"
+                      : ""
+                  }
+                />
               </FormControl>
 
               <FormControl sx={{ m: 1, minWidth: 120 }}>
@@ -444,12 +550,14 @@ export default function application(props) {
               <div>
                 
               <img height={150} src={imagePreview}></img>
-                </div>
-              <div>
-              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Address</h5></div>
+            </div>
+            <div>
+              <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+                <h5 style={{ margin: "10px 0" }}>Address</h5>
+              </div>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                 Building/Apt Number
+                  Building/Apt Number
                 </InputLabel>
                 <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt", { required: true, maxLength: 120})} size="small" id="name-input" 
                  error = {!!(errors?.employeeBuildingApt)} helperText={           
@@ -459,7 +567,7 @@ export default function application(props) {
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                 Street Name
+                  Street Name
                 </InputLabel>
                 <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName", { required: true, maxLength: 120})} size="small" id="name-input" 
                  error = {!!(errors?.employeeStreetName)} helperText={           
@@ -507,44 +615,101 @@ export default function application(props) {
               </div>
               <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5  style={{margin:"10px 0"}}>Reference</h5></div>
 
-              <div
-                style={{
-                  width: "100%",
-                  display: "flex",
-                  justifyContent: "start",
-                  gap: "20px",
-                }}>
+            <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   First Name
                 </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeReferenceFirstName:""} style={{ marginTop: "20px" }} {...register("employeeReferenceFirstName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeReferenceFirstName)} helperText={           
-                  (errors?.employeeReferenceFirstName?.type) ?  errorToPropMapping[errors?.employeeReferenceFirstName?.type]:"" 
-                }
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeReferenceFirstName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeReferenceFirstName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeReferenceFirstName}
+                  helperText={
+                    errors?.employeeReferenceFirstName?.type
+                      ? errorToPropMapping[
+                          errors?.employeeReferenceFirstName?.type
+                        ]
+                      : ""
+                  }
                 />
-        
-   
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                 Middle Name
+                  Middle Name
                 </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeReferenceMiddleName:"" } style={{ marginTop: "20px" }}  {...register("employeeReferenceMiddleName",{maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeReferenceMiddleName)} helperText={           
-                  (errors?.employeeReferenceMiddleName?.type) ?  errorToPropMapping[errors?.employeeReferenceMiddleName?.type]:"" 
-                }/>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeReferenceMiddleName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeReferenceMiddleName", {
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeReferenceMiddleName}
+                  helperText={
+                    errors?.employeeReferenceMiddleName?.type
+                      ? errorToPropMapping[
+                          errors?.employeeReferenceMiddleName?.type
+                        ]
+                      : ""
+                  }
+                />
               </FormControl>
 
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                 Last Name
+                  Last Name
                 </InputLabel>
-                <TextField defaultValue={employee.personalProfile? employee.personalProfile.employeeLastName:""} style={{ marginTop: "20px" }}  {...register("employeeReferenceLastName", { required: true, maxLength: 20 ,pattern:/^[A-Za-z]+$/i})} size="small" id="name-input" erro
-                error = {!!(errors?.employeeReferenceLastName)} helperText={           
-                  (errors?.employeeReferenceLastName?.type) ?  errorToPropMapping[errors?.employeeReferenceLastName?.type]:"" 
-                }/>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.employeeLastName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeReferenceLastName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeReferenceLastName}
+                  helperText={
+                    errors?.employeeReferenceLastName?.type
+                      ? errorToPropMapping[
+                          errors?.employeeReferenceLastName?.type
+                        ]
+                      : ""
+                  }
+                />
               </FormControl>
              </div>
              <div
@@ -590,7 +755,7 @@ export default function application(props) {
       </div>
     );
 
-    /*
+  /*
     return (
       
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
@@ -691,5 +856,4 @@ export default function application(props) {
      
     );
      */
-  
 }

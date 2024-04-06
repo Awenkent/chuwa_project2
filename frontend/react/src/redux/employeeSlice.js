@@ -4,7 +4,7 @@ export const fetchCurrentEmployee = createAsyncThunk(
   "employee/fetchCurrentEmployee",
   async () => {
     const token = localStorage.getItem("token");
-    const response = await fetch("http://localhost:4000/employee/", {
+    const response = await fetch("http://localhost:4000/employee", {
       method: "GET",
       headers: {
         "Content-Type": "application/json;charset=UTF-8",
@@ -29,17 +29,17 @@ export const fetchAllEmployees = createAsyncThunk(
   "hr/fetchAllEmployees",
   async (parameters) => {
     //const url = (parameters) ? ("http://localhost:4000/Employee"+"?page=" + parameters.page +"&limit= " + parameters.limit) : "http://localhost:4000/Employee"
-    const response = await fetch("http://localhost:4000/hr/allProfiles").then(
-      (response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-        }
+    const response = await fetch("http://localhost:4000/hr/allProfiles", {
+      method: "GET",
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then((text) => {
+          throw new Error(text);
+        });
       }
-    );
+    });
     return response;
   }
 );
@@ -97,7 +97,7 @@ export const createEmployee = createAsyncThunk(
 );
 
 const defaultState = {
-
+  
   employee :{
   userName: null,
   role: "Employee",
@@ -142,8 +142,10 @@ export const employeeSlice = createSlice({
      
     },
     setEmployeeProfile :(state,action) =>{
-      state.employee.personalProfile = action.payload
-
+      state.employee.personalProfile= action.payload
+    },
+    setCurrentPage: (state, action) => {
+      state.currentPage = action.payload;
     },
     setCartMerge: (state, action) => {
       state.cartMerged = false;
@@ -242,9 +244,7 @@ export const employeeSlice = createSlice({
   },
 });
 
-
-export const { setEmployee,setEmployeeProfile} = employeeSlice.actions;
-
+export const { setEmployee ,setEmployeeProfile} = employeeSlice.actions;
 
 // The function below is called a selector and allows us to select a value from
 // the state. Selectors can also be defined inline where they're used instead of
