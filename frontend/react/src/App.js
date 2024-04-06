@@ -41,12 +41,12 @@ export default function App() {
         <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} >
           
           <Route path="/profile" element={<PersonalProfile />} />
-
         </Route>
        
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>
+
       </div>
     
      
