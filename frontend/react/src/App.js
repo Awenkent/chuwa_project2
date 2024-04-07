@@ -9,6 +9,7 @@ import PersonalProfile from "./features/personalProfile";
 import Signup from "./features/signup";
 import Application from "./features/application";
 import SendRegistrationEmail from "./features/generateRegistrationEmailPage";
+import RegistrationHistoryPage from "./features/registrationHistory";
 
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
@@ -45,6 +46,7 @@ export default function App() {
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
+        <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>
