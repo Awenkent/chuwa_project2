@@ -216,7 +216,7 @@ export const employeeSlice = createSlice({
         console.log("update employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.employee.applicationStatus = action.payload.applicationStatus;
+        state.employee.personalProfile = action.payload;
       })
       .addCase(updateEmployee.rejected, (state, action) => {
         state.status = "failed";
