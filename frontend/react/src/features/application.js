@@ -237,8 +237,7 @@ export default function application(props) {
   }, []);
 
  const onSubmit = (data) => {
-  console.log(data)
-  console.log(files)
+
   let obj =
   {
     firstName : data.employeeFirstName,
@@ -246,10 +245,19 @@ export default function application(props) {
     lastName: data.employeeLastName,
     email:data.employeeEmail,
     preferredName :data.employeePrederredName,
+    dataOfBirth :data.employeeDateOfBirth,
     profilePictureLink:data.employeeProfilePicture,
     cellPhoneNumber:data.employeePhoneNumber,
     SSN:data.employeeSsn,
     gender:data.employeeGender,
+    currentAddress:
+    {
+      buildingAptNumber:data.employeeBuildingApt,
+      streetName:data.employeeStreetName,
+      city:data.employeeCity,
+      state:data.employeeState,
+      zip:data.employeeZip
+    },
     reference:{
       firstName:data.employeeReferenceFirstName,
       middleName:data.employeeReferenceMiddleName,
@@ -261,7 +269,7 @@ export default function application(props) {
 
   }
   
-
+  console.log(obj)
   dispatch(updateEmployee(obj)).then(()=>{ navigate("/")})
  
 }
@@ -608,7 +616,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Building/Apt Number
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeBuildingApt:""} {...register("employeeBuildingApt", { required: true, maxLength: 120})} size="small" id="name-input" 
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile?.currentAddress?.buildingAptNumber:""} {...register("employeeBuildingApt", { required: true, maxLength: 120})} size="small" id="name-input" 
                  error = {!!(errors?.employeeBuildingApt)} helperText={           
                   (errors?.employeeBuildingApt?.type) ?  errorToPropMapping[errors?.employeeBuildingApt?.type]:"" 
                 }/>
@@ -618,7 +626,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Street Name
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeStreetName:""} {...register("employeeStreetName", { required: true, maxLength: 120})} size="small" id="name-input" 
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.currentAddress?.streetName:""} {...register("employeeStreetName", { required: true, maxLength: 120})} size="small" id="name-input" 
                  error = {!!(errors?.employeeStreetName)} helperText={           
                   (errors?.employeeStreetName?.type) ?  errorToPropMapping[errors?.employeeStreetName?.type]:"" 
                 }/>
@@ -634,7 +642,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                  City
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeCity:""} {...register("employeeCity", { required: true, maxLength: 120})} size="small" id="name-input" 
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.currentAddress?.city:""} {...register("employeeCity", { required: true, maxLength: 120})} size="small" id="name-input" 
                 error = {!!(errors?.employeeCity)} helperText={           
                   (errors?.employeeCity?.type) ?  errorToPropMapping[errors?.employeeCity?.type]:"" 
                 }/>
@@ -644,7 +652,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                  State
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeState:""} {...register("employeeState", { required: true, maxLength: 120})} size="small" id="name-input" 
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.currentAddress?.state:""} {...register("employeeState", { required: true, maxLength: 120})} size="small" id="name-input" 
                    error = {!!(errors?.employeeState)} helperText={           
                     (errors?.employeeState?.type) ?  errorToPropMapping[errors?.employeeState?.type]:"" 
                   }/>
@@ -654,7 +662,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                  Zip
                 </InputLabel>
-                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.employeeZip:""} {...register("employeeZip", { required: true, maxLength: 120})} size="small" id="name-input" 
+                <TextField style={{ marginTop: "20px" }} defaultValue={employee.personalProfile? employee.personalProfile.currentAddress?.zip:""} {...register("employeeZip", { required: true, maxLength: 120})} size="small" id="name-input" 
                    error = {!!(errors?.employeeZip)} helperText={           
                     (errors?.employeeZip?.type) ?  errorToPropMapping[errors?.employeeZip?.type]:"" 
                   }/>

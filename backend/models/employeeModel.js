@@ -47,12 +47,8 @@ const employeeSchema = new mongoose.Schema(
     },
     currentAddress: {
       type: {
-        building: {
+        buildingAptNumber: {
           type: String,
-          default: "",
-        },
-        streetNumber: {
-          type: Number,
           default: "",
         },
         streetName: {
@@ -84,8 +80,9 @@ const employeeSchema = new mongoose.Schema(
       type: String,
     },
     dateOfBirth: {
-      type: Date,
-      default: Date.now(),
+      type: String,
+      required: true,
+      default: "",
     },
     gender: {
       type: String,
