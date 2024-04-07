@@ -123,12 +123,13 @@ export default function application(props) {
   const navigate = useNavigate();
   const location = useLocation();
   const watchUSResidency = watch("employeeResidency");
-  const watchProfilePicture= watch("employeeProfilePicture")
+  const watchProfilePicture= watch("employeeProfilePicture",(employee?.personalProfile?.profilePictureLink? employee.personalProfile.profilePictureLink
+    :"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636"))
   console.log(employee)
   console.log(employee.personalProfile)
-  const [imagePreview,setImagePreview] = useState(employee?.personalProfile?.employeeProfileImage? employee.personalProfile.employeeProfileImage
+  const [imagePreview,setImagePreview] = useState(employee?.personalProfile?.profilePictureLink? employee.personalProfile.profilePictureLink
     :"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
-  const [files,setFiles] = useState([]);
+  const [files,setFiles] = useState(employee.personalProfile.documents);
 
   const handleEmployeeProfileImageUpload = ()=>
   {
@@ -237,10 +238,31 @@ export default function application(props) {
 
  const onSubmit = (data) => {
   console.log(data)
- 
- 
-  dispatch(setEmployeeProfile(data))
-  dispatch(updateEmployee({applicationStatus :"Approved"})).then(()=>{ navigate("/")})
+  console.log(files)
+  let obj =
+  {
+    firstName : data.employeeFirstName,
+    middleName:data.employeeMiddleName,
+    lastName: data.employeeLastName,
+    email:data.employeeEmail,
+    preferredName :data.employeePrederredName,
+    profilePictureLink:data.employeeProfilePicture,
+    cellPhoneNumber:data.employeePhoneNumber,
+    SSN:data.employeeSsn,
+    gender:data.employeeGender,
+    reference:{
+      firstName:data.employeeReferenceFirstName,
+      middleName:data.employeeReferenceMiddleName,
+      lastName:data.employeeReferenceLastName
+    },
+    documents:files
+   
+
+
+  }
+  
+
+  dispatch(updateEmployee(obj)).then(()=>{ navigate("/")})
  
 }
 
@@ -287,7 +309,7 @@ export default function application(props) {
                 <TextField
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeFirstName
+                      ? employee.personalProfile.firstName
                       : ""
                   }
                   style={{ marginTop: "20px" }}
@@ -315,7 +337,7 @@ export default function application(props) {
                 <TextField
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeMiddleName
+                      ? employee.personalProfile.middleName
                       : ""
                   }
                   style={{ marginTop: "20px" }}
@@ -342,7 +364,7 @@ export default function application(props) {
                 <TextField
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeLastName
+                      ? employee.personalProfile.lastName
                       : ""
                   }
                   style={{ marginTop: "20px" }}
@@ -364,6 +386,33 @@ export default function application(props) {
               </FormControl>
             </div>
 
+            <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Preferred Name
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.lastName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeePrederredName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeePrederredName}
+                  helperText={
+                    errors?.employeePrederredName?.type
+                      ? errorToPropMapping[errors?.employeePrederredName?.type]
+                      : ""
+                  }
+                />
+              </FormControl>
             <div
               style={{
                 width: "100%",
@@ -380,7 +429,7 @@ export default function application(props) {
                   style={{ marginTop: "20px" }}
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeePhoneNumber
+                      ? employee.personalProfile.cellPhoneNumber
                       : ""
                   }
                   {...register("employeePhoneNumber", {
@@ -409,7 +458,7 @@ export default function application(props) {
                   style={{ marginTop: "20px" }}
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeEmail
+                      ? employee.personalProfile.email
                       : ""
                   }
                   {...register("employeeEmail", {
@@ -447,7 +496,7 @@ export default function application(props) {
                   style={{ marginTop: "20px" }}
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeSsn
+                      ? employee.personalProfile.SSN
                       : ""
                   }
                   {...register("employeeSsn", {
@@ -475,7 +524,7 @@ export default function application(props) {
                   style={{ marginTop: "20px" }}
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeDateOfBirth
+                      ? employee.personalProfile.dateOfBirth
                       : ""
                   }
                   {...register("employeeDateOfBirth", {
@@ -505,7 +554,7 @@ export default function application(props) {
               labelId="demo-simple-select-helper-label"
               id="demo-simple-select-helper"
         size="small"
-        defaultValue={employee.personalProfile? employee.personalProfile.employeeGender:"NoAnswer"}
+        defaultValue={employee.personalProfile? employee.personalProfile.gender:"NoAnswer"}
         style={{ marginTop: "12px" }}  {...register("employeeGender")} 
       >
 
@@ -527,7 +576,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Profile Image
                 </InputLabel>
-                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.employeeProfilePicture:""} {...register("employeeProfilePicture", { required: true, maxLength: 120})} size="small" id="name-input" 
+                <BootstrapInput style={{ marginTop: "20px" }}  defaultValue={employee.personalProfile? employee.personalProfile.profilePictureLink:""} {...register("employeeProfilePicture", { required: true, maxLength: 120})} size="small" id="name-input" 
                 error = {!!(errors?.employeeProfilePicture)} helperText={           
                   (errors?.employeeProfilePicture?.type) ?  errorToPropMapping[errors?.employeeProfilePicture?.type]+ " Example: MM/DD/YYYY" :"" 
                 }
@@ -630,7 +679,7 @@ export default function application(props) {
                 <TextField
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeReferenceFirstName
+                      ? employee.personalProfile.reference.firstName
                       : ""
                   }
                   style={{ marginTop: "20px" }}
@@ -660,7 +709,7 @@ export default function application(props) {
                 <TextField
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeReferenceMiddleName
+                      ? employee.personalProfile.reference.middleName
                       : ""
                   }
                   style={{ marginTop: "20px" }}
@@ -689,7 +738,7 @@ export default function application(props) {
                 <TextField
                   defaultValue={
                     employee.personalProfile
-                      ? employee.personalProfile.employeeLastName
+                      ? employee.personalProfile.reference.lastName
                       : ""
                   }
                   style={{ marginTop: "20px" }}
@@ -738,7 +787,7 @@ export default function application(props) {
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Work Permit
                 </InputLabel>
-                <FileUpload fileHandler = {setFiles}/>   
+                <FileUpload fileHandler = {setFiles} files ={employee.personalProfile.documents}/>   
               </FormControl>)
               :
               <></>

@@ -36,7 +36,7 @@ return(
   <Button onClick={()=>{setEditMode(true)}}>Edit</Button>
   <div>profile</div>
   <div>
-    Employee Name: {employee.personalProfile.employeeFirstName}  {employee.personalProfile.employeeMiddleName}  {employee.personalProfile.employeeLastName}
+    Employee Name: {employee.personalProfile.firstName}  {employee.personalProfile.middleName}  {employee.personalProfile.lastName}
   </div>
   <div>
     Phone: {employee.personalProfile.employeePhoneNumber} 

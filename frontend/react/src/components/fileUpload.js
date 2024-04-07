@@ -7,9 +7,37 @@ import shortid from "https://cdn.skypack.dev/shortid@2.2.16";
 export default function FileUpload(props) 
 {
 
-    const [Files, SetFiles] = useState([]);
+    const [Files, SetFiles] = useState(props.files? props.files : []);
 
+    /*
+    if(props.files)
+    {
+        props.files.map((file)=>{
+            let reader = new FileReader();
+            reader.onloadend = () => {
+                SetFiles((preValue) => {
+                    return [
+                        ...preValue,
+                        {
+                            id: shortid.generate(),
+                            filename: file.name,
+                            filetype:file.type,
+                            fileimage: reader.result,
+                            datetime: file.lastModifiedDate.toLocaleString('en-IN'),
+                            filesize: filesizes(file.size)
+                        }
+                    ]
+                });
+            }
 
+            if(file) {
+                reader.readAsDataURL(file);
+            }
+        })
+           
+            
+    }
+    */
     const filesizes = (bytes, decimals = 2) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -26,6 +54,7 @@ export default function FileUpload(props)
             images.push((e.target.files[i]));
             let reader = new FileReader();
             let file = e.target.files[i];
+            console.log(e.target.files[i])
             reader.onloadend = () => {
               
                 if(props.fileHandler)
@@ -66,9 +95,13 @@ export default function FileUpload(props)
     const DeleteFile = async (id) => {
         if(window.confirm("Are you sure you want to delete this Image?")){
             const result = Files.filter((data)=>data.id !== id);
-            SetFiles(result);
+            SetFiles((prev) => result);
+            if(props.fileHandler)
+            {
+                props.fileHandler((prev) => result)
+            }
         }else{
-            // alert('No');
+           
         }
     }
    

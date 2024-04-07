@@ -141,7 +141,16 @@ const employeeSchema = new mongoose.Schema(
         },
       ],
     },
-    documents: [String],
+    documents: [{
+      id:String,
+      filename:String,
+      filetype:String,
+      fileimage:String,
+      datetime:String,
+      filesize:String
+      
+    
+    }],
     nextSteps: String,
     feedback: String,
   },
