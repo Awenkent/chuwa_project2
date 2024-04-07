@@ -32,12 +32,10 @@ const employeeSchema = new mongoose.Schema(
     },
     firstName: {
       type: String,
-      required: true,
       default: "",
     },
     lastName: {
       type: String,
-      required: true,
       default: "",
     },
     middleName: String,
@@ -48,49 +46,65 @@ const employeeSchema = new mongoose.Schema(
         "https://upload.wikimedia.org/wikipedia/commons/a/af/Default_avatar_profile.jpg",
     },
     currentAddress: {
-      type: String,
-      default: "",
-      required: true,
+      type: {
+        building: {
+          type: String,
+          default: "",
+        },
+        streetNumber: {
+          type: Number,
+          default: "",
+        },
+        streetName: {
+          type: String,
+          default: "",
+        },
+        city: {
+          type: String,
+          default: "",
+        },
+        state: {
+          type: String,
+          default: "",
+        },
+        zip: {
+          type: String,
+          default: "",
+        },
+      },
     },
 
     cellPhoneNumber: {
       type: String,
       default: "",
-      required: true,
     },
     workPhoneNumber: String,
     SSN: {
       default: "",
       type: String,
-      required: true,
     },
     dateOfBirth: {
       type: Date,
       default: Date.now(),
-      required: true,
     },
     gender: {
       type: String,
       enum: ["male", "female", "i do not wish to answer", ""],
-      required: true,
       default: "",
     },
     workAuth: {
       type: {
         status: {
           type: String,
-          required: true,
           default: "",
         },
         startDate: {
           type: Date,
-          required: true,
           default: Date.now(),
         },
         endDate: {
           type: Date,
           default: Date.now(),
-          required: true,
         },
       },
     },
@@ -99,13 +113,11 @@ const employeeSchema = new mongoose.Schema(
       type: {
         firstName: {
           type: String,
-          required: true,
           default: "",
         },
         lastName: {
           type: String,
           default: "",
-          required: true,
         },
         middleName: String,
         phone: String,
@@ -113,7 +125,6 @@ const employeeSchema = new mongoose.Schema(
         relationship: {
           type: String,
           default: "",
-          required: true,
         },
       },
     },
@@ -122,13 +133,11 @@ const employeeSchema = new mongoose.Schema(
         {
           firstName: {
             type: String,
-            required: true,
             default: "",
           },
           lastName: {
             type: String,
             default: "",
-            required: true,
           },
           middleName: String,
           phone: String,
@@ -136,7 +145,6 @@ const employeeSchema = new mongoose.Schema(
           relationship: {
             type: String,
             default: "",
-            required: true,
           },
         },
       ],
