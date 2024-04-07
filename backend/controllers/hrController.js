@@ -52,7 +52,7 @@ const updateAnyProfile = async (req, res) => {
       .json({ message: "Error on updating Employee:" + err.message });
   }
 };
-const getNewEmployeeToken = async (req, res) => {
+const sendSignupEmail = async (req, res) => {
   try {
     const payload = {
       HR: {
@@ -135,7 +135,7 @@ module.exports = {
   getAllEmployees,
   createEmployee,
   updateAnyProfile,
-  getNewEmployeeToken,
+  sendSignupEmail,
   getRegistrationHistory,
   deleteEmployee,
 };
