@@ -1,4 +1,5 @@
 const Employee = require("../models/employeeModel");
+const RegistrationHistory = require("../models/registrationHistory");
 const jwt = require("jsonwebtoken");
 require("dotenv").config({ path: ".env" });
 const sgMail = require("@sendgrid/mail");
@@ -9,12 +10,10 @@ const getAllEmployees = async (req, res) => {
     res.status(200).json(employees);
   } catch (err) {
     console.error(err.message);
-    res
-      .status(500)
-      .json({
-        message:
-          "Failed to get all employee profiles. Server Error:" + err.message,
-      });
+    res.status(500).json({
+      message:
+        "Failed to get all employee profiles. Server Error:" + err.message,
+    });
   }
 };
 
@@ -82,11 +81,42 @@ const getNewEmployeeToken = async (req, res) => {
         console.error(error);
       });
 
-    res.status(200).json({ message: "Email sent successfully", signupLink });
+    const record = {
+      email: req.body.email,
+      name: req.body.name,
+      registrationLink: signupLink,
+      submitted: false,
+      time:new Date(),
+    };
+    const registrationInstance = new RegistrationHistory(record);
+    await registrationInstance
+      .save()
+      .then((savedRecord) => {
+        console.log("Record saved successfully:", savedRecord);
+        // You can handle further operations here if needed
+      })
+      .catch((error) => {
+        console.error("Error saving record:", error);
+        // Handle error appropriately
+      });
+    res.status(200).json({ message: "Email sent successfully", record });
   } catch (err) {
     res
       .status(500)
       .json({ message: "Failed to send the sign up email:" + err.message });
+  }
+};
+
+const getRegistrationHistory = async (req, res) => {
+  try {
+    const registrationHistory = await RegistrationHistory.find();
+    res.status(200).json(registrationHistory);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({
+      message:
+        "Failed to get all registration history. Server Error:" + err.message,
+    });
   }
 };
 
@@ -106,5 +136,6 @@ module.exports = {
   createEmployee,
   updateAnyProfile,
   getNewEmployeeToken,
+  getRegistrationHistory,
   deleteEmployee,
 };
