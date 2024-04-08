@@ -1,5 +1,5 @@
 const Employee = require("../models/employeeModel");
-
+const RegistrationHistory = require("../models/registrationHistory");
 const getOneEmployee = async (req, res) => {
   try {
     const employee = await Employee.findById(req.employee?.id);
@@ -22,6 +22,14 @@ const createEmployee = async (req, res) => {
         .json({ message: "Bad Request: missing parameters" });
     }
     await employee.save();
+    const history = await RegistrationHistory.updateMany(
+      {email:req.body.email},
+      { $set: { submitted: true } },
+      {
+        new: true,
+      }
+    );
+    console.log("History:"+history); 
     res.status(201).json(employee);
   } catch (err) {
     console.log(err.message);
