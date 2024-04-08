@@ -99,6 +99,7 @@ export const createEmployee = createAsyncThunk(
 const defaultState = {
   
   employee :{
+  
   userName: null,
   role: "Employee",
   applicationStatus:"Never submitted",
@@ -196,6 +197,7 @@ export const employeeSlice = createSlice({
         console.log("fetch current employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
+        
         state.employee.userName = action.payload.userName;
         state.employee.role = action.payload.role;
         state.employee.applicationStatus = action.payload.applicationStatus
@@ -216,6 +218,7 @@ export const employeeSlice = createSlice({
         console.log("update employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
+        state.applicationStatus = action.payload.applicationStatus
         state.employee.personalProfile = action.payload;
       })
       .addCase(updateEmployee.rejected, (state, action) => {

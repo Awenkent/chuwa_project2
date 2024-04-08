@@ -24,16 +24,15 @@ import {
   fetchEmployee,
   setEmployeeProfile
 } from "../redux/employeeSlice";
-export default function personalProfile(props) {
+export default function applicationStatus(props) {
 
-  const [editMode, setEditMode] = useState(false);
-  const employee = useSelector(selectEmployee);
+  
+const employee = useSelector(selectEmployee);
   
 
- if(!editMode)  
 return(
   <div style={{maxWidth:"800px", margin:"0 auto"}}>
-  <h2>Personel Information</h2>
+  <h2>Application Status</h2>
   <div
     style={{
       padding: "20px 50px",
@@ -41,8 +40,11 @@ return(
       backgroundColor: "white",
     }}
   >
-  <Button onClick={()=>{setEditMode(true)}}>Edit</Button>
 
+    <div>Current Status: {employee.personalProfile?.applicationStatus}</div>
+    {employee.personalProfile?.feedback? (
+       <div>Hr feedback: {employee.personalProfile?.feedback}</div>
+    ) :""}
   <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
   <div style={{textAlign:"left"}}>
   <div>
@@ -122,23 +124,7 @@ return(
 
 </div>
   </div>
- 
-)
-else
-{
-  return(
-  <>
-  <Button onClick={()=>{
-     if(window.confirm("Are you sure want discard all changes?"))
-     {
-      setEditMode(false)
-    }
-   
-    }}>Exit</Button>
-  <Application/>
-  </>
-  )
 
-}
+)
 
 }

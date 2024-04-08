@@ -91,6 +91,9 @@ const employeeSchema = new mongoose.Schema(
     },
     workAuth: {
       type: {
+        type: String,
+        default: "",
+      },
         status: {
           type: String,
           default: "",
@@ -103,7 +106,7 @@ const employeeSchema = new mongoose.Schema(
           type: Date,
           default: Date.now(),
         },
-      },
+     
     },
 
     reference: {
@@ -152,9 +155,9 @@ const employeeSchema = new mongoose.Schema(
       filetype:String,
       fileimage:String,
       datetime:String,
-      filesize:String
+      filesize:String,
+      status:String,
       
-    
     }],
     nextSteps: String,
     feedback: String,

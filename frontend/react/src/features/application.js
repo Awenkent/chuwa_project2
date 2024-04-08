@@ -24,7 +24,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import {
     setEmployee,
     selectEmployee,
-    fetchEmployee,
+    fetchCurrentEmployee,
     setEmployeeProfile,
     updateEmployee
   } from "../redux/employeeSlice";
@@ -122,7 +122,8 @@ export default function application(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const watchUSResidency = watch("employeeResidency");
+  const watchemployeeWorkAuth = watch("employeeWorkAuth",(employee.personalProfile?.workAuth ? employee.personalProfile?.workAuth?.type :"Citizen"));
+  
   const watchProfilePicture= watch("employeeProfilePicture",(employee?.personalProfile?.profilePictureLink? employee.personalProfile.profilePictureLink
     :"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636"))
   console.log(employee)
@@ -130,7 +131,7 @@ export default function application(props) {
   const [imagePreview,setImagePreview] = useState(employee?.personalProfile?.profilePictureLink? employee.personalProfile.profilePictureLink
     :"https://preyash2047.github.io/assets/img/no-preview-available.png?h=824917b166935ea4772542bec6e8f636")
   const [files,setFiles] = useState(employee.personalProfile.documents);
-
+console.log(employee)
   const handleEmployeeProfileImageUpload = ()=>
   {
      setImagePreview(watchProfilePicture)
@@ -231,25 +232,32 @@ export default function application(props) {
 
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
-    if (employee.employeeName === null) {
-      // dispatch(fetchEmployee());
+    if (employee.userName === null) {
+      navigate("/");
     }
   }, []);
 
  const onSubmit = (data) => {
 
+  let next = "None";
+  
+  
   let obj =
   {
     firstName : data.employeeFirstName,
     middleName:data.employeeMiddleName,
+    applicationStatus: employee.applicationStatus === "Never Submitted" ? "Pending" : employee.applicationStatus,
     lastName: data.employeeLastName,
     email:data.employeeEmail,
     preferredName :data.employeePrederredName,
-    dataOfBirth :data.employeeDateOfBirth,
+    dateOfBirth :data.employeeDateOfBirth,
     profilePictureLink:data.employeeProfilePicture,
     cellPhoneNumber:data.employeePhoneNumber,
     SSN:data.employeeSsn,
     gender:data.employeeGender,
+    workAuth:{
+      type: data.employeeWorkAuth
+    },
     currentAddress:
     {
       buildingAptNumber:data.employeeBuildingApt,
@@ -261,23 +269,22 @@ export default function application(props) {
     reference:{
       firstName:data.employeeReferenceFirstName,
       middleName:data.employeeReferenceMiddleName,
-      lastName:data.employeeReferenceLastName
+      lastName:data.employeeReferenceLastName,
+      relationship:data.employeeReferenceRelationship
     },
-    documents:files
+    documents:files,
+    nextSteps: "Wait for HR to approve the onboarding application"
    
-
-
   }
   
   console.log(obj)
-  dispatch(updateEmployee(obj)).then(()=>{ navigate("/")})
+  dispatch(updateEmployee(obj)).then(()=>{
+     alert("Update Successful!")
+  navigate("/")})
  
 }
 
-    if(employee.applicationStatus === "never")
-    {
-
-    }
+  
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
         <h2>{location.state ?"Update Product" : "Create Product"}</h2>
@@ -686,7 +693,7 @@ export default function application(props) {
                 </InputLabel>
                 <TextField
                   defaultValue={
-                    employee.personalProfile
+                    employee.personalProfile?.reference
                       ? employee.personalProfile.reference.firstName
                       : ""
                   }
@@ -716,7 +723,7 @@ export default function application(props) {
                 </InputLabel>
                 <TextField
                   defaultValue={
-                    employee.personalProfile
+                    employee.personalProfile?.reference
                       ? employee.personalProfile.reference.middleName
                       : ""
                   }
@@ -745,7 +752,7 @@ export default function application(props) {
                 </InputLabel>
                 <TextField
                   defaultValue={
-                    employee.personalProfile
+                    employee.personalProfile?.reference
                       ? employee.personalProfile.reference.lastName
                       : ""
                   }
@@ -768,15 +775,76 @@ export default function application(props) {
                   }
                 />
               </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Relationship
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile?.reference
+                      ? employee.personalProfile.reference.relationship
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeReferenceRelationship", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeReferenceRelationship}
+                  helperText={
+                    errors?.employeeReferenceRelationship?.type
+                      ? errorToPropMapping[
+                          errors?.employeeReferenceRelationship?.type
+                        ]
+                      : ""
+                  }
+                />
+              </FormControl>
              </div>
              <div
                 style={{
                   width: "100%",
                   display: "flex",
                   justifyContent: "start",
+                  alignItems:"center",
                   gap: "20px",
                 }}>
-             <span>Permanent resident or citizen of the U.S? </span><input type="checkbox" {...register("employeeResidency")}></input>
+             <span>What's your work Authorization in the U.S? </span>  
+<Select
+
+labelId="demo-simple-select-helper-label"
+id="demo-simple-select-helper"
+size="small"
+defaultValue={employee.personalProfile?.workAuth ? employee.personalProfile?.workAuth?.type:"Citizen"}
+style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")} 
+>
+
+<MenuItem key={"Citizen"} value={"Citizen"}>
+{"Citizen"}
+</MenuItem>
+<MenuItem key={"GreenCard"} value={"GreenCard"}>
+{"GreenCard"}
+</MenuItem>
+
+<MenuItem key={"H1B"} value={"H1B"}>
+{"H1B"}
+</MenuItem>
+<MenuItem key={"H4"} value={"H4"}>
+{"H4"}
+</MenuItem>
+<MenuItem key={"F1(CPT/OPT)"} value={"F1(CPT/OPT)"}>
+{"F1(CPT/OPT)"}
+</MenuItem>
+
+<MenuItem key={"Ohters"} value={"Others"}>
+{"Others"}
+</MenuItem>
+</Select>
                 
 </div>
               <div
@@ -786,17 +854,54 @@ export default function application(props) {
                   justifyContent: "start",
                   gap: "20px",
                 }}>
-
-             
+  
           
-            {watchUSResidency?
+            {watchemployeeWorkAuth === "F1(CPT/OPT)" ?
               
-              (<FormControl variant="standard" fullWidth>
+              (
+              <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                  Work Permit
+                  Please upload your OPT receipt:
                 </InputLabel>
                 <FileUpload fileHandler = {setFiles} files ={employee.personalProfile.documents}/>   
-              </FormControl>)
+              </FormControl>
+              )
+              :
+              <></>
+            }
+
+            {watchemployeeWorkAuth === "Others" ?          
+              (
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                Please specify your visa type:
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.visaTitle
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeVisaTitle", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeVisaTitle}
+                  helperText={
+                    errors?.employeeVisaTitle?.type
+                      ? errorToPropMapping[
+                          errors?.employeeVisaTitle?.type
+                        ]
+                      : ""
+                  }
+                /> 
+              </FormControl>
+              )
               :
               <></>
             }
@@ -812,105 +917,5 @@ export default function application(props) {
       </div>
     );
 
-  /*
-    return (
-      
-      <div style={{maxWidth:"800px", margin:"0 auto"}}>
-            <h2>{location.state ?"Update Product" : "Create Product"}</h2>
-        <div
-          style={{
-            padding: "20px 50px",
-            margin: "50px",
-            backgroundColor: "white",
-          }}
-        >
-          <form action="" style={{ textAlign: "center" }}>
-            <Box
-              component="div"
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                gridTemplateColumns: { sm: "1fr 1fr" },
-                gap: 3,
-              }}
-            >
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Product Name
-                </InputLabel>
-                <TextField id="name-input" style={{ marginTop: "20px" }} size="small" value = {productName} onChange={handleProductNameChange} error = {!!errorState.productNameError} helperText={errorState.productNameError}/>
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Product Description
-                </InputLabel>
-                <TextareaAutosize aria-label="empty textarea" minRows={8} value = {productDescription} onChange={handleProductDescriptionChange}/>
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Category
-                </InputLabel>
-                <TextField id="category-input" style={{ marginTop: "20px" }} size="small" value = {productCategory} onChange={handleProductCategoryChange}/>
-              </FormControl>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  Price
-                </InputLabel>
-                <TextField id="price-input" style={{ marginTop: "20px" }} size="small" value = {productPrice} onChange={handleProductPriceChange} error = {!!errorState.priceError} helperText={errorState.priceError}/>
-              </FormControl>
-
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                  In Stock Quantity
-                </InputLabel>
-                <TextField id="quantity-input" style={{ marginTop: "20px" }} size="small" value = {productQuantity} onChange={handleProductQuantityChange} error = {!!errorState.quantityError} helperText={errorState.quantityError}/>
-              </FormControl>
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="imageLink-input">
-                  Add Image Link
-                </InputLabel>
-                <BootstrapInput
-                  id="imageLink_input"
-                  style={{ marginTop: "20px" }} size="small"
-                  error = {!!errorState.imageLinkError} 
-                  helperText={errorState.imageLinkError}
-                  value = {productImageLink} onChange={handleProductImageLinkChange}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <Button
-                        size="small"
-                        component="label"
-                        
-                        role={undefined}
-                        variant="contained"
-                        tabIndex={-1}
-                        onClick ={handleProductImageLinkUpload} 
-                        startIcon={<CloudUploadIcon />}
-                      >
-                        Upload
-                       
-                      </Button>
-                    </InputAdornment>
-                  }
-                />
-
-              </FormControl>
- <FormControl variant="standard" fullWidth>
-                <img  src={imagePreview}></img>
-              </FormControl>
-              <Button variant="contained" fullWidth onClick={handleProductCreation}>
-              {location.state ?"Update Product" : "Add Product"}
-              </Button>
-              {location.state? <Button onClick={handleDelete}>delete Product</Button> :""}
-            </Box>
-          </form>
-        </div>
-      </div>
-     
-    );
-     */
+  
 }
