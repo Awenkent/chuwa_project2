@@ -14,6 +14,8 @@ import RegistrationHistoryPage from "./features/registrationHistory";
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import VisaStatus from "./features/visaStatusManagement"
+import ApplicationStatus from "./features/applicationStatus"
 import {
   fetchCurrentEmployee,
   setEmployee,
@@ -40,9 +42,11 @@ export default function App() {
         <Route path="/signin" element={<Signin />} /> 
         
         <Route path="/application" element={<Application />} />  
+        <Route path="/applicationstatus" element={<ApplicationStatus />} />
         <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} >
-          
           <Route path="/profile" element={<PersonalProfile />} />
+          <Route path="/visastatus" element={<VisaStatus />} />
+        
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />

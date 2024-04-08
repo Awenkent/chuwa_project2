@@ -74,7 +74,9 @@ export default function Header(props) {
             <b>Chuwa</b> <small>Management</small>
           </h3>
         </div>
-        <Paper
+
+
+        {employee.role === "hr" ? (<Paper
           component="form"
           sx={{
             p: "2px 4px",
@@ -92,7 +94,9 @@ export default function Header(props) {
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
             <SearchIcon />
           </IconButton>
-        </Paper>
+        </Paper>):""
+        
+        }
         <div
           style={{
             flex: 1,
@@ -108,7 +112,7 @@ export default function Header(props) {
             Personal Information
           <ManageAccountsOutlinedIcon className="icon clickable" fontSize="medium" onClick={()=>{navigate("/profile")}}/>
           Visa Status Management
-          <ShoppingCartOutlinedIcon className="icon clickable" fontSize="medium" onClick={handleDisplayCart}/>
+          <ShoppingCartOutlinedIcon className="icon clickable" fontSize="medium" onClick={()=>{navigate("/visastatus")}}/>
           </span>
 
           
