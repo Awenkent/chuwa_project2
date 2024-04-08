@@ -47,12 +47,8 @@ const employeeSchema = new mongoose.Schema(
     },
     currentAddress: {
       type: {
-        building: {
+        buildingAptNumber: {
           type: String,
-          default: "",
-        },
-        streetNumber: {
-          type: Number,
           default: "",
         },
         streetName: {
@@ -84,8 +80,9 @@ const employeeSchema = new mongoose.Schema(
       type: String,
     },
     dateOfBirth: {
-      type: Date,
-      default: Date.now(),
+      type: String,
+      required: true,
+      default: "",
     },
     gender: {
       type: String,
@@ -94,6 +91,9 @@ const employeeSchema = new mongoose.Schema(
     },
     workAuth: {
       type: {
+        type: String,
+        default: "",
+      },
         status: {
           type: String,
           default: "",
@@ -106,7 +106,7 @@ const employeeSchema = new mongoose.Schema(
           type: Date,
           default: Date.now(),
         },
-      },
+     
     },
 
     reference: {
@@ -149,7 +149,16 @@ const employeeSchema = new mongoose.Schema(
         },
       ],
     },
-    documents: [String],
+    documents: [{
+      id:String,
+      filename:String,
+      filetype:String,
+      fileimage:String,
+      datetime:String,
+      filesize:String,
+      status:String,
+      
+    }],
     nextSteps: String,
     feedback: String,
   },

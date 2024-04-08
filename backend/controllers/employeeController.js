@@ -41,6 +41,7 @@ const createEmployee = async (req, res) => {
 
 const updateEmployee = async (req, res) => {
   try {
+    console.log(req.body)
     const employee = await Employee.findByIdAndUpdate(
       req.employee?.id,
       req.body,
@@ -48,6 +49,7 @@ const updateEmployee = async (req, res) => {
         new: true,
       }
     );
+    console.log(employee)
     res.status(200).json(employee);
   } catch (err) {
     res
