@@ -7,6 +7,7 @@ const {
   getRegistrationHistory,
   createEmployee,
   deleteEmployee,
+  sendNotification,
 } = require("../controllers/hrController");
 
 const authentication = require("../middleware/authentication");
@@ -18,6 +19,7 @@ router.put("/profile", authentication, authorization, updateAnyProfile); //only 
 router.post("/new", authentication, authorization, sendSignupEmail); //
 router.get("/registrationHistory", authentication, authorization, getRegistrationHistory); //
 router.post("/employee", authentication, authorization, createEmployee); //
+router.post("/notification", authentication, authorization, sendNotification); //
 router.delete("/employee", authentication, authorization, deleteEmployee); //
 
 module.exports = router;
