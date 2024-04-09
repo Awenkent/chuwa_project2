@@ -28,7 +28,7 @@ export const fetchCurrentEmployee = createAsyncThunk(
 export const fetchAllEmployees = createAsyncThunk(
   "hr/fetchAllEmployees",
   async (parameters) => {
-    //const url = (parameters) ? ("http://localhost:4000/Employee"+"?page=" + parameters.page +"&limit= " + parameters.limit) : "http://localhost:4000/Employee"
+  
     const response = await fetch("http://localhost:4000/hr/allProfiles", {
       method: "GET",
     }).then((response) => {
@@ -218,7 +218,7 @@ export const employeeSlice = createSlice({
         console.log("update employee successfully:");
         console.log(action);
         // Add any fetched posts to the array
-        state.applicationStatus = action.payload.applicationStatus
+        state.employee.applicationStatus = action.payload.applicationStatus
         state.employee.personalProfile = action.payload;
       })
       .addCase(updateEmployee.rejected, (state, action) => {

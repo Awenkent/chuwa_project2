@@ -22,12 +22,12 @@ export default function Home()
       {
         if(employee.applicationStatus === "Never Submitted")
         {
-         
+        
           navigate("/application");  
         }
         else
         {
-  
+      
           navigate("/applicationstatus");  
         }
       }

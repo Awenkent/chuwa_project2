@@ -123,9 +123,9 @@ export default function visaStatus(props) {
   const navigate = useNavigate();
   const location = useLocation();
   
-  const [files,setFiles] = useState(employee.personalProfile.documents);
+  const [files,setFiles] = useState([]);
 
- 
+  
  
 
   const matches = useMediaQuery("(min-width:600px)");
@@ -136,11 +136,11 @@ export default function visaStatus(props) {
   }, []);
 
  const onSubmit = () => {
-
-
+console.log(files)
+  let allFiles = [...employee.personalProfile?.documents,...files]
   let obj =
   {
-    documents:files,
+    documents:allFiles,
     nextSteps: "Wait for HR to approve the visa document"
   }
   
@@ -150,10 +150,15 @@ export default function visaStatus(props) {
     navigate("/")})
  
 }
-
+    if(employee.personalProfile?.workAuth?.type !== "F1(CPT/OPT)" || employee.personalProfile?.optStatus ==="Approved")
+    {
+      return <div>No action required</div>
+    }
+    else
+    {
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>Current Status: {employee.personalProfile?.nextSteps}</h2>
+        <h2>Visa Status: </h2>
         <div
           style={{
             padding: "20px 50px",
@@ -161,6 +166,7 @@ export default function visaStatus(props) {
             backgroundColor: "white",
           }}
         >
+       
         <Box
               component="form"
               onSubmit={handleSubmit(onSubmit)}
@@ -173,7 +179,39 @@ export default function visaStatus(props) {
                 gap: 3,
               }}
             >
-           <FileUpload fileHandler = {setFiles} files ={employee.personalProfile.documents}/> 
+              {employee.personalProfile?.documents?.length > 0 ?
+                                        <div className="kb-attach-box">
+                                            <hr />
+                                            {
+                                                employee.personalProfile?.documents?.map((data, index) => {
+                                                    const { id, filename, filetype, fileimage, datetime, filesize } = data;
+                                                    return (
+                                                        <div className="file-atc-box" key={index}>
+                                                            {
+                                                                filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
+                                                                    <div className="file-image"> <img src={fileimage} alt="" /></div> :
+                                                                    <div className="file-image"><i className="far fa-file-alt"></i></div>
+                                                            }
+                                                            <div className="file-detail">
+                                                                <h6>{filename}</h6>
+                                                                <p><span>Size : {filesize}</span><span className="ml-3">Modified Time : {datetime}</span></p>
+                                                                <div className="file-actions">
+                      
+                                                                    <a href={fileimage}  className="file-action-btn" download={filename}>Download</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                        : ''}
+           <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                {employee.personalProfile?.nextSteps}
+                </InputLabel>
+                <FileUpload fileHandler = {setFiles}/>   
+              </FormControl>
            <Button variant="contained" type = "submit" fullWidth>
                 Submit Application
               </Button>  
@@ -181,6 +219,6 @@ export default function visaStatus(props) {
         </div>
       </div>
     );
-
+  }
  
 }
