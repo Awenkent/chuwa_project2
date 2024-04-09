@@ -68,7 +68,8 @@ export default function FileUpload(props)
                                 filetype: e.target.files[i].type,
                                 fileimage: reader.result,
                                 datetime: e.target.files[i].lastModifiedDate.toLocaleString('en-IN'),
-                                filesize: filesizes(e.target.files[i].size)
+                                filesize: filesizes(e.target.files[i].size),
+                                status: "pending"
                             }
                         ]
                     });

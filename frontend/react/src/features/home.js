@@ -18,6 +18,8 @@ export default function Home()
     console.log(employee.
       applicationStatus)
     useEffect(()=>{
+
+      
       if(employee.applicationStatus !== "Approved")
       {
         if(employee.applicationStatus === "Never Submitted")

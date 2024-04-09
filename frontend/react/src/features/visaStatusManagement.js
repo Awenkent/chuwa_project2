@@ -138,10 +138,12 @@ export default function visaStatus(props) {
  const onSubmit = () => {
 console.log(files)
   let allFiles = [...employee.personalProfile?.documents,...files]
+
   let obj =
   {
     documents:allFiles,
-    nextSteps: "Wait for HR to approve the visa document"
+    optStatus:"Pending",
+    nextSteps: "Wait for HR to approve " + employee.personalProfile.optStage
   }
   
   console.log(obj)
@@ -158,7 +160,7 @@ console.log(files)
     {
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>Visa Status: </h2>
+        <h2>Visa Status</h2>
         <div
           style={{
             padding: "20px 50px",
@@ -193,7 +195,7 @@ console.log(files)
                                                                     <div className="file-image"><i className="far fa-file-alt"></i></div>
                                                             }
                                                             <div className="file-detail">
-                                                                <h6>{filename}</h6>
+                                                                <h6>{filename}({data.status})</h6>
                                                                 <p><span>Size : {filesize}</span><span className="ml-3">Modified Time : {datetime}</span></p>
                                                                 <div className="file-actions">
                       
@@ -210,11 +212,14 @@ console.log(files)
                 <InputLabel shrink htmlFor="bootstrap-input">
                 {employee.personalProfile?.nextSteps}
                 </InputLabel>
-                <FileUpload fileHandler = {setFiles}/>   
+                {employee.personalProfile.optStatus !== "Never Submitted" ? <FileUpload fileHandler = {setFiles}/> : ""}
+                 
               </FormControl>
+              {employee.personalProfile.optStatus !== "Never Submitted" ? 
            <Button variant="contained" type = "submit" fullWidth>
                 Submit Application
               </Button>  
+    :""}
            </Box>
         </div>
       </div>
