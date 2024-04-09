@@ -14,6 +14,7 @@ import FormControl from "@mui/material/FormControl";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { selectAllEmployees, fetchAllEmployees } from "../redux/employeeSlice";
 
 const getAllEmployee = async (parameters) => {
@@ -37,11 +38,37 @@ const getAllEmployee = async (parameters) => {
   });
   return response;
 };
+const updateAnyEmployee = async (employeeObj) => {
+  const token = localStorage.getItem("token");
 
-export default function hrViewApplicationPage(props) {
+  const response = await fetch("http://localhost:4000/hr/profile", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json;charset=UTF-8",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(employeeObj),
+    mode: "cors",
+    cache: "default",
+  }).then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return response.text().then((text) => {
+        throw new Error(text);
+      });
+    }
+  });
+  return response;
+};
+
+export default function hrEditApplicationPage(props) {
   let { employeeId } = useParams();
+  const navigate = useNavigate();
 
   const [employees, setEmployees] = useState([]);
+  const [decision, setDecision] = useState("");
+  const [feedback, setFeedback] = useState("");
   useEffect(() => {
     getAllEmployee()
       .then((res) => {
@@ -52,6 +79,37 @@ export default function hrViewApplicationPage(props) {
       });
   }, []);
 
+  const handleApprove = () => {
+    setDecision("Approved");
+    const employeeObj = {
+      ...employee,
+      applicationStatus: "Approved",
+      feedback:feedback,
+    };
+    if (
+      employeeObj.workAuth?.tyoe === "F1(CPT/OPT)" &&
+      decision === "Approved"
+    ) {
+      employeeObj.nextSteps = "waiting for hr to approve OPT receipt";
+    } else if (decision === "Approved") {
+      employeeObj.nextSteps = "No Action required";
+    }
+    updateAnyEmployee(employeeObj);
+    navigate("/hiringManagement");
+  };
+
+  const handleReject = () => {
+    setDecision("Rejected");
+    const employeeObj = {
+      ...employee,
+      applicationStatus: "Rejected",
+      feedback:feedback,
+    };
+    
+    updateAnyEmployee(employeeObj);
+    navigate("/hiringManagement");
+  };
+
   const employeeArr = employees.filter(
     (employee) => employee._id === employeeId
   );
@@ -60,6 +118,7 @@ export default function hrViewApplicationPage(props) {
   console.log(employees);
   console.log("In hrViewApplicationPage:");
   console.log(employee);
+
   if (!employee) {
     return <div>Loading...</div>; // Render loading state while employees are being fetched
   }
@@ -165,6 +224,24 @@ export default function hrViewApplicationPage(props) {
             ""
           )}
         </div>
+      </div>
+
+      <div style={{ marginTop: "20px" }}>
+        <label htmlFor="feedback">Feedback:</label>
+        <textarea
+          id="feedback"
+          rows="4"
+          cols="50"
+          value={feedback} // Bind value to state
+          onChange={(e) => setFeedback(e.target.value)} // Update state on change
+        ></textarea>
+      </div>
+
+      <div style={{ marginTop: "20px" }}>
+        <button onClick={handleApprove}>Approve</button>
+        <button onClick={handleReject} style={{ marginLeft: "10px" }}>
+          Reject
+        </button>
       </div>
     </div>
   );
