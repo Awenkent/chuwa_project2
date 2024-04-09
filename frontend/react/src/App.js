@@ -12,6 +12,9 @@ import SendRegistrationEmail from "./features/generateRegistrationEmailPage";
 import RegistrationHistoryPage from "./features/registrationHistory";
 import HrVisaStatusManagement from "./features/hrVisaStatusManagement"
 import HrProtectLayer from "./features/hrProtectLayer"
+import HiringManagementPage from "./features/hiringManagementPage";
+import HrViewApplicationPage from "./features/hrViewApplicationPage";
+
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -53,6 +56,8 @@ export default function App() {
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
         <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
+        <Route path="/hiringManagement" element={<HiringManagementPage />} />
+        <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>

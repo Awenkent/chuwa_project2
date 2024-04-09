@@ -28,9 +28,14 @@ export const fetchCurrentEmployee = createAsyncThunk(
 export const fetchAllEmployees = createAsyncThunk(
   "hr/fetchAllEmployees",
   async (parameters) => {
-  
     const response = await fetch("http://localhost:4000/hr/allProfiles", {
-      method: "GET",
+      method: "get",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json;charset=UTF-8",
+        },
+        mode: "cors",
+        cache: "default",
     }).then((response) => {
       if (response.ok) {
         return response.json();
@@ -254,5 +259,6 @@ export const { setEmployee ,setEmployeeProfile} = employeeSlice.actions;
 // in the slice file. For example: `useSelector((state) => state.counter.value)`
 
 export const selectEmployee = (state) => state.employee.employee;
+export const selectAllEmployees = (state) => state.employee.employees;
 
 export default employeeSlice.reducer;
