@@ -105,7 +105,7 @@ return(
                                                                     <div className="file-image"><i className="far fa-file-alt"></i></div>
                                                             }
                                                             <div className="file-detail">
-                                                                <h6>{filename}</h6>
+                                                                <h6>{filename}({data.status})</h6>
                                                                 <p><span>Size : {filesize}</span><span className="ml-3">Modified Time : {datetime}</span></p>
                                                                 <div className="file-actions">
                       
