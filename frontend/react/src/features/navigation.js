@@ -2,10 +2,14 @@ import React from "react";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import {useRef} from 'react';
+
 import { useSelector, useDispatch } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import ManageAccountsOutlinedIcon from "@mui/icons-material/ManageAccountsOutlined";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Paper from "@mui/material/Paper";
 import InputBase from "@mui/material/InputBase";
 import IconButton from "@mui/material/IconButton";
@@ -23,6 +27,15 @@ export default function Header(props) {
   const employee = useSelector(selectEmployee);
   const matches = useMediaQuery("(min-width:600px)");
   const navigate = useNavigate();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   const handleSearch = ()=>{
     
     if(searchRef.current.value)
@@ -65,7 +78,7 @@ export default function Header(props) {
           alignItems: "center",
           justifyContent: "space-evenly",
           color: "white",
-          backgroundColor: "black",
+          backgroundColor: "rgb(25,118,210)",
           flexWrap: "nowrap",
         }}
       >
@@ -76,7 +89,9 @@ export default function Header(props) {
         </div>
 
 
-        {employee.role === "hr" ? (<Paper
+        {employee.role === "hr" ? (
+      
+        <Paper
           component="form"
           sx={{
             p: "2px 4px",
@@ -94,7 +109,10 @@ export default function Header(props) {
           <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
             <SearchIcon />
           </IconButton>
-        </Paper>):""
+          </Paper>
+        
+      
+      ):""
         
         }
         <div
@@ -103,18 +121,52 @@ export default function Header(props) {
             display: "flex",
             justifyContent: "center",
             alignItems: "flex-end",
+            gap:"10px",
             flexWrap: "nowrap",
           }}
         >
 
+          {employee.role === "hr" ? (
+            <>
+              <span
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              HR Dashboard
+            </span>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={()=>{
+                handleClose();
+                navigate("/profile")}
+                }>Profile</MenuItem>
+              <MenuItem onClick={()=>{
+                handleClose();
+                navigate("/hr/visastatus")}
+                }
+              >Employee Visa Status Management</MenuItem>
+             
+            </Menu>
+            </>
+          ):""}
 
-            <span className="notification">
-            Personal Information
-          <ManageAccountsOutlinedIcon className="icon clickable" fontSize="medium" onClick={()=>{navigate("/profile")}}/>
-          Visa Status Management
-          <ShoppingCartOutlinedIcon className="icon clickable" fontSize="medium" onClick={()=>{navigate("/visastatus")}}/>
-          </span>
-
+        
+           <span onClick={()=>{navigate("/profile")}}>Profile</span> 
+         
+          <span onClick={()=>{navigate("/visastatus")}}>Visa Status</span> 
+ 
+  
+            
           
           {employee.employeeName !== null?
           (<span className ="clickable" style={{ margin: "0 10px" ,whiteSpace:"nowrap"}} onClick={handleSignOut}>
