@@ -101,7 +101,7 @@ export default function signup(props) {
       cache: "default",
     })
       .then((res) => {
-        if (res.ok) {
+        if (res.status === 201) {
           alert(
             "Your account has been created, please varify the email address before login."
           );
