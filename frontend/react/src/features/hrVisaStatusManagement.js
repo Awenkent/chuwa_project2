@@ -149,19 +149,27 @@ const getAllEmployee = async (parameters) => {
         }
     },[])
     return(
-        <>
+        <div style={{maxWidth:"800px", margin:"0 auto"}}>
+        <h2>{location.state ?"Update Product" : "Create Product"}</h2>
+        <div
+          style={{
+            padding: "20px 50px",
+            margin: "50px",
+            backgroundColor: "white",
+          }}
+        >
         {employees.map((current,index)=>{
               if(current.workAuth?.type === "F1(CPT/OPT)")
               {
             return (
                 <>
-               <div key = {index} style={{display:"flex", gap:"10px"}}>
-                <div>{current.firstName}{current.middleName}{current.lastName}</div>
-                <div>{current.email}</div>
-                <div>{current.workAuth?.type}{current.workAuth?.startDate}{current.workAuth?.endDate}</div>
-                <div>{current.optStage}{current.optStatus}</div>
+               <div key = {index}>
+                <div>Employee: {current.firstName} {current.middleName} {current.lastName}</div>
+                <div>Email: {current.email}</div>
+                <div>Work Authorization:{current.workAuth?.type} Start Date: {current.workAuth?.startDate} End Date:{current.workAuth?.endDate}</div>
+                <div>OPT Status:{current.optStage} {current.optStatus}</div>
                 </div>
-                <details>
+                <details >
                 {current.documents?.length > 0 ?
                                         <div className="kb-attach-box">
                                             <hr />
@@ -192,7 +200,7 @@ const getAllEmployee = async (parameters) => {
                 {current.optStatus === "Pending"? 
                 (
                     
-                    <>
+                    <div style={{marginTop:"10px", display:"flex", gap:"10px", justifyContent:"center"}}>
                  
                     <input onChange={(e)=>
                         {
@@ -201,15 +209,18 @@ const getAllEmployee = async (parameters) => {
                         
                         }}></input>
                     <button onClick={()=>handleApprove(current,index)}>Approved</button><button onClick={()=>handleReject(current,index)}>Reject</button>
-                    </>
+                    </div>
                 ):""
                 }
                 </details>
+                <div style={{marginTop:"10px", borderBottom : "1px solid gray"}}></div>
                 </>
              
             )
         }
         })}
-        </>
+        </div>
+        </div>
+        
     )
   }
