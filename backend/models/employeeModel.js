@@ -82,7 +82,7 @@ const employeeSchema = new mongoose.Schema(
     },
     dateOfBirth: {
       type: String,
-      required: true,
+     
       default: "",
     },
     gender: {
@@ -94,13 +94,13 @@ const employeeSchema = new mongoose.Schema(
     {
       type: String,
       enum: ["NONE","RECEIPT", "EAD", "I-983", "I-20"],
-      default: "",
+      default: "NONE",
     },
     optStatus:
     {
       type: String,
-      enum: ["Never submitted", "Pending", "Approved", "Rejected"],
-      required: true,
+      enum: ["Never Submitted", "Pending", "Approved", "Rejected"],
+      
     },
     workAuth: {
       type: {

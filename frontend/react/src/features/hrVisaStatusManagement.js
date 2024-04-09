@@ -163,7 +163,7 @@ const getAllEmployee = async (parameters) => {
               {
             return (
                 <>
-               <div key = {index}>
+               <div key = {index} style={{textAlign:"left"}}>
                 <div>Employee: {current.firstName} {current.middleName} {current.lastName}</div>
                 <div>Email: {current.email}</div>
                 <div>Work Authorization:{current.workAuth?.type} Start Date: {current.workAuth?.startDate} End Date:{current.workAuth?.endDate}</div>
@@ -201,7 +201,7 @@ const getAllEmployee = async (parameters) => {
                 (
                     
                     <div style={{marginTop:"10px", display:"flex", gap:"10px", justifyContent:"center"}}>
-                 
+                     HR FeedBack: 
                     <input onChange={(e)=>
                         {
                         

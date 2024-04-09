@@ -1,5 +1,6 @@
 import React from "react";
-import { useEffect } from "react";
+import Button from "@mui/material/Button";
+import { useEffect ,useState} from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -12,6 +13,7 @@ import {
   Paper,
 } from "@mui/material";
 import {
+  selectEmployee,
   setEmployee,
   selectAllEmployees,
   fetchAllEmployees,
@@ -19,14 +21,44 @@ import {
   updateEmployee,
 } from "../redux/employeeSlice";
 import Application from "./application";
-
+const getAllEmployee = async (parameters) => {
+  const token = localStorage.getItem("token");
+  const response = await fetch("http://localhost:4000/hr/allProfiles", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json;charset=UTF-8",
+        Authorization: `Bearer ${token}`,
+      },
+      mode: "cors",
+      cache: "default",
+    }).then((response) => {
+    if (response.ok) {
+      return response.json();
+    } else {
+      return response.text().then((text) => {
+         throw new Error(text);
+      });
+    }
+  });
+  return response;
+}
 export default function HiringManagementPage() {
   const navigate = useNavigate();
-  const employees = useSelector(selectAllEmployees);
+  const employee = useSelector(selectEmployee);
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(fetchAllEmployees());
-  }, []);
+  const [employees,setEmployees] = useState([])
+  useEffect(()=>{
+    if(employee.userName === null)
+    {
+        navigate("/")
+    }
+    else
+    {
+        getAllEmployee().then((res)=>{setEmployees((prev) =>res)}).catch((err)=>{
+            alert(err)
+        })
+    }
+},[])
 
   console.log("All employees: \n");
   console.table(employees);
@@ -40,40 +72,48 @@ export default function HiringManagementPage() {
     return <div>Loading...</div>; // Render loading state while employees are being fetched
   }
   return (
-    <div>
-      <h1>Hiring Management</h1>
+    <div style={{maxWidth:"800px", margin:"0 auto"}}>
+    <h2>Hiring Management</h2>
+    <div
+      style={{
+        padding: "20px 50px",
+        margin: "50px",
+        backgroundColor: "white",
+      }}
+    >
+      
       <div style={{ display: "flex", flexDirection: "column" }}>
-        <h2 style={{ alignSelf: "flex-start", marginBottom: "10px" }}>
+        <h3 style={{ alignSelf: "flex-start", marginBottom: "10px" }}>
           Registration
-        </h2>
+        </h3>
         <div style={{ alignSelf: "flex-start" }}>
-          <button
-            style={{
-              backgroundColor: "rgb(80,72,229)",
-              padding: "20px",
-              margin: "30px",
+          <Button
+             style={{
+              backgroundColor: "rgb(25,118,210)",
+              padding: "5px",
+              margin: "5px",
               color: "white",
             }}
             onClick={() => navigate("/generateRegistrationEmail")}
           >
             Generate token and send email
-          </button>
-          <button
-            style={{
-              backgroundColor: "rgb(80,72,229)",
-              padding: "20px",
-              margin: "30px",
-              color: "white",
-            }}
+          </Button>
+          <Button
+                          style={{
+                            backgroundColor: "rgb(25,118,210)",
+                            padding: "5px",
+                            margin: "5px",
+                            color: "white",
+                          }}
             onClick={() => navigate("/registrationHistory")}
           >
             View Registration History
-          </button>
+          </Button>
         </div>
 
-        <h2 style={{ alignSelf: "flex-start", marginBottom: "10px" }}>
+        <h3 style={{ alignSelf: "flex-start", marginBottom: "10px" }}>
           Onboarding Application Review
-        </h2>
+        </h3>
         <div>
           <h3 style={{ alignSelf: "flex-start", marginBottom: "5px" }}>
             Pending
@@ -97,9 +137,9 @@ export default function HiringManagementPage() {
                       <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
                       <TableCell>{employee.email}</TableCell>
                       <TableCell>
-                        <button
+                        <Button
                           style={{
-                            backgroundColor: "rgb(80,72,229)",
+                            backgroundColor: "rgb(25,118,210)",
                             padding: "5px",
                             margin: "5px",
                             color: "white",
@@ -107,7 +147,7 @@ export default function HiringManagementPage() {
                           onClick={() => handlePendingApplication(employee._id)}
                         >
                           View Application
-                        </button>
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -136,17 +176,17 @@ export default function HiringManagementPage() {
                       <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
                       <TableCell>{employee.email}</TableCell>
                       <TableCell>
-                        <button
+                        <Button
                           style={{
-                            backgroundColor: "rgb(80,72,229)",
-                            padding: "5px",
-                            margin: "5px",
-                            color: "white",
+                            backgroundColor: "rgb(25,118,210)",
+              padding: "5px",
+              margin: "5px",
+              color: "white",
                           }}
                           onClick={() => handleApplication(employee._id)}
                         >
                           View Application
-                        </button>
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -177,16 +217,17 @@ export default function HiringManagementPage() {
                       <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
                       <TableCell>{employee.email}</TableCell>
                       <TableCell>
-                        <button
+                        <Button
                           style={{
-                            backgroundColor: "rgb(80,72,229)",
+                            backgroundColor: "rgb(25,118,210)",
                             padding: "5px",
+                            margin: "5px",
                             color: "white",
                           }}
                           onClick={() => handleApplication(employee._id)}
                         >
                           View Application
-                        </button>
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))}
@@ -196,5 +237,7 @@ export default function HiringManagementPage() {
         </div>
       </div>
     </div>
+    </div>
+    
   );
 }

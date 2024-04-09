@@ -155,6 +155,10 @@ export default function Header(props) {
                 navigate("/hr/visastatus")}
                 }
               >Employee Visa Status Management</MenuItem>
+               <MenuItem onClick={()=>{
+                handleClose();
+                navigate("/hiringManagement")}
+                }>View Applications</MenuItem>
              
             </Menu>
             </>

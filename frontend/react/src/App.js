@@ -51,11 +51,14 @@ export default function App() {
           <Route path="/profile" element={<PersonalProfile />} />
           <Route path="/visastatus" element={<VisaStatus />} />
           <Route path="/hr/visastatus" element={<HrProtectLayer><HrVisaStatusManagement /></HrProtectLayer>} />
-
+          <Route path="/hiringManagement" element={<HrProtectLayer><HiringManagementPage /></HrProtectLayer>} />
+          <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
         <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
+       
+       
         <Route path="/hiringManagement" element={<HiringManagementPage />} />
         <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
         <Route path="/hrEditApplicationPage/:employeeId" element={<HrEditApplicationPage />} />
