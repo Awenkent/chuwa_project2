@@ -20,15 +20,36 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-    setEmployee,
-    selectEmployee,
-    fetchCurrentEmployee,
-    setEmployeeProfile,
-    updateEmployee
-  } from "../redux/employeeSlice";
 
+    selectEmployee,
+  } from "../redux/employeeSlice";
+  
+
+  const updateEmployee = async (employee) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:4000/HR/profile", {
+      method: "PUT",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify(employee),
+      mode: "cors",
+      cache: "default",
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then((text) => {
+          throw new Error(text);
+        });
+      }
+    });
+    return response;
+  }
 const getAllEmployee = async (parameters) => {
     const token = localStorage.getItem("token");
     const response = await fetch("http://localhost:4000/hr/allProfiles", {
@@ -53,11 +74,68 @@ const getAllEmployee = async (parameters) => {
 
   export default function hrVisaStatusManagement()
   {
+    
     const employee = useSelector(selectEmployee);
     const navigate = useNavigate();
     const [employees,setEmployees] = useState([])
+    const feedbackRef = useRef([]);
     console.log(employee)
-    console.log(employees)
+    const handleOnChange=(e,index) =>
+    {
+  
+        feedbackRef.current[index] = e.target.value
+    }
+    const handleApprove = (current,index)=>{
+     
+      switch(current.optStage)
+      {
+          case "RECEIPT":
+          {
+              current.optStage = "EAD";
+              current.optStatus = "Never submitted"
+              current.nextStep = "Please submit your EAD file"
+              break;
+          }
+           case "EAD":
+          {
+              current.optStage = "I-983";
+              current.optStatus = "Never submitted"
+  
+              current.nextStep = "Please submit your I-983 file"
+              break;
+          }
+          case "I-983":
+          {
+              current.optStage = "I-20";
+              current.optStatus = "Never submitted"
+  
+              current.nextStep = "Please submit your I-20 file"
+              
+              break;
+          }
+          case "I-20":
+          {
+              current.optStatus = "Approved"
+              current.nextStep= "none"
+              break;
+          }
+          
+      }
+      current.documents.forEach(document => {
+          document.status = "Approved"
+      });
+
+      current.feedback = feedbackRef.current[index]
+      console.log(current)
+      updateEmployee(current).then(()=>{
+        getAllEmployee().then((res)=>{setEmployees((prev) =>res)}).catch((err)=>{
+            alert(err)
+        })
+
+      }).catch((err)=>{
+        alert(err)
+      })
+  }
     useEffect(()=>{
         if(employee.userName === null)
         {
@@ -76,12 +154,14 @@ const getAllEmployee = async (parameters) => {
               if(current.workAuth?.type === "F1(CPT/OPT)")
               {
             return (
-              
+                <>
                <div key = {index} style={{display:"flex", gap:"10px"}}>
                 <div>{current.firstName}{current.middleName}{current.lastName}</div>
                 <div>{current.email}</div>
                 <div>{current.workAuth?.type}{current.workAuth?.startDate}{current.workAuth?.endDate}</div>
-                <div>{current.optState}{current.optStatus}</div>
+                <div>{current.optStage}{current.optStatus}</div>
+                </div>
+                <details>
                 {current.documents?.length > 0 ?
                                         <div className="kb-attach-box">
                                             <hr />
@@ -96,7 +176,7 @@ const getAllEmployee = async (parameters) => {
                                                                     <div className="file-image"><i className="far fa-file-alt"></i></div>
                                                             }
                                                             <div className="file-detail">
-                                                                <h6>{filename}</h6>
+                                                                <h6>{filename}({data.status})</h6>
                                                                 <p><span>Size : {filesize}</span><span className="ml-3">Modified Time : {datetime}</span></p>
                                                                 <div className="file-actions">
                       
@@ -109,15 +189,24 @@ const getAllEmployee = async (parameters) => {
                                             }
                                         </div>
                                         : ''}
-                {employee.optStatus === "pending"}
-                {
-
+                {current.optStatus === "Pending"? 
+                (
+                    
                     <>
-                    <button>Approved</button><button>Reject</button>
+                 
+                    <input onChange={(e)=>
+                        {
+                        
+                            handleOnChange(e,index)
+                        
+                        }}></input>
+                    <button onClick={()=>handleApprove(current,index)}>Approved</button><button onClick={()=>handleReject(current,index)}>Reject</button>
                     </>
+                ):""
                 }
-                
-               </div>
+                </details>
+                </>
+             
             )
         }
         })}
