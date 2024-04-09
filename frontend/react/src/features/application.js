@@ -67,43 +67,7 @@ const BootstrapInput = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-const TextareaAutosize = styled(BaseTextareaAutosize)(({ theme }) => ({
-  "label + &": {
-    marginTop: theme.spacing(3),
-  },
-  "& .MuiInputBase-input": {
-    borderRadius: 4,
-    position: "relative",
-    backgroundColor: theme.palette.mode === "light" ? "#F3F6F9" : "#1A2027",
-    border: "1px solid",
-    borderColor: theme.palette.mode === "light" ? "#E0E3E7" : "#2D3843",
-    fontSize: 16,
-    width: "100%",
-    padding: "10px 12px",
-    transition: theme.transitions.create([
-      "border-color",
-      "background-color",
-      "box-shadow",
-    ]),
-    // Use the system font instead of the default Roboto font.
-    fontFamily: [
-      "-apple-system",
-      "BlinkMacSystemFont",
-      '"Segoe UI"',
-      "Roboto",
-      '"Helvetica Neue"',
-      "Arial",
-      "sans-serif",
-      '"Apple Color Emoji"',
-      '"Segoe UI Emoji"',
-      '"Segoe UI Symbol"',
-    ].join(","),
-    "&:focus": {
-      boxShadow: `${alpha(theme.palette.primary.main, 0.25)} 0 0 0 0.2rem`,
-      borderColor: theme.palette.primary.main,
-    },
-  },
-}));
+
 export default function application(props) {
   const {
     register,
@@ -254,10 +218,9 @@ console.log(employee)
     profilePictureLink:data.employeeProfilePicture,
     cellPhoneNumber:data.employeePhoneNumber,
     SSN:data.employeeSsn,
+  
     gender:data.employeeGender,
-    workAuth:{
-      type: data.employeeWorkAuth
-    },
+  
     currentAddress:
     {
       buildingAptNumber:data.employeeBuildingApt,
@@ -272,11 +235,24 @@ console.log(employee)
       lastName:data.employeeReferenceLastName,
       relationship:data.employeeReferenceRelationship
     },
+
+  
     documents:files,
-    nextSteps: "Wait for HR to approve the onboarding application"
+   
    
   }
-  
+  if(employee.applicationStatus === "Never Submitted")
+  {
+    obj.optStage = data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE",
+    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"APPROVED"
+    obj.workAuth = {
+      type: data.employeeWorkAuth,
+      startDate: data.employeeWorkAuthStartDate,
+      endDate: data.employeeWorkAuthEndDate,
+    },
+    obj.nextSteps = "Wait for HR to approve the onboarding application"
+  }
+   
   console.log(obj)
   dispatch(updateEmployee(obj)).then(()=>{
      alert("Update Successful!")
@@ -806,15 +782,19 @@ console.log(employee)
                 />
               </FormControl>
              </div>
+             <article style={{width:"100%" , display: (employee.applicationStatus === "Never Submitted") ? "block" : "none"}}>
              <div
                 style={{
+               
                   width: "100%",
                   display: "flex",
                   justifyContent: "start",
                   alignItems:"center",
                   gap: "20px",
                 }}>
-             <span>What's your work Authorization in the U.S? </span>  
+            
+
+<span>What's your work Authorization in the U.S? </span>  
 <Select
 
 labelId="demo-simple-select-helper-label"
@@ -855,7 +835,65 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
                   gap: "20px",
                 }}>
   
-          
+  {(watchemployeeWorkAuth !== "Citizen" && watchemployeeWorkAuth !== "GreenCard") ?
+  (<>  <FormControl variant="standard" fullWidth>
+  <InputLabel shrink htmlFor="bootstrap-input">
+   Start Date:
+  </InputLabel>
+  <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile.workAuth?.startDate
+                      ? employee.personalProfile.workAuth?.startDate
+                      : ""
+                  }
+                  {...register("employeeWorkAuthStartDate", {
+                    required: true,
+                    maxLength: 120,
+                    pattern:
+                      /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeWorkAuthStartDate}
+                  helperText={
+                    errors?.employeeWorkAuthStartDate?.type
+                      ? errorToPropMapping[errors?.employeeWorkAuthStartDate?.type] +
+                        " Example: MM/DD/YYYY"
+                      : ""
+                  }
+                />
+</FormControl>
+  <FormControl variant="standard" fullWidth>
+  <InputLabel shrink htmlFor="bootstrap-input">
+    End Date:
+  </InputLabel>
+  <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile.workAuth?.startEnd
+                    ? employee.personalProfile.workAuth?.startEnd
+                    : ""
+                  }
+                  {...register("employeeWorkAuthEndDate", {
+                    required: true,
+                    maxLength: 120,
+                    pattern:
+                      /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeWorkAuthEndDate}
+                  helperText={
+                    errors?.employeeWorkAuthEndDate?.type
+                      ? errorToPropMapping[errors?.employeeWorkAuthEndDate?.type] +
+                        " Example: MM/DD/YYYY"
+                      : ""
+                  }
+                />
+</FormControl></>):""}
+</div> 
+
             {watchemployeeWorkAuth === "F1(CPT/OPT)" ?
               
               (
@@ -905,8 +943,9 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
               :
               <></>
             }
-         
-              </div>
+       
+             
+              </article>
               <Button variant="contained" type = "submit" fullWidth>
                 Submit Application
               </Button>

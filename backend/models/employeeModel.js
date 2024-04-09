@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 
+
 const { Schema } = mongoose;
 
 // Define the schema
@@ -89,6 +90,18 @@ const employeeSchema = new mongoose.Schema(
       enum: ["male", "female", "i do not wish to answer", ""],
       default: "",
     },
+    optStage:
+    {
+      type: String,
+      enum: ["NONE","RECEIPT", "EAD", "I-983", "I-20"],
+      default: "",
+    },
+    optStatus:
+    {
+      type: String,
+      enum: ["Never submitted", "Pending", "Approved", "Rejected"],
+      required: true,
+    },
     workAuth: {
       type: {
         type: String,
@@ -99,12 +112,12 @@ const employeeSchema = new mongoose.Schema(
           default: "",
         },
         startDate: {
-          type: Date,
-          default: Date.now(),
+          type: String,
+          default: "",
         },
         endDate: {
-          type: Date,
-          default: Date.now(),
+          type: String,
+          default: "",
         },
      
     },

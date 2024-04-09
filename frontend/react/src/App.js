@@ -10,7 +10,8 @@ import Signup from "./features/signup";
 import Application from "./features/application";
 import SendRegistrationEmail from "./features/generateRegistrationEmailPage";
 import RegistrationHistoryPage from "./features/registrationHistory";
-
+import HrVisaStatusManagement from "./features/hrVisaStatusManagement"
+import HrProtectLayer from "./features/hrProtectLayer"
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -46,7 +47,8 @@ export default function App() {
         <Route path="/" element={ <ProtectLayer><Home /></ProtectLayer>} >
           <Route path="/profile" element={<PersonalProfile />} />
           <Route path="/visastatus" element={<VisaStatus />} />
-        
+          <Route path="/hr/visastatus" element={<HrProtectLayer><HrVisaStatusManagement /></HrProtectLayer>} />
+
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />

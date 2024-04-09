@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
+import FileUpload from "../components/fileUpload";
 import IconButton from "@mui/material/IconButton";
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
@@ -10,100 +11,82 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-import Application from "./application";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAutosize";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
-  setEmployee,
-  selectEmployee,
-  fetchEmployee,
-  setEmployeeProfile
-} from "../redux/employeeSlice";
-export default function applicationStatus(props) {
+    setEmployee,
+    selectEmployee,
+    fetchCurrentEmployee,
+    setEmployeeProfile,
+    updateEmployee
+  } from "../redux/employeeSlice";
 
-  
-const employee = useSelector(selectEmployee);
-const navigate = useNavigate();
-useEffect(()=>{
-  
-    if(employee.userName === null)
-    {
-        navigate("/");
-    }
-},[])
-return(
-  <div style={{maxWidth:"800px", margin:"0 auto"}}>
-  <h2>Application Status</h2>
-  <div
-    style={{
-      padding: "20px 50px",
-      margin: "50px",
-      backgroundColor: "white",
-    }}
-  >
+const getAllEmployee = async (parameters) => {
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:4000/hr/allProfiles", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
+        mode: "cors",
+        cache: "default",
+      }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then((text) => {
+           throw new Error(text);
+        });
+      }
+    });
+    return response;
+  }
 
-    <div>Current Status: {employee.personalProfile?.applicationStatus}</div>
-    {employee.personalProfile?.feedback? (
-       <div>Hr feedback: {employee.personalProfile?.feedback}</div>
-    ) :""}
-  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
-  <div style={{textAlign:"left"}}>
-  <div>
-    Employee Name: {employee.personalProfile.firstName}  {employee.personalProfile.middleName}  {employee.personalProfile.lastName}
-  </div>
-  <div>
-    Gender: {employee.personalProfile.gender}
-  </div>
-  <div>
-    Phone: {employee.personalProfile.cellPhoneNumber} 
-  </div>
-  <div>
-    Email: {employee.personalProfile.email} 
-  </div>
-  <div>
-    SSN: {employee.personalProfile.SSN} 
-  </div>
-  </div>
-
-
-  <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Address</h5>
-              </div>
-<div style={{textAlign:"left"}}>
-              <div>
-    Building/Apt Number : {employee.personalProfile.currentAddress?.buildingAptNumber} 
-  </div>
-  <div> Street:   {employee.personalProfile?.currentAddress?.streetName} </div>
-  <div> City:   {employee.personalProfile?.currentAddress?.city} </div>
-  <div> State:    {employee.personalProfile?.currentAddress?.state} </div>
-  <div> Zip:    {employee.personalProfile?.currentAddress?.zip} </div>
-  </div>
- 
-
-  <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Reference</h5>
-              </div>
-              <div style={{textAlign:"left"}}>
-              <div> Reference First Name:   {employee.personalProfile?.reference?.firstName} </div>
-  <div> Reference Middle Name:   {employee.personalProfile?.reference?.middleName} </div>
-  <div> Reference Last Name:    {employee.personalProfile?.reference?.lastName} </div>
-
-  <div> Reference Relationship:    {employee.personalProfile?.reference?.relationship} </div>
-  </div>
-
-
-  <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-  <h5 style={{ margin: "10px 0" }}>Documents</h5>
-  {employee.personalProfile?.documents?.length > 0 ?
+  export default function hrVisaStatusManagement()
+  {
+    const employee = useSelector(selectEmployee);
+    const navigate = useNavigate();
+    const [employees,setEmployees] = useState([])
+    console.log(employee)
+    console.log(employees)
+    useEffect(()=>{
+        if(employee.userName === null)
+        {
+            navigate("/")
+        }
+        else
+        {
+            getAllEmployee().then((res)=>{setEmployees((prev) =>res)}).catch((err)=>{
+                alert(err)
+            })
+        }
+    },[])
+    return(
+        <>
+        {employees.map((current,index)=>{
+              if(current.workAuth?.type === "F1(CPT/OPT)")
+              {
+            return (
+              
+               <div key = {index} style={{display:"flex", gap:"10px"}}>
+                <div>{current.firstName}{current.middleName}{current.lastName}</div>
+                <div>{current.email}</div>
+                <div>{current.workAuth?.type}{current.workAuth?.startDate}{current.workAuth?.endDate}</div>
+                <div>{current.optState}{current.optStatus}</div>
+                {current.documents?.length > 0 ?
                                         <div className="kb-attach-box">
                                             <hr />
                                             {
-                                                employee.personalProfile?.documents?.map((data, index) => {
+                                                current.documents?.map((data, index) => {
                                                     const { id, filename, filetype, fileimage, datetime, filesize } = data;
                                                     return (
                                                         <div className="file-atc-box" key={index}>
@@ -126,11 +109,18 @@ return(
                                             }
                                         </div>
                                         : ''}
-</div>
+                {employee.optStatus === "pending"}
+                {
 
-</div>
-  </div>
-
-)
-
-}
+                    <>
+                    <button>Approved</button><button>Reject</button>
+                    </>
+                }
+                
+               </div>
+            )
+        }
+        })}
+        </>
+    )
+  }
