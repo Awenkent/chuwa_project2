@@ -63,7 +63,7 @@ export default function HiringManagementPage() {
   console.log("All employees: \n");
   console.table(employees);
   const handlePendingApplication = (employeeId) => {
-    navigate(`/hrViewApplicationPage/${employeeId}`);
+    navigate(`/hrEditApplicationPage/${employeeId}`);
   };
   const handleApplication = (employeeId) => {
     navigate(`/hrViewApplicationPage/${employeeId}`);
@@ -133,7 +133,7 @@ export default function HiringManagementPage() {
                     (employee) => employee.applicationStatus === "Pending"
                   )
                   .map((employee) => (
-                    <TableRow key={employee.id}>
+                    <TableRow key={employee._id}>
                       <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
                       <TableCell>{employee.email}</TableCell>
                       <TableCell>
@@ -172,7 +172,7 @@ export default function HiringManagementPage() {
                     (employee) => employee.applicationStatus === "Rejected"
                   )
                   .map((employee) => (
-                    <TableRow key={employee.id}>
+                    <TableRow key={employee._id}>
                       <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
                       <TableCell>{employee.email}</TableCell>
                       <TableCell>
@@ -224,7 +224,7 @@ export default function HiringManagementPage() {
                             margin: "5px",
                             color: "white",
                           }}
-                          onClick={() => handleApplication(employee.id)}
+                          onClick={() => handleApplication(employee._id)}
                         >
                           View Application
                         </Button>

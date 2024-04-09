@@ -14,7 +14,7 @@ import HrVisaStatusManagement from "./features/hrVisaStatusManagement"
 import HrProtectLayer from "./features/hrProtectLayer"
 import HiringManagementPage from "./features/hiringManagementPage";
 import HrViewApplicationPage from "./features/hrViewApplicationPage";
-
+import HrEditApplicationPage from "./features/hrEditApplicationPage";
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -59,6 +59,9 @@ export default function App() {
         <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
        
        
+        <Route path="/hiringManagement" element={<HiringManagementPage />} />
+        <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
+        <Route path="/hrEditApplicationPage/:employeeId" element={<HrEditApplicationPage />} />
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>

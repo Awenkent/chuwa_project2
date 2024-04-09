@@ -28,6 +28,8 @@ export const fetchCurrentEmployee = createAsyncThunk(
 export const fetchAllEmployees = createAsyncThunk(
   "hr/fetchAllEmployees",
   async (parameters) => {
+    const token = localStorage.getItem("token");
+  
     const response = await fetch("http://localhost:4000/hr/allProfiles", {
       method: "get",
         headers: {
