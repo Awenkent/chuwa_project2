@@ -138,10 +138,12 @@ export default function visaStatus(props) {
  const onSubmit = () => {
 console.log(files)
   let allFiles = [...employee.personalProfile?.documents,...files]
+
   let obj =
   {
     documents:allFiles,
-    nextSteps: "Wait for HR to approve the visa document"
+    optStatus:"Pending",
+    nextSteps: "Wait for HR to approve " + employee.personalProfile.optStage
   }
   
   console.log(obj)
@@ -158,7 +160,7 @@ console.log(files)
     {
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>Visa Status: </h2>
+        <h2>Visa Status</h2>
         <div
           style={{
             padding: "20px 50px",

@@ -88,7 +88,7 @@ export default function signup(props) {
       userName: username,
       password: password,
       email:email,
-      applicationStatus:"Never submitted",
+      applicationStatus:"Never Submitted",
     };
     fetch("http://localhost:4000/employee/signup", {
       method: "POST",

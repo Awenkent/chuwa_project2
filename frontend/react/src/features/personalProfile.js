@@ -43,7 +43,7 @@ return(
   >
   <Button onClick={()=>{setEditMode(true)}}>Edit</Button>
 
-  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
+  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
   <div style={{textAlign:"left"}}>
   <div>
     Employee Name: {employee.personalProfile.firstName}  {employee.personalProfile.middleName}  {employee.personalProfile.lastName}
@@ -64,7 +64,7 @@ return(
 
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Address</h5>
+                <h3 style={{ margin: "10px 0" }}>Address</h3>
               </div>
 <div style={{textAlign:"left"}}>
               <div>
@@ -78,7 +78,7 @@ return(
  
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Reference</h5>
+                <h3 style={{ margin: "10px 0" }}>Reference</h3>
               </div>
               <div style={{textAlign:"left"}}>
               <div> Reference First Name:   {employee.personalProfile?.reference?.firstName} </div>
@@ -90,7 +90,7 @@ return(
 
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-  <h5 style={{ margin: "10px 0" }}>Documents</h5>
+  <h3 style={{ margin: "10px 0" }}>Documents</h3>
   {employee.personalProfile?.documents?.length > 0 ?
                                         <div className="kb-attach-box">
                                             <hr />
