@@ -28,7 +28,7 @@ const employeeSchema = new mongoose.Schema(
     },
     applicationStatus: {
       type: String,
-      enum: ["Never submitted", "Pending", "Approved", "Rejected"],
+      enum: ["Never Submitted", "Pending", "Approved", "Rejected"],
       required: true,
     },
     firstName: {
