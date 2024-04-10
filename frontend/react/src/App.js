@@ -10,16 +10,18 @@ import Signup from "./features/signup";
 import Application from "./features/application";
 import SendRegistrationEmail from "./features/generateRegistrationEmailPage";
 import RegistrationHistoryPage from "./features/registrationHistory";
-import HrVisaStatusManagement from "./features/hrVisaStatusManagement"
-import HrProtectLayer from "./features/hrProtectLayer"
+import HrVisaStatusManagement from "./features/hrVisaStatusManagement";
+import HrProtectLayer from "./features/hrProtectLayer";
 import HiringManagementPage from "./features/hiringManagementPage";
 import HrViewApplicationPage from "./features/hrViewApplicationPage";
 import HrEditApplicationPage from "./features/hrEditApplicationPage";
 import { useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import VisaStatus from "./features/visaStatusManagement"
-import ApplicationStatus from "./features/applicationStatus"
+import VisaStatus from "./features/visaStatusManagement";
+import ApplicationStatus from "./features/applicationStatus";
+import EmployeeProfiles from "./features/employeeProfiles";
+import EmployeeDetailsPage from "./features/employeeDetailsPage";
 import {
   fetchCurrentEmployee,
   setEmployee,
@@ -65,11 +67,9 @@ export default function App() {
       </Routes>
       </ErrorBoundary>
 
+          
+        </div>
       </div>
-    
-     
-    </div>
- 
     </BrowserRouter>
   );
 }

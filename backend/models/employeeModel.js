@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
 
-
 const { Schema } = mongoose;
 
 // Define the schema
@@ -39,8 +38,14 @@ const employeeSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    middleName: String,
-    preferredName: String,
+    middleName: {
+      type: String,
+      default: "",
+    },
+    preferredName: {
+      type: String,
+      default: "",
+    },
     profilePictureLink: {
       type: String,
       default:
@@ -82,7 +87,7 @@ const employeeSchema = new mongoose.Schema(
     },
     dateOfBirth: {
       type: String,
-     
+
       default: "",
     },
     gender: {
@@ -90,36 +95,32 @@ const employeeSchema = new mongoose.Schema(
       enum: ["male", "female", "i do not wish to answer", ""],
       default: "",
     },
-    optStage:
-    {
+    optStage: {
       type: String,
-      enum: ["NONE","RECEIPT", "EAD", "I-983", "I-20"],
-      default: "NONE",
+      enum: ["NONE", "RECEIPT", "EAD", "I-983", "I-20"],
+      default: "",
     },
-    optStatus:
-    {
+    optStatus: {
       type: String,
       enum: ["Never Submitted", "Pending", "Approved", "Rejected"],
-      
     },
     workAuth: {
       type: {
         type: String,
         default: "",
       },
-        status: {
-          type: String,
-          default: "",
-        },
-        startDate: {
-          type: String,
-          default: "",
-        },
-        endDate: {
-          type: String,
-          default: "",
-        },
-     
+      status: {
+        type: String,
+        default: "",
+      },
+      startDate: {
+        type: String,
+        default: "",
+      },
+      endDate: {
+        type: String,
+        default: "",
+      },
     },
 
     reference: {
@@ -162,16 +163,17 @@ const employeeSchema = new mongoose.Schema(
         },
       ],
     },
-    documents: [{
-      id:String,
-      filename:String,
-      filetype:String,
-      fileimage:String,
-      datetime:String,
-      filesize:String,
-      status:String,
-      
-    }],
+    documents: [
+      {
+        id: String,
+        filename: String,
+        filetype: String,
+        fileimage: String,
+        datetime: String,
+        filesize: String,
+        status: String,
+      },
+    ],
     nextSteps: String,
     feedback: String,
   },
