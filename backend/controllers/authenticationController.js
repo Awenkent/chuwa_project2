@@ -1,4 +1,4 @@
-const Users = require("../models/userModel");
+const Employees = require("../models/employeeModel");
 const jwt = require("jsonwebtoken");
 require("dotenv").config({ path: ".env" });
 
@@ -6,24 +6,25 @@ const doLogin = async (req, res, next) => {
   try {
     const { userName, password } = req.body;
 
-    let user = await Users.findOne({ userName });
+    let employee = await Employees.findOne({ userName });
 
-    if (!user) {
+    if (!employee) {
       return res
         .status(400)
-        .json({ messgae: "Invalid Credentials(User does not exist)" });
+        .json({ message: "Invalid Credentials(User does not exist)" });
     }
 
-    if (user.password !== password) {
+    if (employee.password !== password) {
       return res
         .status(400)
-        .json({ messgae: "Invalid Credentials(Passwod incorrect)" });
+        .json({ message: "Invalid Credentials(Password incorrect)" });
     }
 
     const payload = {
-      user: {
-        id: user._id,
-        userName: user.userName,
+      employee: {
+        id: employee._id,
+        userName: employee.userName,
+        role:employee.role,
       },
     };
 

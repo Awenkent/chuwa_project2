@@ -16,9 +16,11 @@ module.exports = async (req, res, next) => {
   try {
     // Verify token
     const decoded = await jwt.verify(token, process.env.SECRET);
-
-    // Add user id from payload
-    req.id = decoded.user.id;
+    if(!decoded.HR){
+        console.log("The token is not registration token");
+        res.status(400).json({ msg: "The token is not registration token" });
+    } 
+    
     console.log(decoded);
     next();
   } catch (err) {

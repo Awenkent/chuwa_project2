@@ -1,105 +1,65 @@
-const User = require("../models/userModel");
-const Product = require("../models/productModel");
-
-const getAllUsers = async (req, res) => {
+const Employee = require("../models/employeeModel");
+const RegistrationHistory = require("../models/registrationHistory");
+const getOneEmployee = async (req, res) => {
   try {
-    const users = await User.find();
-    res.status(200).json(users);
+    const employee = await Employee.findById(req.employee?.id);
+    res.status(200).json(employee);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).json({ message: "Server Error:"+ err.message });
+    console.log(err);
+    res
+      .status(500)
+      .json({ message: "Error on getting Employee:" + err.message });
   }
 };
 
-const getCartFromUser = async (req, res, next) => {
+const createEmployee = async (req, res) => {
   try {
-    const user = await User.findById(req.id);
-    const cartPromises = user.shoppingCart.map((item)=>{
-      return Product.findById(item).then((product)=>product)
-    })
-   
-    Promise.all(cartPromises).then((shoppingCart)=>{
-    
-      res.status(200).json(shoppingCart);
-    })
-   
-  } catch (err) {
-    console.log(err.message);
-    res.status(500).json({ message: "Server Error:" + err.message });
-  }
-};
+    const employee = new Employee(req.body);
 
-const getOneUser = async (req, res) => {
-  try {
-    const user = await User.findById(req.id).select(["userName","shoppingCart","role"]);
-    const cartPromises = user.shoppingCart.map((item)=>{
-      return Product.findById(item).then((product)=>product)
-    })
- 
-    Promise.all(cartPromises).then((shoppingCart)=>{
-   
-      let obj = {...(user._doc)}
-      obj.shoppingCart = shoppingCart
-   
-      res.status(200).json(obj);
-    })
-   
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ message: "Error on getting User:" + err.message });
-  }
-};
-
-const createUser = async (req, res) => {
-  try {
-    const user = new User(req.body);
-
-    if (!user.userName || !user.password || !user.role) {
-      return res.status(400).json({ message: "Bad Request: missing parameters" });
+    if (!employee.userName || !employee.password) {
+      return res
+        .status(400)
+        .json({ message: "Bad Request: missing parameters" });
     }
-    await user.save();
-    res.status(201).json(user);
+    await employee.save();
+    const history = await RegistrationHistory.updateMany(
+      {email:req.body.email},
+      { $set: { submitted: true } },
+      {
+        new: true,
+      }
+    );
+    console.log("History:"+history); 
+    res.status(201).json(employee);
   } catch (err) {
     console.log(err.message);
-    res.status(500).json({ message: "Error on creating User:" + err.message });
+    res
+      .status(500)
+      .json({ message: "Error on creating Employee:" + err.message });
   }
 };
 
-const updateUser = async (req, res) => {
+const updateEmployee = async (req, res) => {
   try {
-    
-    const user = await User.findByIdAndUpdate(req.id, req.body,{new: true});
-
-    const cartPromises = user.shoppingCart.map((item)=>{
-      return Product.findById(item).then((product)=>product)
-    })
- 
-    Promise.all(cartPromises).then((shoppingCart)=>{
-   
-      let obj = {...(user._doc)}
-      obj.shoppingCart = shoppingCart
-      res.status(200).json(obj);
-    })
-  
+    console.log(req.body)
+    const employee = await Employee.findByIdAndUpdate(
+      req.employee?.id,
+      req.body,
+      {
+        new: true,
+      }
+    );
+    console.log(employee)
+    res.status(200).json(employee);
   } catch (err) {
-    res.status(500).json({ message: "Error on updating User:"+err.message });
-  }
-};
-
-const deleteUser = async (req, res) => {
-  try {
-    await User.findByIdAndDelete(req.id);
-    res.status(200).json({ message: "User deleted" });
-  } catch (err) {
-    res.status(500).json({ message: "Error on deleting User:"+err.message });
+    res
+      .status(500)
+      .json({ message: "Error on updating Employee:" + err.message });
   }
 };
 
 module.exports = {
-  getCartFromUser,
-  getAllUsers,
-  getOneUser,
-  createUser,
-  updateUser,
-  deleteUser,
+  getOneEmployee,
+  createEmployee,
+  updateEmployee,
 };
