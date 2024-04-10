@@ -44,7 +44,7 @@ export default function Signin(props) {
   useEffect(()=>{
     if(employee.userName !== null)
     {
-      navigate("/");
+      navigate("/peofile");
     }
   })
 
@@ -97,7 +97,7 @@ export default function Signin(props) {
            
             dispatch(fetchCurrentEmployee()).then(()=>{
               alert("Login successful!");
-              navigate("/");
+              navigate("/profile");
             })
           });
         } else {

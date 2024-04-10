@@ -33,7 +33,7 @@ useEffect(()=>{
   
     if(employee.userName === null)
     {
-        navigate("/");
+        navigate("/profile");
     }
 },[])
 return(

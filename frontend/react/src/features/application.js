@@ -105,7 +105,7 @@ console.log(employee)
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
     if (employee.userName === null) {
-      navigate("/");
+      navigate("/profile");
     }
   }, []);
 
@@ -194,7 +194,7 @@ console.log(employee)
                 gap: 3,
               }}
             >
-                  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
+                  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
                <div
                 style={{
                   width: "100%",
@@ -503,7 +503,7 @@ console.log(employee)
             </div>
             <div>
               <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Address</h5>
+                <h3 style={{ margin: "10px 0" }}>Address</h3>
               </div>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
@@ -563,7 +563,7 @@ console.log(employee)
               </FormControl>
               </div>
               </div>
-              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5  style={{margin:"10px 0"}}>Reference</h5></div>
+              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3  style={{margin:"10px 0"}}>Reference</h3></div>
 
             <div
               style={{
@@ -856,10 +856,19 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
        
              
               </article>
-              <Button onClick={()=>{console.log("hi")}}  variant="contained" type = "submit" fullWidth>
+              <Button  variant="contained" type = "submit" fullWidth>
                 Submit Application
               </Button>
+              {props.editMode?( <Button variant="contained" onClick={(e)=>{e.preventDefault
+               if(window.confirm("Are you sure want discard all changes?"))
+               {
+                props.editMode(false)
+              }
               
+              }} fullWidth>
+                
+                Undo Changes
+              </Button>):"" }
             </Box>
           </div>
         </div>

@@ -1,10 +1,12 @@
 import React from "react";
+import Paper from "@mui/material/Paper";
 import { useState, useRef, useEffect } from "react";
 import { alpha, styled } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import Box from "@mui/material/Box";
 import FileUpload from "../components/fileUpload";
 import IconButton from "@mui/material/IconButton";
+import Autocomplete from '@mui/material/Autocomplete';
 import InputLabel from "@mui/material/InputLabel";
 import Button from "@mui/material/Button";
 import OutlinedInput from "@mui/material/OutlinedInput";
@@ -20,14 +22,14 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-
+import SearchIcon from "@mui/icons-material/Search";
 import { useNavigate, useLocation } from "react-router-dom";
 import {
 
     selectEmployee,
   } from "../redux/employeeSlice";
   
-
+ 
   const updateEmployee = async (employee) => {
     const token = localStorage.getItem("token");
     const response = await fetch("http://localhost:4000/HR/profile", {
@@ -77,58 +79,102 @@ const getAllEmployee = async (parameters) => {
     
     const employee = useSelector(selectEmployee);
     const navigate = useNavigate();
+    const searchRef = useRef();
     const [employees,setEmployees] = useState([])
+    const employeeNameRef = useRef([]);
     const feedbackRef = useRef([]);
     console.log(employee)
+
+
+    const handleSearch = ()=>{
+    
+      if(searchRef.current.value)
+      {
+
+        getAllEmployee().then((res)=>{
+          employeeNameRef.current = res.map((data)=>{
+            return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+        })
+        setEmployees((prev) =>res.filter((data)=>{
+          return (data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")").includes(searchRef.current.value)
+
+        }))}
+        ).catch((err)=>{
+            alert(err)
+        })
+
+     
+      } 
+      else
+      {
+        getAllEmployee().then((res)=>{
+          employeeNameRef.current = res.map((data)=>{
+            return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+        })
+        setEmployees((prev) =>res)}
+        ).catch((err)=>{
+            alert(err)
+        })
+      }
+      
+    
+     
+    }
     const handleOnChange=(e,index) =>
     {
   
-        feedbackRef.current[index] = e.target.value
+        feedbackRef.currentEmployee[index] = e.target.value
     }
-    const handleApprove = (current,index)=>{
+    const handleApprove = (currentEmployeeEmployee,index)=>{
      
-      switch(current.optStage)
+      switch(currentEmployee.optStage)
       {
           case "RECEIPT":
           {
-              current.optStage = "EAD";
-              current.optStatus = "Never submitted"
-              current.nextSteps = "Please submit your EAD file"
+              currentEmployee.optStage = "EAD";
+              currentEmployee.optStatus = "Never Submitted"
+              currentEmployee.nextSteps = "Please submit your EAD file"
               break;
           }
            case "EAD":
           {
-              current.optStage = "I-983";
-              current.optStatus = "Never submitted"
+              currentEmployee.optStage = "I-983";
+              currentEmployee.optStatus = "Never Submitted"
   
-              current.nextSteps = "Please submit your I-983 file"
+              currentEmployee.nextSteps = "Please submit your I-983 file"
               break;
           }
           case "I-983":
           {
-              current.optStage = "I-20";
-              current.optStatus = "Never submitted"
+              currentEmployee.optStage = "I-20";
+              currentEmployee.optStatus = "Never Submitted"
   
-              current.nextSteps = "Please submit your I-20 file"
+              currentEmployee.nextSteps = "Please submit your I-20 file"
               
               break;
           }
           case "I-20":
           {
-              current.optStatus = "Approved"
-              current.nextSteps= "none"
+              currentEmployee.optStatus = "Approved"
+              currentEmployee.nextSteps= "none"
               break;
           }
           
       }
-      current.documents.forEach(document => {
+      currentEmployee.documents.forEach(document => {
           document.status = "Approved"
       });
 
-      current.feedback = feedbackRef.current[index]
-      console.log(current)
-      updateEmployee(current).then(()=>{
-        getAllEmployee().then((res)=>{setEmployees((prev) =>res)}).catch((err)=>{
+      currentEmployee.feedback = feedbackRef.current[index]
+      console.log(currentEmployee)
+      updateEmployee(currentEmployee).then(()=>{
+        getAllEmployee().then((res)=>{
+          employeeNameRef.current = res.map((data)=>{
+            return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+          })
+          setEmployees((prev) =>res)}
+      
+      ).catch((err)=>{
             alert(err)
         })
 
@@ -136,6 +182,7 @@ const getAllEmployee = async (parameters) => {
         alert(err)
       })
   }
+
     useEffect(()=>{
         if(employee.userName === null)
         {
@@ -143,14 +190,20 @@ const getAllEmployee = async (parameters) => {
         }
         else
         {
-            getAllEmployee().then((res)=>{setEmployees((prev) =>res)}).catch((err)=>{
+            getAllEmployee().then((res)=>{
+              employeeNameRef.current = res.map((data)=>{
+                return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+            })
+            setEmployees((prev) =>res)}
+            ).catch((err)=>{
                 alert(err)
             })
         }
     },[])
     return(
         <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>{location.state ?"Update Product" : "Create Product"}</h2>
+        
+        <h2>Visa Status Management</h2>
         <div
           style={{
             padding: "20px 50px",
@@ -158,6 +211,22 @@ const getAllEmployee = async (parameters) => {
             backgroundColor: "white",
           }}
         >
+          
+           <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={employeeNameRef.current}
+      sx={{ width: 350, border:"none" }}
+      renderInput={(params) =>  <div style={{display:"flex", justifyContent:"space-between", textAlign:"center"}}> <TextField {...params}
+        label ="Search Employee"
+        inputRef={searchRef}
+      />
+      <Button type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
+          Search
+    </Button></div>}
+    />
+         
+          
         {employees.map((current,index)=>{
               if(current.workAuth?.type === "F1(CPT/OPT)")
               {
@@ -170,6 +239,7 @@ const getAllEmployee = async (parameters) => {
                 <div>OPT Status:{current.optStage} {current.optStatus}</div>
                 </div>
                 <details >
+                <summary>See uploaded documents </summary>
                 {current.documents?.length > 0 ?
                                         <div className="kb-attach-box">
                                             <hr />

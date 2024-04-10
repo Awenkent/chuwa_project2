@@ -83,38 +83,14 @@ export default function Header(props) {
         }}
       >
         <div style={{ flex: 1 }}>
-        <h3 className ="clickable" onClick = {()=>{navigate("/")}}>
+        <h3 className ="clickable" onClick = {()=>{navigate("/profile")}}>
             <b>Chuwa</b> <small>Management</small>
           </h3>
         </div>
 
 
-        {employee.role === "hr" ? (
-      
-        <Paper
-          component="form"
-          sx={{
-            p: "2px 4px",
-            display: "flex",
-            alignItems: "center",
-            width: 400,
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search Products"
-            inputProps={{ "aria-label": "search google maps" }}
-            inputRef={searchRef}
-          />
-          <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
-            <SearchIcon />
-          </IconButton>
-          </Paper>
         
-      
-      ):""
         
-        }
         <div
           style={{
             flex: 1,
@@ -135,7 +111,7 @@ export default function Header(props) {
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
             >
-              HR Dashboard
+             <Button style={{color:"white" ,textTransform: 'none'}}>  HR Dashboard </Button>
             </span>
             <Menu
               id="basic-menu"
@@ -165,20 +141,20 @@ export default function Header(props) {
           ):""}
 
         
-           <span onClick={()=>{navigate("/profile")}}>Profile</span> 
+           <span onClick={()=>{navigate("/profile")}}><Button style={{color:"white" ,textTransform: 'none'}}>Profile</Button></span> 
          
-          <span onClick={()=>{navigate("/visastatus")}}>Visa Status</span> 
+          <span onClick={()=>{navigate("/visastatus")}}><Button style={{color:"white" ,textTransform: 'none'}}>Visa Status</Button></span> 
  
   
             
           
           {employee.employeeName !== null?
           (<span className ="clickable" style={{ margin: "0 10px" ,whiteSpace:"nowrap"}} onClick={handleSignOut}>
-             Sign Out
+            <Button style={{color:"white",textTransform: 'none'}}> Sign Out</Button>
           </span>) :
             (
             <span className ="clickable" style={{ margin: "0 10px",whiteSpace:"nowrap" }} onClick={()=>{navigate("/signin")}}>
-              Sign in
+             <Button style={{color:"white",textTransform: 'none'}}>  Sign in</Button>
             </span>
             )
           }

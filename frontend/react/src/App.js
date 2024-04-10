@@ -26,18 +26,17 @@ import {
   selectEmployee,
 } from "./redux/employeeSlice";
 export default function App() {
-  const employee = useSelector(selectEmployee);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchCurrentEmployee());
   }, []);
 
-  console.log(employee);
+
 
   return (
     <BrowserRouter>
  
-     
     <div className="App" style={{ backgroundColor: "rgb(235,235,235)" }}>
      
       <div style={{minHeight: "800px"}}>
@@ -53,6 +52,7 @@ export default function App() {
           <Route path="/hr/visastatus" element={<HrProtectLayer><HrVisaStatusManagement /></HrProtectLayer>} />
           <Route path="/hiringManagement" element={<HrProtectLayer><HiringManagementPage /></HrProtectLayer>} />
           <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
+          <Route path="/hrEditApplicationPage/:employeeId" element={<HrEditApplicationPage />} />
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
@@ -60,8 +60,7 @@ export default function App() {
        
        
         <Route path="/hiringManagement" element={<HiringManagementPage />} />
-        <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
-        <Route path="/hrEditApplicationPage/:employeeId" element={<HrEditApplicationPage />} />
+ 
         <Route path="*" element={<Error />} />
       </Routes>
       </ErrorBoundary>

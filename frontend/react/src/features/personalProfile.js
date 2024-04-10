@@ -41,7 +41,7 @@ return(
       backgroundColor: "white",
     }}
   >
-  <Button onClick={()=>{setEditMode(true)}}>Edit</Button>
+  <Button onClick={()=>{setEditMode(true)}}>Edit Profile</Button>
 
   <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
   <div style={{textAlign:"left"}}>
@@ -128,14 +128,7 @@ else
 {
   return(
   <>
-  <Button onClick={()=>{
-     if(window.confirm("Are you sure want discard all changes?"))
-     {
-      setEditMode(false)
-    }
-   
-    }}>Exit</Button>
-  <Application/>
+  <Application editMode={setEditMode}/>
   </>
   )
 
