@@ -107,6 +107,33 @@ const sendSignupEmail = async (req, res) => {
   }
 };
 
+const sendNotification = async (req, res) => {
+  try {
+    
+    // Email content
+    const mailOptions = {
+      from: "weizhouwen5@gmail.com",
+      to: req.body.email, // Email address from the request body
+      subject: req.body.name + ", Sign up for application",
+      text: `Hello ${req.body.name},\n\nPlease continue your application. The next step is:\n\n${req.body.nextSteps}\n\nPlease visit http://localhost:3000/signin to continue your application.`,
+    };
+    //Send the email
+    await sgMail
+      .send(mailOptions)
+      .then(() => {
+        console.log("Email sent");
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    res.status(200).json({ message: "Notification Email sent successfully"});
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to send the notification email:" + err.message });
+  }
+};
+
 const getRegistrationHistory = async (req, res) => {
   try {
     const registrationHistory = await RegistrationHistory.find();
@@ -138,4 +165,5 @@ module.exports = {
   sendSignupEmail,
   getRegistrationHistory,
   deleteEmployee,
+  sendNotification,
 };
