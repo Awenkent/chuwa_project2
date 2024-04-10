@@ -108,7 +108,7 @@ const getAllEmployee = async (parameters) => {
       else
       {
         getAllEmployee().then((res)=>{
-          employeeNameRef.current = res.map((data)=>{
+          employeeNameRef.current = res.filter(data=>data.workAuth.type ==="F1(CPT/OPT)").map((data)=>{
             return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
         })
         setEmployees((prev) =>res)}
@@ -122,10 +122,41 @@ const getAllEmployee = async (parameters) => {
     }
     const handleOnChange=(e,index) =>
     {
-  
-        feedbackRef.currentEmployee[index] = e.target.value
+
+        feedbackRef.current[index] = e.target.value
     }
-    const handleApprove = (currentEmployeeEmployee,index)=>{
+    const handleReject = (currentEmployee,index)=>{
+     
+     
+       currentEmployee.optStatus = "Never Submitted"
+        
+          
+      
+      currentEmployee.documents.forEach(document => {
+        if(document.status === "Pending")
+        {
+          document.status = "Rejected"
+        }
+      });
+
+      currentEmployee.feedback = feedbackRef.current[index]
+      console.log(currentEmployee)
+      updateEmployee(currentEmployee).then(()=>{
+        getAllEmployee().then((res)=>{
+          employeeNameRef.current = res.filter(data=>data.workAuth.type ==="F1(CPT/OPT)").map((data)=>{
+            return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+          })
+          setEmployees((prev) =>res)}
+      
+      ).catch((err)=>{
+            alert(err)
+        })
+
+      }).catch((err)=>{
+        alert(err)
+      })
+  }
+    const handleApprove = (currentEmployee,index)=>{
      
       switch(currentEmployee.optStage)
       {
@@ -162,14 +193,17 @@ const getAllEmployee = async (parameters) => {
           
       }
       currentEmployee.documents.forEach(document => {
+        if(document.status === "Pending")
+        {
           document.status = "Approved"
+        }
       });
 
       currentEmployee.feedback = feedbackRef.current[index]
       console.log(currentEmployee)
       updateEmployee(currentEmployee).then(()=>{
         getAllEmployee().then((res)=>{
-          employeeNameRef.current = res.map((data)=>{
+          employeeNameRef.current = res.filter(data=>data.workAuth.type ==="F1(CPT/OPT)").map((data)=>{
             return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
           })
           setEmployees((prev) =>res)}
@@ -186,12 +220,12 @@ const getAllEmployee = async (parameters) => {
     useEffect(()=>{
         if(employee.userName === null)
         {
-            navigate("/")
+            navigate("/profile")
         }
         else
         {
             getAllEmployee().then((res)=>{
-              employeeNameRef.current = res.map((data)=>{
+              employeeNameRef.current = res.filter(data=>data.workAuth.type ==="F1(CPT/OPT)").map((data)=>{
                 return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
             })
             setEmployees((prev) =>res)}

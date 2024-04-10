@@ -124,8 +124,8 @@ export default function Header(props) {
             >
               <MenuItem onClick={()=>{
                 handleClose();
-                navigate("/profile")}
-                }>Profile</MenuItem>
+                navigate("/hrEmployeeProfiles")}
+                }>Employee Profiles</MenuItem>
               <MenuItem onClick={()=>{
                 handleClose();
                 navigate("/hr/visastatus")}

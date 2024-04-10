@@ -55,13 +55,14 @@ export default function App() {
           <Route path="/hiringManagement" element={<HrProtectLayer><HiringManagementPage /></HrProtectLayer>} />
           <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
           <Route path="/hrEditApplicationPage/:employeeId" element={<HrEditApplicationPage />} />
+          <Route path="/hrEmployeeProfiles" element={<EmployeeProfiles />} />
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
         <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
         <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
        
        
-        <Route path="/hiringManagement" element={<HiringManagementPage />} />
+
  
         <Route path="*" element={<Error />} />
       </Routes>

@@ -1,13 +1,16 @@
 import * as React from "react";
-import { useEffect, useState, useContext } from "react";
+import Button from "@mui/material/Button";
+import { useEffect, useState, useContext ,useRef} from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
+import Autocomplete from '@mui/material/Autocomplete';
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import TextField, { TextFieldProps } from "@mui/material/TextField";
 import { useDispatch, useSelector } from "react-redux";
 import { selectEmployee, selectEmployees } from "../redux/employeeSlice";
 import { fetchAllEmployees } from "../redux/employeeSlice";
@@ -38,32 +41,67 @@ export default function EmployeeProfiles(props) {
   const employee = useSelector(selectEmployee);
   const [employees, setEmployees] = useState([]);
   const [sorted, setSorted] = useState(false);
+  const employeeNameRef = useRef([]);
+  const searchRef = useRef();
   console.log("render");
+  const handleSearch = ()=>{
+    
+    if(searchRef.current.value)
+    {
 
-  const getAllEmployee = async () => {
+      getAllEmployee().then((res)=>{
+        employeeNameRef.current = res.map((data)=>{
+          return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+      })
+      setEmployees((prev) =>res.filter((data)=>{
+        return (data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")").includes(searchRef.current.value)
+
+      }))}
+      ).catch((err)=>{
+          alert(err)
+      })
+
+   
+    } 
+    else
+    {
+      getAllEmployee().then((res)=>{
+        employeeNameRef.current = res.filter(data=>data.workAuth.type ==="F1(CPT/OPT)").map((data)=>{
+          return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+      })
+      setEmployees((prev) =>res)}
+      ).catch((err)=>{
+          alert(err)
+      })
+    }
+    
+  
+   
+  }
+const getAllEmployee = async (parameters) => {
     const token = localStorage.getItem("token");
     const response = await fetch("http://localhost:4000/hr/allProfiles", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json;charset=UTF-8",
-        Authorization: `Bearer ${token}`,
-      },
-      mode: "cors",
-      cache: "default",
-    }).then((response) => {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json;charset=UTF-8",
+          Authorization: `Bearer ${token}`,
+        },
+        mode: "cors",
+        cache: "default",
+      }).then((response) => {
       if (response.ok) {
         return response.json();
       } else {
         return response.text().then((text) => {
-          throw new Error(text);
+           throw new Error(text);
         });
       }
     });
     return response;
-  };
+  }
 
   const handleEmployeeDetails = (employee) => {
-    navigate(`/employees/${employee._id}`, {
+    navigate(`/hrViewApplicationPage/${employee._id}`, {
       state: employee,
     });
     console.log("handleEmployeeDetail()");
@@ -86,21 +124,26 @@ export default function EmployeeProfiles(props) {
     console.log(newEmployees);
   };
 
-  useEffect(() => {
-    if (employee.userName === null) {
-      navigate("/");
-    } else {
-      getAllEmployee()
-        .then((res) => {
-          setEmployees((prev) => res);
-        })
-        .catch((err) => {
-          alert(err);
-        });
+  useEffect(()=>{
+    if(employee.userName === null)
+    {
+        navigate("/profile")
     }
-  }, []);
+    else
+    {
+        getAllEmployee().then((res)=>{
+          employeeNameRef.current = res.filter(data=>data.workAuth.type ==="F1(CPT/OPT)").map((data)=>{
+            return data.firstName +" "+ data.middleName +" "+ data.lastName +" ("+ data.preferredName +")";
+        })
+        setEmployees((prev) =>res)}
+        ).catch((err)=>{
+            alert(err)
+        })
+    }
+},[])
 
   return (
+    
     <div>
       <TableContainer
         component={Paper}
@@ -111,7 +154,22 @@ export default function EmployeeProfiles(props) {
           minHeight: "90vh",
         }}
       >
+
+
         <h2 style={{ margin: "20px auto" }}>Employees</h2>
+        <Autocomplete
+      disablePortal
+      id="combo-box-demo"
+      options={employeeNameRef.current}
+      sx={{ width: 350, border:"none" }}
+      renderInput={(params) =>  <div style={{display:"flex", justifyContent:"space-between", textAlign:"center"}}> <TextField {...params}
+        label ="Search Employee"
+        inputRef={searchRef}
+      />
+      <Button type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
+          Search
+    </Button></div>}
+    />
         <div style={{ borderTop: "1px solid gray", width: "100%" }}></div>
         <div>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">

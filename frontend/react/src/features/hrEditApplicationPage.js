@@ -134,7 +134,7 @@ export default function hrEditApplicationPage(props) {
         }}
       >
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-          <h5 style={{ margin: "10px 0" }}>Personal Information</h5>
+          <h3 style={{ margin: "10px 0" }}>Personal Information</h3>
         </div>
         <div style={{ textAlign: "left" }}>
           <div>
@@ -148,7 +148,7 @@ export default function hrEditApplicationPage(props) {
         </div>
 
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-          <h5 style={{ margin: "10px 0" }}>Address</h5>
+          <h3 style={{ margin: "10px 0" }}>Address</h3>
         </div>
         <div style={{ textAlign: "left" }}>
           <div>
@@ -161,7 +161,7 @@ export default function hrEditApplicationPage(props) {
         </div>
 
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-          <h5 style={{ margin: "10px 0" }}>Reference</h5>
+          <h3 style={{ margin: "10px 0" }}>Reference</h3>
         </div>
         <div style={{ textAlign: "left" }}>
           <div> Reference First Name: {employee.reference?.firstName} </div>
@@ -169,13 +169,22 @@ export default function hrEditApplicationPage(props) {
           <div> Reference Last Name: {employee.reference?.lastName} </div>
 
           <div>
-            {" "}
-            Reference Relationship: {employee.reference?.relationship}{" "}
+            
+            Reference Relationship: {employee.reference?.relationship}
           </div>
         </div>
-
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-          <h5 style={{ margin: "10px 0" }}>Documents</h5>
+                <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
+              </div>
+              <div style={{textAlign:"left"}}>
+              <div> First Name:   {employee.personalProfile?.emergencyContacts?.firstName} </div>
+  <div>Middle Name:   {employee.personalProfile?.reference?.emergencyContacts?.middleName} </div>
+  <div> Last Name:    {employee.personalProfile?.reference?.emergencyContacts?.lastName} </div>
+
+  <div>Relationship:    {employee.personalProfile?.emergencyContacts?.relationship} </div>
+  </div>
+        <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+          <h3 style={{ margin: "10px 0" }}>Documents</h3>
           {employee.documents?.length > 0 ? (
             <div className="kb-attach-box">
               <hr />
@@ -223,26 +232,23 @@ export default function hrEditApplicationPage(props) {
           ) : (
             ""
           )}
+                <div style={{marginTop:"10px", display:"flex", gap:"10px", justifyContent:"center"}}>
+                     HR FeedBack: 
+                    <input value={feedback} 
+                        
+                          
+                          onChange={(e) => setFeedback(e.target.value)}
+                        
+                        ></input>
+                    <button onClick={()=>handleApprove()}>Approved</button><button onClick={()=>handleReject()}>Reject</button>
+                    </div>
+
+    </div>
         </div>
       </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <label htmlFor="feedback">Feedback:</label>
-        <textarea
-          id="feedback"
-          rows="4"
-          cols="50"
-          value={feedback} // Bind value to state
-          onChange={(e) => setFeedback(e.target.value)} // Update state on change
-        ></textarea>
-      </div>
+    
 
-      <div style={{ marginTop: "20px" }}>
-        <button onClick={handleApprove}>Approve</button>
-        <button onClick={handleReject} style={{ marginLeft: "10px" }}>
-          Reject
-        </button>
-      </div>
-    </div>
+          
   );
 }

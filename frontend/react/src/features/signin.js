@@ -44,7 +44,7 @@ export default function Signin(props) {
   useEffect(()=>{
     if(employee.userName !== null)
     {
-      navigate("/peofile");
+      navigate("/profile");
     }
   })
 
