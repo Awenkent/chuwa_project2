@@ -2,7 +2,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Link } from "react-router-dom";
 
 import { Outlet } from 'react-router-dom'
-import Navigation from "../features/navigation"
+import Navigation from "../components/navigation"
+import Footer from "../components/footer"
 import {
   setEmployee,
   selectEmployee,
@@ -19,7 +20,6 @@ export default function Home()
       applicationStatus)
     useEffect(()=>{
 
-      
       if(employee.applicationStatus !== "Approved")
       {
         if(employee.applicationStatus === "Never Submitted")
@@ -37,11 +37,13 @@ export default function Home()
 
    
     return (
-      <div>
+      <>
       <Navigation/>
-      
+      <div style={{minHeight: "800px"}}>
       <Outlet />
       </div>
+      <Footer style={{position:"fixed", bottom:"25px"}}/>
+      </>
     )
   
 }

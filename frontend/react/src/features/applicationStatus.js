@@ -33,7 +33,7 @@ useEffect(()=>{
   
     if(employee.userName === null)
     {
-        navigate("/");
+        navigate("/profile");
     }
 },[])
 return(
@@ -51,7 +51,7 @@ return(
     {employee.personalProfile?.feedback? (
        <div>Hr feedback: {employee.personalProfile?.feedback}</div>
     ) :""}
-  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h5 style={{margin:"10px 0"}}>Personal Information</h5></div>
+  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
   <div style={{textAlign:"left"}}>
   <div>
     Employee Name: {employee.personalProfile.firstName}  {employee.personalProfile.middleName}  {employee.personalProfile.lastName}
@@ -72,7 +72,7 @@ return(
 
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Address</h5>
+                <h3 style={{ margin: "10px 0" }}>Address</h3>
               </div>
 <div style={{textAlign:"left"}}>
               <div>
@@ -86,19 +86,30 @@ return(
  
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Reference</h5>
+                <h3 style={{ margin: "10px 0" }}>Reference</h3>
               </div>
               <div style={{textAlign:"left"}}>
-              <div> Reference First Name:   {employee.personalProfile?.reference?.firstName} </div>
-  <div> Reference Middle Name:   {employee.personalProfile?.reference?.middleName} </div>
-  <div> Reference Last Name:    {employee.personalProfile?.reference?.lastName} </div>
+              <div> First Name:   {employee.personalProfile?.reference?.firstName} </div>
+  <div> Middle Name:   {employee.personalProfile?.reference?.middleName} </div>
+  <div>Last Name:    {employee.personalProfile?.reference?.lastName} </div>
 
-  <div> Reference Relationship:    {employee.personalProfile?.reference?.relationship} </div>
+  <div> Relationship:    {employee.personalProfile?.reference?.relationship} </div>
+  </div>
+
+  <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+                <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
+              </div>
+              <div style={{textAlign:"left"}}>
+              <div> First Name:   {employee.personalProfile?.emergencyContacts?.firstName} </div>
+  <div>Middle Name:   {employee.personalProfile?.reference?.emergencyContacts?.middleName} </div>
+  <div> Last Name:    {employee.personalProfile?.reference?.emergencyContacts?.lastName} </div>
+
+  <div>Relationship:    {employee.personalProfile?.emergencyContacts?.relationship} </div>
   </div>
 
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-  <h5 style={{ margin: "10px 0" }}>Documents</h5>
+  <h3 style={{ margin: "10px 0" }}>Documents</h3>
   {employee.personalProfile?.documents?.length > 0 ?
                                         <div className="kb-attach-box">
                                             <hr />

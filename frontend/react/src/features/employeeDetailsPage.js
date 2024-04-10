@@ -49,7 +49,7 @@ export default function personalProfile(props) {
           </Button>
 
           <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-            <h5 style={{ margin: "10px 0" }}>Personal Information</h5>
+            <h3 style={{ margin: "10px 0" }}>Personal Information</h3>
           </div>
           <div style={{ textAlign: "left" }}>
             <div>
@@ -63,7 +63,7 @@ export default function personalProfile(props) {
           </div>
 
           <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-            <h5 style={{ margin: "10px 0" }}>Address</h5>
+            <h3 style={{ margin: "10px 0" }}>Address</h3>
           </div>
           <div style={{ textAlign: "left" }}>
             <div>
@@ -77,7 +77,7 @@ export default function personalProfile(props) {
           </div>
 
           <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-            <h5 style={{ margin: "10px 0" }}>Reference</h5>
+            <h3 style={{ margin: "10px 0" }}>Reference</h3>
           </div>
           <div style={{ textAlign: "left" }}>
             <div>
@@ -104,7 +104,7 @@ export default function personalProfile(props) {
           </div>
 
           <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-            <h5 style={{ margin: "10px 0" }}>Documents</h5>
+            <h3 style={{ margin: "10px 0" }}>Documents</h3>
             {location.state?.documents?.length > 0 ? (
               <div className="kb-attach-box">
                 <hr />

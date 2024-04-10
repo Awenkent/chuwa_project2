@@ -41,7 +41,7 @@ return(
       backgroundColor: "white",
     }}
   >
-  <Button onClick={()=>{setEditMode(true)}}>Edit</Button>
+  <Button onClick={()=>{setEditMode(true)}}>Edit Profile</Button>
 
   <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
   <div style={{textAlign:"left"}}>
@@ -81,13 +81,23 @@ return(
                 <h3 style={{ margin: "10px 0" }}>Reference</h3>
               </div>
               <div style={{textAlign:"left"}}>
-              <div> Reference First Name:   {employee.personalProfile?.reference?.firstName} </div>
-  <div> Reference Middle Name:   {employee.personalProfile?.reference?.middleName} </div>
-  <div> Reference Last Name:    {employee.personalProfile?.reference?.lastName} </div>
+              <div>First Name:   {employee.personalProfile?.reference?.firstName} </div>
+  <div> Middle Name:   {employee.personalProfile?.reference?.middleName} </div>
+  <div> Last Name:    {employee.personalProfile?.reference?.lastName} </div>
 
-  <div> Reference Relationship:    {employee.personalProfile?.reference?.relationship} </div>
+  <div> Relationship:    {employee.personalProfile?.reference?.relationship} </div>
   </div>
 
+  <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+                <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
+              </div>
+              <div style={{textAlign:"left"}}>
+              <div> First Name:   {employee.personalProfile?.emergencyContacts?.firstName} </div>
+  <div>Middle Name:   {employee.personalProfile?.emergencyContacts?.middleName} </div>
+  <div> Last Name:    {employee.personalProfile?.emergencyContacts?.lastName} </div>
+
+  <div>Relationship:    {employee.personalProfile?.emergencyContacts?.relationship} </div>
+  </div>
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
   <h3 style={{ margin: "10px 0" }}>Documents</h3>
@@ -128,14 +138,7 @@ else
 {
   return(
   <>
-  <Button onClick={()=>{
-     if(window.confirm("Are you sure want discard all changes?"))
-     {
-      setEditMode(false)
-    }
-   
-    }}>Exit</Button>
-  <Application/>
+  <Application editMode={setEditMode}/>
   </>
   )
 

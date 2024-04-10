@@ -149,7 +149,7 @@ console.log(files)
   console.log(obj)
   dispatch(updateEmployee(obj)).then(()=>{
     alert("Update Successful!")
-    navigate("/")})
+    navigate("/profile")})
  
 }
     if(employee.personalProfile?.workAuth?.type !== "F1(CPT/OPT)" || employee.personalProfile?.optStatus ==="Approved")
@@ -210,7 +210,7 @@ console.log(files)
                                         : ''}
            <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
-                {employee.personalProfile?.nextSteps}
+                Next Step: {employee.personalProfile?.nextSteps}
                 </InputLabel>
                 {employee.personalProfile.optStatus === "Never Submitted" ? <FileUpload fileHandler = {setFiles}/> : ""}
                  

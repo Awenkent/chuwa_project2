@@ -114,7 +114,7 @@ export default function application(props) {
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
     if (employee.userName === null) {
-      navigate("/");
+      navigate("/profile");
     }
   }, []);
 
@@ -138,7 +138,14 @@ export default function application(props) {
       SSN: data.employeeSsn,
 
       gender: data.employeeGender,
-
+      emergencyContacts :{
+        firstName: data.employeeEmergencyContactFirstName,
+        middleName:data.employeeEmergencyContactMiddleName,
+        lastName:data.employeeEmergencyContactLastName,
+        relationship:data.employeeEmergencyContactRelationship,
+        phone: data.employeeEmergencyContactPhone,
+        email: data.employeeEmergencyContactEmail
+      },
       currentAddress: {
         buildingAptNumber: data.employeeBuildingApt,
         streetName: data.employeeStreetName,
@@ -151,68 +158,81 @@ export default function application(props) {
         middleName: data.employeeReferenceMiddleName,
         lastName: data.employeeReferenceLastName,
         relationship: data.employeeReferenceRelationship,
+        phone: data.employeeReferencePhone,
+        email: data.employeeReferenceEmail
       },
 
-      documents: files,
-    };
-    if (employee.applicationStatus === "Never Submitted") {
-      (obj.optStage =
-        data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE"),
-        (obj.optStatus =
-          data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" : "APPROVED");
-      (obj.workAuth = {
-        type: data.employeeWorkAuth,
-        startDate: data.employeeWorkAuthStartDate,
-        endDate: data.employeeWorkAuthEndDate,
-      }),
-        (obj.nextSteps = "Wait for HR to approve the onboarding application");
+  
+    documents:files,
+   
+   
+  }
+  if(employee.applicationStatus === "Never Submitted")
+  {
+    obj.optStage = data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE",
+    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"APPROVED"
+    obj.workAuth = {
+      type: data.employeeWorkAuth,
+      startDate: data.employeeWorkAuthStartDate,
+      endDate: data.employeeWorkAuthEndDate,
+    },
+    obj.nextSteps = "Wait for HR to approve the onboarding application"
+  }
+   
+  console.log(obj)
+  dispatch(updateEmployee(obj)).then(()=>{
+     alert("Update Successful!")
+    if(props.editMode)
+    {
+      props.editMode(false)
     }
+    else{
+      navigate("/profile")
+    }
+ 
 
-    console.log(obj);
-    dispatch(updateEmployee(obj))
-      .then(() => {
-        alert("Update Successful!");
-        navigate("/");
-      })
-      .catch((error) => {
-        alert(error);
-      });
-  };
 
-  return (
-    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h2>{location.state ? "Update Product" : "Create Product"}</h2>
-      <div
-        style={{
-          padding: "20px 50px",
-          margin: "50px",
-          backgroundColor: "white",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gridTemplateColumns: { sm: "1fr 1fr" },
-              gap: 3,
-            }}
-          >
-            <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-              <h5 style={{ margin: "10px 0" }}>Personal Information</h5>
-            </div>
-            <div
-              style={{
-                width: "100%",
+})
+  
+  .catch((error)=>{
+    alert(error)
+  })
+ 
+}
+
+  
+    return (
+      <div style={{maxWidth:"800px", margin:"0 auto"}}>
+        <h2>{location.state ?"Update Product" : "Create Product"}</h2>
+        <div
+          style={{
+            padding: "20px 50px",
+            margin: "50px",
+            backgroundColor: "white",
+          }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{
                 display: "flex",
-                justifyContent: "start",
-                gap: "20px",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gridTemplateColumns: { sm: "1fr 1fr" },
+                gap: 3,
               }}
             >
+                  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
+               <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+                   
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   First Name
@@ -529,7 +549,7 @@ export default function application(props) {
             </div>
             <div>
               <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h5 style={{ margin: "10px 0" }}>Address</h5>
+                <h3 style={{ margin: "10px 0" }}>Address</h3>
               </div>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
@@ -669,10 +689,8 @@ export default function application(props) {
                   />
                 </FormControl>
               </div>
-            </div>
-            <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-              <h5 style={{ margin: "10px 0" }}>Reference</h5>
-            </div>
+              </div>
+              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3  style={{margin:"10px 0"}}>Reference</h3></div>
 
             <div
               style={{
@@ -771,6 +789,72 @@ export default function application(props) {
                 />
               </FormControl>
 
+                  </div>
+              <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Phone Number
+                </InputLabel>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile?.reference
+                      ? employee.personalProfile.reference?.phone
+                      : ""
+                  }
+                  {...register("employeeReferencePhone", {
+                    required: true,
+                    maxLength: 20,
+                    pattern:
+                      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeReferencePhone}
+                  helperText={
+                    errors?.employeeReferencePhone?.type
+                      ? errorToPropMapping[errors?.employeeReferencePhone?.type] +
+                        " Example:(123)4567890"
+                      : ""
+                  }
+                />
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Email
+                </InputLabel>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile?.reference
+                      ? employee.personalProfile?.reference?.email
+                      : ""
+                  }
+                  {...register("employeeReferenceEmail", {
+                    required: true,
+                    maxLength: 120,
+                    pattern:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeReferenceEmail}
+                  helperText={
+                    errors?.employeeReferenceEmail?.type
+                      ? errorToPropMapping[errors?.employeeReferenceEmail?.type] +
+                        " Example:user@mail.com"
+                      : ""
+                  }
+                />
+              </FormControl>
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   Relationship
@@ -801,6 +885,204 @@ export default function application(props) {
                 />
               </FormControl>
             </div>
+
+
+            <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3  style={{margin:"10px 0"}}>Emergency Contact</h3></div>
+
+<div
+  style={{
+    width: "100%",
+    display: "flex",
+    justifyContent: "start",
+    gap: "20px",
+  }}
+>
+  <FormControl variant="standard" fullWidth>
+    <InputLabel shrink htmlFor="bootstrap-input">
+      First Name
+    </InputLabel>
+    <TextField
+      defaultValue={
+        employee.personalProfile?.emergencyContacts
+          ? employee.personalProfile.emergencyContacts.firstName
+          : ""
+      }
+      style={{ marginTop: "20px" }}
+      {...register("employeeEmergencyContactFirstName", {
+        required: true,
+        maxLength: 20,
+        pattern: /^[A-Za-z]+$/i,
+      })}
+      size="small"
+      id="name-input"
+      erro
+      error={!!errors?.employeeEmergencyContactFirstName}
+      helperText={
+        errors?.employeeEmergencyContactFirstName?.type
+          ? errorToPropMapping[
+              errors?.employeeEmergencyContactFirstName?.type
+            ]
+          : ""
+      }
+    />
+  </FormControl>
+
+  <FormControl variant="standard" fullWidth>
+    <InputLabel shrink htmlFor="bootstrap-input">
+      Middle Name
+    </InputLabel>
+    <TextField
+      defaultValue={
+        employee.personalProfile?.emergencyContacts
+          ? employee.personalProfile.emergencyContacts.middleName
+          : ""
+      }
+      style={{ marginTop: "20px" }}
+      {...register("employeeEmergencyContactMiddleName", {
+        maxLength: 20,
+        pattern: /^[A-Za-z]+$/i,
+      })}
+      size="small"
+      id="name-input"
+      erro
+      error={!!errors?.employeeEmergencyContactMiddleName}
+      helperText={
+        errors?.employeeEmergencyContactMiddleName?.type
+          ? errorToPropMapping[
+              errors?.employeeEmergencyContactMiddleName?.type
+            ]
+          : ""
+      }
+    />
+  </FormControl>
+
+  <FormControl variant="standard" fullWidth>
+    <InputLabel shrink htmlFor="bootstrap-input">
+      Last Name
+    </InputLabel>
+    <TextField
+      defaultValue={
+        employee.personalProfile?.emergencyContacts
+          ? employee.personalProfile.emergencyContacts.lastName
+          : ""
+      }
+      style={{ marginTop: "20px" }}
+      {...register("employeeEmergencyContactLastName", {
+        required: true,
+        maxLength: 20,
+        pattern: /^[A-Za-z]+$/i,
+      })}
+      size="small"
+      id="name-input"
+      erro
+      error={!!errors?.employeeEmergencyContactLastName}
+      helperText={
+        errors?.employeeEmergencyContactLastName?.type
+          ? errorToPropMapping[
+              errors?.employeeEmergencyContactLastName?.type
+            ]
+          : ""
+      }
+    />
+  </FormControl>
+</div>
+  <div
+              style={{
+                width: "100%",
+                display: "flex",
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Phone Number
+                </InputLabel>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile?.emergencyContacts?
+                       employee.personalProfile.emergencyContacts?.phone
+                      : ""
+                  }
+                  {...register("employeeEmergencyContactPhone", {
+                    required: true,
+                    maxLength: 20,
+                    pattern:
+                      /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeEmergencyContactPhone}
+                  helperText={
+                    errors?.employeeEmergencyContactPhone?.type
+                      ? errorToPropMapping[errors?.employeeEmergencyContactPhone?.type] +
+                        " Example:(123)4567890"
+                      : ""
+                  }
+                />
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Email
+                </InputLabel>
+                <TextField
+                  style={{ marginTop: "20px" }}
+                  defaultValue={
+                    employee.personalProfile?.emergencyContacts?
+                       employee.personalProfile?.emergencyContacts?.email
+                      : ""
+                  }
+                  {...register("employeeEmergencyContactEmail", {
+                    required: true,
+                    maxLength: 120,
+                    pattern:
+                      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+                  })}
+                  size="small"
+                  id="name-input"
+                  error={!!errors?.employeeEmergencyContactEmail}
+                  helperText={
+                    errors?.employeeEmergencyContactEmail?.type
+                      ? errorToPropMapping[errors?.employeeEmergencyContactEmail?.type] +
+                        " Example:user@mail.com"
+                      : ""
+                  }
+                />
+              </FormControl>
+
+  <FormControl variant="standard" fullWidth>
+    <InputLabel shrink htmlFor="bootstrap-input">
+      Relationship
+    </InputLabel>
+    <TextField
+      defaultValue={
+        employee.personalProfile?.emergencyContacts
+          ? employee.personalProfile.emergencyContacts.relationship
+          : ""
+      }
+      style={{ marginTop: "20px" }}
+      {...register("employeeEmergencyContactRelationship", {
+        required: true,
+        maxLength: 20,
+        pattern: /^[A-Za-z]+$/i,
+      })}
+      size="small"
+      id="name-input"
+      erro
+      error={!!errors?.employeeEmergencyContactRelationship}
+      helperText={
+        errors?.employeeEmergencyContactRelationship?.type
+          ? errorToPropMapping[
+              errors?.employeeEmergencyContactRelationship?.type
+            ]
+          : ""
+      }
+    />
+  </FormControl>
+</div>
+
             <article
               style={{
                 width: "100%",
@@ -942,50 +1224,62 @@ export default function application(props) {
                 <></>
               )}
 
-              {watchemployeeWorkAuth === "Others" ? (
-                <FormControl variant="standard" fullWidth>
-                  <InputLabel shrink htmlFor="bootstrap-input">
-                    Please specify your visa type:
-                  </InputLabel>
-                  <TextField
-                    defaultValue={
-                      employee.personalProfile
-                        ? employee.personalProfile.visaTitle
-                        : ""
-                    }
-                    style={{ marginTop: "20px" }}
-                    {...register("employeeVisaTitle", {
-                      maxLength: 20,
-                      pattern: /^[A-Za-z]+$/i,
-                    })}
-                    size="small"
-                    id="name-input"
-                    erro
-                    error={!!errors?.employeeVisaTitle}
-                    helperText={
-                      errors?.employeeVisaTitle?.type
-                        ? errorToPropMapping[errors?.employeeVisaTitle?.type]
-                        : ""
-                    }
-                  />
-                </FormControl>
-              ) : (
-                <></>
-              )}
-            </article>
-            <Button
-              onClick={() => {
-                console.log("hi");
-              }}
-              variant="contained"
-              type="submit"
-              fullWidth
-            >
-              Submit Application
-            </Button>
-          </Box>
+            {watchemployeeWorkAuth === "Others" ?          
+              (
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                Please specify your visa type:
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile
+                      ? employee.personalProfile.visaTitle
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeVisaTitle", {
+                 
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeVisaTitle}
+                  helperText={
+                    errors?.employeeVisaTitle?.type
+                      ? errorToPropMapping[
+                          errors?.employeeVisaTitle?.type
+                        ]
+                      : ""
+                  }
+                /> 
+              </FormControl>
+              )
+              :
+              <></>
+            }
+       
+             
+              </article>
+              <Button  variant="contained" type = "submit" fullWidth>
+                Submit Application
+              </Button>
+              {props.editMode?( <Button variant="contained" onClick={(e)=>{e.preventDefault
+               if(window.confirm("Are you sure want discard all changes?"))
+               {
+                props.editMode(false)
+              }
+              
+              }} fullWidth>
+                
+                Undo Changes
+              </Button>):"" }
+            </Box>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+
+  
 }
