@@ -212,10 +212,10 @@ console.log(files)
                 <InputLabel shrink htmlFor="bootstrap-input">
                 {employee.personalProfile?.nextSteps}
                 </InputLabel>
-                {employee.personalProfile.optStatus !== "Never Submitted" ? <FileUpload fileHandler = {setFiles}/> : ""}
+                {employee.personalProfile.optStatus === "Never Submitted" ? <FileUpload fileHandler = {setFiles}/> : ""}
                  
               </FormControl>
-              {employee.personalProfile.optStatus !== "Never Submitted" ? 
+              {employee.personalProfile.optStatus === "Never Submitted" ? 
            <Button variant="contained" type = "submit" fullWidth>
                 Submit Application
               </Button>  

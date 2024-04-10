@@ -93,7 +93,7 @@ const getAllEmployee = async (parameters) => {
           {
               current.optStage = "EAD";
               current.optStatus = "Never submitted"
-              current.nextStep = "Please submit your EAD file"
+              current.nextSteps = "Please submit your EAD file"
               break;
           }
            case "EAD":
@@ -101,7 +101,7 @@ const getAllEmployee = async (parameters) => {
               current.optStage = "I-983";
               current.optStatus = "Never submitted"
   
-              current.nextStep = "Please submit your I-983 file"
+              current.nextSteps = "Please submit your I-983 file"
               break;
           }
           case "I-983":
@@ -109,14 +109,14 @@ const getAllEmployee = async (parameters) => {
               current.optStage = "I-20";
               current.optStatus = "Never submitted"
   
-              current.nextStep = "Please submit your I-20 file"
+              current.nextSteps = "Please submit your I-20 file"
               
               break;
           }
           case "I-20":
           {
               current.optStatus = "Approved"
-              current.nextStep= "none"
+              current.nextSteps= "none"
               break;
           }
           
