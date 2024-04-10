@@ -100,99 +100,7 @@ console.log(employee)
   {
      setImagePreview(watchProfilePicture)
   }
-  const handleDelete = ()=>{
-    dispatch(deleteProducts(location.state.product._id)).then((res)=>{
-      if(res.error)
-      { 
-        alert( res.error.message) 
-      }
-      else
-      {
-        alert("product deleted!")
-        navigate("/")
-      }
-    })  
-  }
- const handleProductCreation = ()=>
- {
-  let errorObj={
-    errorCount :0,
-    productNameError: "",
-    descriptionError: "",
-    categoryError: "",
-    priceError: "",
-    imageLinkError: "",
-    quantityError: "",
-  };
 
-    if (!productName) {
-      errorObj.errorCount += 1;
-      errorObj.productNameError = "Product Name cannot be empty.";
-    }
-
-    if (!productCategory) {
-      errorObj.errorCount += 1;
-      errorObj.categoryError = "category Name cannot be empty.";
-    }
-
-    if (!productPrice) {
-      errorObj.errorCount += 1;
-      errorObj.priceError = "Price cannot be empty.";
-    } else if (productPrice <= 0) {
-      errorObj.errorCount += 1;
-      errorObj.priceError = "Price should be at least greater than 0.";
-    }
-
-    if (!productImageLink) {
-      errorObj.errorCount += 1;
-      errorObj.imageLinkError = "ImageLink cannot be empty.";
-    }
-
-    if (!productQuantity) {
-      errorObj.errorCount += 1;
-      errorObj.quantityError = "Quantity cannot be empty.";
-    } else if (productQuantity <= 0) {
-      errorObj.errorCount += 1;
-      errorObj.quantityError = "Quantity shoud be at least 1.";
-    }
-
-    if (errorObj.errorCount > 0) {
-      setErrorState(() => {
-        return errorObj;
-      });
-      alert("One or more input is invalid, please try again");
-      return;
-    }
-
-    let productObj = {
-      productName: productName,
-      description: productDescription,
-      category: productCategory,
-      price: productPrice,
-      imageLink: productImageLink,
-      quantity: productQuantity,
-    };
-    location.state
-      ? dispatch(
-          updateProduct({ product: productObj, id: location.state.product._id })
-        ).then((res) => {
-          if (res.error) {
-            alert(res.error.message);
-          } else {
-            alert("product updated!");
-            navigate("/");
-          }
-        })
-      : dispatch(createProduct(productObj)).then((res) => {
-          console.log(res);
-          if (res.error) {
-            alert(res.error.message);
-          } else {
-            alert("product created!");
-            navigate("/");
-          }
-        });
-  };
 
   const matches = useMediaQuery("(min-width:600px)");
   useEffect(() => {
@@ -202,7 +110,7 @@ console.log(employee)
   }, []);
 
  const onSubmit = (data) => {
-
+  console.log("sbb")
   let next = "None";
   
   
@@ -256,7 +164,9 @@ console.log(employee)
   console.log(obj)
   dispatch(updateEmployee(obj)).then(()=>{
      alert("Update Successful!")
-  navigate("/")})
+  navigate("/")}).catch((error)=>{
+    alert(error)
+  })
  
 }
 
@@ -848,7 +758,7 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
                       : ""
                   }
                   {...register("employeeWorkAuthStartDate", {
-                    required: true,
+                   
                     maxLength: 120,
                     pattern:
                       /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/,
@@ -876,7 +786,7 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
                     : ""
                   }
                   {...register("employeeWorkAuthEndDate", {
-                    required: true,
+                   
                     maxLength: 120,
                     pattern:
                       /^(0?[1-9]|1[012])[\/\-](0?[1-9]|[12][0-9]|3[01])[\/\-]\d{4}$/,
@@ -922,7 +832,7 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
                   }
                   style={{ marginTop: "20px" }}
                   {...register("employeeVisaTitle", {
-                    required: true,
+                 
                     maxLength: 20,
                     pattern: /^[A-Za-z]+$/i,
                   })}
@@ -946,7 +856,7 @@ style={{ marginTop: "12px" }}  {...register("employeeWorkAuth")}
        
              
               </article>
-              <Button variant="contained" type = "submit" fullWidth>
+              <Button onClick={()=>{console.log("hi")}}  variant="contained" type = "submit" fullWidth>
                 Submit Application
               </Button>
               
