@@ -119,16 +119,26 @@ export default function EmployeeProfiles(props) {
               <TableRow>
                 <StyledTableCell
                   onClick={handleSort}
-                  style={{ cursor: "pointer", textDecoration: "underline" }}
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    fontWeight: "bold",
+                  }}
                 >
                   Full Name
                 </StyledTableCell>
-                <StyledTableCell align="right">SSN</StyledTableCell>
-                <StyledTableCell align="right">
+                <StyledTableCell align="right" style={{ fontWeight: "bold" }}>
+                  SSN
+                </StyledTableCell>
+                <StyledTableCell align="right" style={{ fontWeight: "bold" }}>
                   Work Authorization Title
                 </StyledTableCell>
-                <StyledTableCell align="right">Phone Number</StyledTableCell>
-                <StyledTableCell align="right">Email</StyledTableCell>
+                <StyledTableCell align="right" style={{ fontWeight: "bold" }}>
+                  Phone Number
+                </StyledTableCell>
+                <StyledTableCell align="right" style={{ fontWeight: "bold" }}>
+                  Email
+                </StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -169,8 +179,8 @@ export default function EmployeeProfiles(props) {
         <div
           style={{
             position: "absolute",
-            bottom: "0",
-            right: "30px",
+            bottom: "10px",
+            right: "40px",
             fontWeight: "bold",
             fontSize: "1.2rem",
           }}

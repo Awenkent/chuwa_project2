@@ -20,6 +20,8 @@ import { BrowserRouter } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import VisaStatus from "./features/visaStatusManagement";
 import ApplicationStatus from "./features/applicationStatus";
+import EmployeeProfiles from "./features/employeeProfiles";
+import EmployeeDetailsPage from "./features/employeeDetailsPage";
 import {
   fetchCurrentEmployee,
   setEmployee,
@@ -56,6 +58,11 @@ export default function App() {
                 }
               >
                 <Route path="/profile" element={<PersonalProfile />} />
+                <Route path="/employees" element={<EmployeeProfiles />} />
+                <Route
+                  path="/employees/:id"
+                  element={<EmployeeDetailsPage />}
+                />
                 <Route path="/visastatus" element={<VisaStatus />} />
                 <Route
                   path="/hr/visastatus"
