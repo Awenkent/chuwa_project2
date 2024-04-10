@@ -143,8 +143,7 @@ const employeeSchema = new mongoose.Schema(
       },
     },
     emergencyContacts: {
-      type: [
-        {
+     
           firstName: {
             type: String,
             default: "",
@@ -160,8 +159,7 @@ const employeeSchema = new mongoose.Schema(
             type: String,
             default: "",
           },
-        },
-      ],
+     
     },
     documents: [
       {

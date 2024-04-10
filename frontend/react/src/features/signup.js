@@ -119,6 +119,13 @@ export default function signup(props) {
   
   
   return (
+    <div
+      style={{
+        maxWidth: "800px",
+        margin: "50px auto",
+        backgroundColor: "white",
+      }}
+    >
     <div style={{ padding: "20px 50px" }}>
       <h2 role="title">Sign up an account</h2>
       <form action="" style={{ textAlign: "center" }}>
@@ -212,6 +219,7 @@ export default function signup(props) {
           </h5>
         </Box>
       </form>
+    </div>
     </div>
   );
 }
