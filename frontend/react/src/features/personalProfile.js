@@ -18,6 +18,7 @@ import { TextareaAutosize as BaseTextareaAutosize } from "@mui/base/TextareaAuto
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useNavigate, useLocation } from "react-router-dom";
+
 import {
   setEmployee,
   selectEmployee,
@@ -28,7 +29,7 @@ export default function personalProfile(props) {
 
   const [editMode, setEditMode] = useState(false);
   const employee = useSelector(selectEmployee);
-  
+  const matches = useMediaQuery("(min-width:600px)");
 
  if(!editMode)  
 return(
@@ -59,6 +60,9 @@ return(
   </div>
   <div>
     SSN: {employee.personalProfile.SSN} 
+  </div>
+  <div>
+    Work Authorization: {employee.personalProfile.workAuth.type}  Start:{employee.personalProfile.workAuth.startDate} End:{employee.personalProfile.workAuth.endDate}
   </div>
   </div>
 
@@ -100,6 +104,14 @@ return(
   </div>
 
   <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+                <h3 style={{ margin: "10px 0" }}>Notification</h3>
+              </div>
+              <div style={{textAlign:"left"}}>
+              <div> Next Step:  {employee.personalProfile?.nextSteps} </div>
+  
+  </div>
+
+  <div style={{ borderTop: "1px solid gray", width: "100%" }}>
   <h3 style={{ margin: "10px 0" }}>Documents</h3>
   {employee.personalProfile?.documents?.length > 0 ?
                                         <div className="kb-attach-box">
@@ -108,7 +120,8 @@ return(
                                                 employee.personalProfile?.documents?.map((data, index) => {
                                                     const { id, filename, filetype, fileimage, datetime, filesize } = data;
                                                     return (
-                                                        <div className="file-atc-box" key={index}>
+                                                      
+                                                        <div  className="file-atc-box" style={!matches?{ marginTop: "20px", display:"flex", flexDirection:"column", alignItems:"center", width:"100%"} : {}} key={index}>
                                                             {
                                                                 filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
                                                                     <div className="file-image"> <img src={fileimage} alt="" /></div> :

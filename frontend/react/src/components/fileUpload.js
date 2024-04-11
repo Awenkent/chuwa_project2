@@ -1,6 +1,7 @@
 import React from "react";
 import { useState,useRef,useEffect } from "react";
 import Button from "@mui/material/Button";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import ReactDOM from "https://cdn.skypack.dev/react-dom@17.0.1";
 import shortid from "https://cdn.skypack.dev/shortid@2.2.16";
@@ -8,36 +9,8 @@ export default function FileUpload(props)
 {
 
     const [Files, SetFiles] = useState(props.files? props.files : []);
-
-    /*
-    if(props.files)
-    {
-        props.files.map((file)=>{
-            let reader = new FileReader();
-            reader.onloadend = () => {
-                SetFiles((preValue) => {
-                    return [
-                        ...preValue,
-                        {
-                            id: shortid.generate(),
-                            filename: file.name,
-                            filetype:file.type,
-                            fileimage: reader.result,
-                            datetime: file.lastModifiedDate.toLocaleString('en-IN'),
-                            filesize: filesizes(file.size)
-                        }
-                    ]
-                });
-            }
-
-            if(file) {
-                reader.readAsDataURL(file);
-            }
-        })
-           
-            
-    }
-    */
+    const matches = useMediaQuery("(min-width:600px)");
+   
     const filesizes = (bytes, decimals = 2) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -69,7 +42,7 @@ export default function FileUpload(props)
                                 fileimage: reader.result,
                                 datetime: e.target.files[i].lastModifiedDate.toLocaleString('en-IN'),
                                 filesize: filesizes(e.target.files[i].size),
-                                status: "pending"
+                                status: "Pending"
                             }
                         ]
                     });
@@ -94,7 +67,7 @@ export default function FileUpload(props)
         }
     }
     const DeleteFile = (id) => {
-        if(window.confirm("Are you sure you want to delete this Image?")){
+        if(window.confirm("Are you sure you want to delete this file?")){
             const result = Files.filter((data)=>data.id !== id);
             SetFiles((prev) => result);
             if(props.fileHandler)
@@ -105,7 +78,8 @@ export default function FileUpload(props)
            
         }
     }
-   
+   if(matches)
+   {
     return(
         <div style={{ marginTop: "20px" }}>                        
                                         <div className="kb-file-upload">
@@ -145,4 +119,47 @@ export default function FileUpload(props)
          </div>
        
     );
+}
+else
+{
+    return(
+        <div style={{ marginTop: "20px"}}>                        
+                                        <div className="kb-file-upload">
+                                            <div className="file-upload-box">
+                                                <input type="file" id="fileupload" className="file-upload-input" onChange={InputChange} multiple />
+                                                <span>Drag and drop or <span className="file-link">Choose your files</span></span>
+                                            </div>
+                                        </div>
+                                                                            
+                                    {Files.length > 0 ?
+                                        <div className="kb-attach-box">
+                                            <hr />
+                                            {
+                                                Files.map((data, index) => {
+                                                    const { id, filename, filetype, fileimage, datetime, filesize } = data;
+                                                    return (
+                                                        <div style={{ marginTop: "20px", display:"flex", flexDirection:"column", alignItems:"center"}} key={index}>
+                                                            {
+                                                                filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
+                                                                    <div className="file-image"> <img src={fileimage} alt="" /></div> :
+                                                                    <div className="file-image"><i className="far fa-file-alt"></i></div>
+                                                            }
+                                                            <div className="file-detail">
+                                                                <h6>{filename}</h6>
+                                                                <p><span>Size : {filesize}</span><span className="ml-3">Modified Time : {datetime}</span></p>
+                                                                <div className="file-actions">
+                                                                    <div className="file-action-btn" onClick={() => DeleteFile(id)}>Delete</div>
+                                                                    <a href={fileimage}  className="file-action-btn" download={filename}>Download</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                        : ''}
+         </div>
+       
+    );
+}
 }

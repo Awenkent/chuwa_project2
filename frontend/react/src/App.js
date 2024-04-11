@@ -56,10 +56,12 @@ export default function App() {
           <Route path="/hrViewApplicationPage/:employeeId" element={<HrViewApplicationPage />} />
           <Route path="/hrEditApplicationPage/:employeeId" element={<HrEditApplicationPage />} />
           <Route path="/hrEmployeeProfiles" element={<EmployeeProfiles />} />
+          <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
+          <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
         </Route>
         <Route path="/signup/:signupToken" element={<Signup />} />
-        <Route path="/generateRegistrationEmail" element={<SendRegistrationEmail />} />
-        <Route path="/registrationHistory" element={<RegistrationHistoryPage />} />
+      
+   
        
        
 

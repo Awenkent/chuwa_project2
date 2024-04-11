@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { selectAllEmployees, fetchAllEmployees } from "../redux/employeeSlice";
 
 const getAllEmployee = async (parameters) => {
+
   const token = localStorage.getItem("token");
   const response = await fetch("http://localhost:4000/hr/allProfiles", {
     method: "GET",
@@ -65,7 +66,7 @@ const updateAnyEmployee = async (employeeObj) => {
 export default function hrEditApplicationPage(props) {
   let { employeeId } = useParams();
   const navigate = useNavigate();
-
+  const matches = useMediaQuery("(min-width:600px)");
   const [employees, setEmployees] = useState([]);
   const [decision, setDecision] = useState("");
   const [feedback, setFeedback] = useState("");
@@ -87,11 +88,11 @@ export default function hrEditApplicationPage(props) {
       feedback:feedback,
     };
     if (
-      employeeObj.workAuth?.tyoe === "F1(CPT/OPT)" &&
-      decision === "Approved"
+      employeeObj.workAuth?.type === "F1(CPT/OPT)"
+     
     ) {
       employeeObj.nextSteps = "waiting for hr to approve OPT receipt";
-    } else if (decision === "Approved") {
+    } else {
       employeeObj.nextSteps = "No Action required";
     }
     updateAnyEmployee(employeeObj);
@@ -103,6 +104,7 @@ export default function hrEditApplicationPage(props) {
     const employeeObj = {
       ...employee,
       applicationStatus: "Rejected",
+      nextSteps:"Please resubmit the onboarding application",
       feedback:feedback,
     };
     
@@ -198,7 +200,7 @@ export default function hrEditApplicationPage(props) {
                   filesize,
                 } = data;
                 return (
-                  <div className="file-atc-box" key={index}>
+                  <div className="file-atc-box" style={!matches?{ marginTop: "20px", display:"flex", flexDirection:"column", alignItems:"center", width:"100%"} : {}} key={index}>
                     {filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ? (
                       <div className="file-image">
                         {" "}

@@ -139,6 +139,7 @@ export default function signup(props) {
       })
       .catch((error) => {
         alert(error);
+        
       });
   };
   if (!email) {
