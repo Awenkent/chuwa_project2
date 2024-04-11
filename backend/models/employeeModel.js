@@ -97,7 +97,7 @@ const employeeSchema = new mongoose.Schema(
     },
     optStage: {
       type: String,
-      enum: ["NONE", "RECEIPT", "EAD", "I-983", "I-20"],
+      enum: ["NONE", "RECEIPT", "EAD", "I-983", "I-20",""],
       default: "",
     },
     optStatus: {

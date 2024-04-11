@@ -59,6 +59,7 @@ const sendSignupEmail = async (req, res) => {
         userName: req.employee?.userName,
         role: req.employee?.role,
       },
+      email:req.body.email,
     };
     const token = await jwt.sign(payload, process.env.SECRET, {
       expiresIn: "3h",
