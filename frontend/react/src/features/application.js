@@ -172,7 +172,7 @@ export default function application(props) {
   if(employee.applicationStatus === "Never Submitted")
   {
     obj.optStage = data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE",
-    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"APPROVED"
+    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"Approved"
     obj.workAuth = {
       type: data.employeeWorkAuth,
       startDate: data.employeeWorkAuthStartDate,
