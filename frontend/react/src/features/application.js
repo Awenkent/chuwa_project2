@@ -113,22 +113,21 @@ export default function application(props) {
     setImagePreview(watchProfilePicture);
   };
 
-
   useEffect(() => {
+    console.log(employee);
     if (employee.userName === null) {
       navigate("/profile");
     }
   }, []);
 
   const onSubmit = (data) => {
-    console.log("sbb");
     let next = "None";
 
     let obj = {
       firstName: data.employeeFirstName,
       middleName: data.employeeMiddleName,
       applicationStatus:
-        employee.applicationStatus === "Never Submitted"
+        employee.applicationStatus === "Never Submitted" || employee.applicationStatus === "Rejected"
           ? "Pending"
           : employee.applicationStatus,
       lastName: data.employeeLastName,
@@ -140,13 +139,13 @@ export default function application(props) {
       SSN: data.employeeSsn,
 
       gender: data.employeeGender,
-      emergencyContacts :{
+      emergencyContacts: {
         firstName: data.employeeEmergencyContactFirstName,
-        middleName:data.employeeEmergencyContactMiddleName,
-        lastName:data.employeeEmergencyContactLastName,
-        relationship:data.employeeEmergencyContactRelationship,
+        middleName: data.employeeEmergencyContactMiddleName,
+        lastName: data.employeeEmergencyContactLastName,
+        relationship: data.employeeEmergencyContactRelationship,
         phone: data.employeeEmergencyContactPhone,
-        email: data.employeeEmergencyContactEmail
+        email: data.employeeEmergencyContactEmail,
       },
       currentAddress: {
         buildingAptNumber: data.employeeBuildingApt,
@@ -161,7 +160,7 @@ export default function application(props) {
         lastName: data.employeeReferenceLastName,
         relationship: data.employeeReferenceRelationship,
         phone: data.employeeReferencePhone,
-        email: data.employeeReferenceEmail
+        email: data.employeeReferenceEmail,
       },
 
   
@@ -172,7 +171,7 @@ export default function application(props) {
   if(employee.applicationStatus === "Never Submitted")
   {
     obj.optStage = data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE",
-    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"APPROVED"
+    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"Approved"
     obj.workAuth = {
       type: data.employeeWorkAuth,
       startDate: data.employeeWorkAuthStartDate,
@@ -205,7 +204,7 @@ export default function application(props) {
   
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>Onboarding Application</h2>
+        <h2>{props.editMode? "Edit Profile" : "Onboarding Application"}</h2>
         <div
           style={{
             padding: "20px 50px",
@@ -353,7 +352,7 @@ export default function application(props) {
             <div
               style={{
                 width: "100%",
-                display: matches? "flex":"block" ,
+                display: matches ? "flex" : "block",
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -420,7 +419,7 @@ export default function application(props) {
             <div
               style={{
                 width: "100%",
-                display: matches? "flex":"block" ,
+                display: matches ? "flex" : "block",
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -612,7 +611,7 @@ export default function application(props) {
               <div
                 style={{
                   width: "100%",
-                  display: matches? "flex":"block" ,
+                  display: matches ? "flex" : "block",
                   justifyContent: "start",
                   gap: "20px",
                 }}
@@ -695,13 +694,15 @@ export default function application(props) {
                   />
                 </FormControl>
               </div>
-              </div>
-              <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3  style={{margin:"10px 0"}}>Reference</h3></div>
+            </div>
+            <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+              <h3 style={{ margin: "10px 0" }}>Reference</h3>
+            </div>
 
             <div
               style={{
                 width: "100%",
-                display: matches? "flex":"block" ,
+                display: matches ? "flex" : "block",
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -794,12 +795,11 @@ export default function application(props) {
                   }
                 />
               </FormControl>
-
-                  </div>
-              <div
+            </div>
+            <div
               style={{
                 width: "100%",
-                display: matches? "flex":"block" ,
+                display: matches ? "flex" : "block",
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -826,8 +826,9 @@ export default function application(props) {
                   error={!!errors?.employeeReferencePhone}
                   helperText={
                     errors?.employeeReferencePhone?.type
-                      ? errorToPropMapping[errors?.employeeReferencePhone?.type] +
-                        " Example:(123)4567890"
+                      ? errorToPropMapping[
+                          errors?.employeeReferencePhone?.type
+                        ] + " Example:(123)4567890"
                       : ""
                   }
                 />
@@ -855,8 +856,9 @@ export default function application(props) {
                   error={!!errors?.employeeReferenceEmail}
                   helperText={
                     errors?.employeeReferenceEmail?.type
-                      ? errorToPropMapping[errors?.employeeReferenceEmail?.type] +
-                        " Example:user@mail.com"
+                      ? errorToPropMapping[
+                          errors?.employeeReferenceEmail?.type
+                        ] + " Example:user@mail.com"
                       : ""
                   }
                 />
@@ -892,110 +894,111 @@ export default function application(props) {
               </FormControl>
             </div>
 
+            <div style={{ borderTop: "1px solid gray", width: "100%" }}>
+              <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
+            </div>
 
-            <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3  style={{margin:"10px 0"}}>Emergency Contact</h3></div>
-
-<div
-  style={{
-    width: "100%",
-    display: matches? "flex":"block" ,
-    justifyContent: "start",
-    gap: "20px",
-  }}
->
-  <FormControl variant="standard" fullWidth>
-    <InputLabel shrink htmlFor="bootstrap-input">
-      First Name
-    </InputLabel>
-    <TextField
-      defaultValue={
-        employee.personalProfile?.emergencyContacts
-          ? employee.personalProfile.emergencyContacts.firstName
-          : ""
-      }
-      style={{ marginTop: "20px" }}
-      {...register("employeeEmergencyContactFirstName", {
-        required: true,
-        maxLength: 20,
-        pattern: /^[A-Za-z]+$/i,
-      })}
-      size="small"
-      id="name-input"
-      erro
-      error={!!errors?.employeeEmergencyContactFirstName}
-      helperText={
-        errors?.employeeEmergencyContactFirstName?.type
-          ? errorToPropMapping[
-              errors?.employeeEmergencyContactFirstName?.type
-            ]
-          : ""
-      }
-    />
-  </FormControl>
-
-  <FormControl variant="standard" fullWidth>
-    <InputLabel shrink htmlFor="bootstrap-input">
-      Middle Name
-    </InputLabel>
-    <TextField
-      defaultValue={
-        employee.personalProfile?.emergencyContacts
-          ? employee.personalProfile.emergencyContacts.middleName
-          : ""
-      }
-      style={{ marginTop: "20px" }}
-      {...register("employeeEmergencyContactMiddleName", {
-        maxLength: 20,
-        pattern: /^[A-Za-z]+$/i,
-      })}
-      size="small"
-      id="name-input"
-      erro
-      error={!!errors?.employeeEmergencyContactMiddleName}
-      helperText={
-        errors?.employeeEmergencyContactMiddleName?.type
-          ? errorToPropMapping[
-              errors?.employeeEmergencyContactMiddleName?.type
-            ]
-          : ""
-      }
-    />
-  </FormControl>
-
-  <FormControl variant="standard" fullWidth>
-    <InputLabel shrink htmlFor="bootstrap-input">
-      Last Name
-    </InputLabel>
-    <TextField
-      defaultValue={
-        employee.personalProfile?.emergencyContacts
-          ? employee.personalProfile.emergencyContacts.lastName
-          : ""
-      }
-      style={{ marginTop: "20px" }}
-      {...register("employeeEmergencyContactLastName", {
-        required: true,
-        maxLength: 20,
-        pattern: /^[A-Za-z]+$/i,
-      })}
-      size="small"
-      id="name-input"
-      erro
-      error={!!errors?.employeeEmergencyContactLastName}
-      helperText={
-        errors?.employeeEmergencyContactLastName?.type
-          ? errorToPropMapping[
-              errors?.employeeEmergencyContactLastName?.type
-            ]
-          : ""
-      }
-    />
-  </FormControl>
-</div>
-  <div
+            <div
               style={{
                 width: "100%",
-                display: matches? "flex":"block" ,
+                display: matches ? "flex" : "block",
+                justifyContent: "start",
+                gap: "20px",
+              }}
+            >
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  First Name
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile?.emergencyContacts
+                      ? employee.personalProfile.emergencyContacts.firstName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeEmergencyContactFirstName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeEmergencyContactFirstName}
+                  helperText={
+                    errors?.employeeEmergencyContactFirstName?.type
+                      ? errorToPropMapping[
+                          errors?.employeeEmergencyContactFirstName?.type
+                        ]
+                      : ""
+                  }
+                />
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Middle Name
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile?.emergencyContacts
+                      ? employee.personalProfile.emergencyContacts.middleName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeEmergencyContactMiddleName", {
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeEmergencyContactMiddleName}
+                  helperText={
+                    errors?.employeeEmergencyContactMiddleName?.type
+                      ? errorToPropMapping[
+                          errors?.employeeEmergencyContactMiddleName?.type
+                        ]
+                      : ""
+                  }
+                />
+              </FormControl>
+
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Last Name
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile?.emergencyContacts
+                      ? employee.personalProfile.emergencyContacts.lastName
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeEmergencyContactLastName", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeEmergencyContactLastName}
+                  helperText={
+                    errors?.employeeEmergencyContactLastName?.type
+                      ? errorToPropMapping[
+                          errors?.employeeEmergencyContactLastName?.type
+                        ]
+                      : ""
+                  }
+                />
+              </FormControl>
+            </div>
+            <div
+              style={{
+                width: "100%",
+                display: matches ? "flex" : "block",
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -1007,8 +1010,8 @@ export default function application(props) {
                 <TextField
                   style={{ marginTop: "20px" }}
                   defaultValue={
-                    employee.personalProfile?.emergencyContacts?
-                       employee.personalProfile.emergencyContacts?.phone
+                    employee.personalProfile?.emergencyContacts
+                      ? employee.personalProfile.emergencyContacts?.phone
                       : ""
                   }
                   {...register("employeeEmergencyContactPhone", {
@@ -1022,8 +1025,9 @@ export default function application(props) {
                   error={!!errors?.employeeEmergencyContactPhone}
                   helperText={
                     errors?.employeeEmergencyContactPhone?.type
-                      ? errorToPropMapping[errors?.employeeEmergencyContactPhone?.type] +
-                        " Example:(123)4567890"
+                      ? errorToPropMapping[
+                          errors?.employeeEmergencyContactPhone?.type
+                        ] + " Example:(123)4567890"
                       : ""
                   }
                 />
@@ -1036,8 +1040,8 @@ export default function application(props) {
                 <TextField
                   style={{ marginTop: "20px" }}
                   defaultValue={
-                    employee.personalProfile?.emergencyContacts?
-                       employee.personalProfile?.emergencyContacts?.email
+                    employee.personalProfile?.emergencyContacts
+                      ? employee.personalProfile?.emergencyContacts?.email
                       : ""
                   }
                   {...register("employeeEmergencyContactEmail", {
@@ -1051,43 +1055,44 @@ export default function application(props) {
                   error={!!errors?.employeeEmergencyContactEmail}
                   helperText={
                     errors?.employeeEmergencyContactEmail?.type
-                      ? errorToPropMapping[errors?.employeeEmergencyContactEmail?.type] +
-                        " Example:user@mail.com"
+                      ? errorToPropMapping[
+                          errors?.employeeEmergencyContactEmail?.type
+                        ] + " Example:user@mail.com"
                       : ""
                   }
                 />
               </FormControl>
 
-  <FormControl variant="standard" fullWidth>
-    <InputLabel shrink htmlFor="bootstrap-input">
-      Relationship
-    </InputLabel>
-    <TextField
-      defaultValue={
-        employee.personalProfile?.emergencyContacts
-          ? employee.personalProfile.emergencyContacts.relationship
-          : ""
-      }
-      style={{ marginTop: "20px" }}
-      {...register("employeeEmergencyContactRelationship", {
-        required: true,
-        maxLength: 20,
-        pattern: /^[A-Za-z]+$/i,
-      })}
-      size="small"
-      id="name-input"
-      erro
-      error={!!errors?.employeeEmergencyContactRelationship}
-      helperText={
-        errors?.employeeEmergencyContactRelationship?.type
-          ? errorToPropMapping[
-              errors?.employeeEmergencyContactRelationship?.type
-            ]
-          : ""
-      }
-    />
-  </FormControl>
-</div>
+              <FormControl variant="standard" fullWidth>
+                <InputLabel shrink htmlFor="bootstrap-input">
+                  Relationship
+                </InputLabel>
+                <TextField
+                  defaultValue={
+                    employee.personalProfile?.emergencyContacts
+                      ? employee.personalProfile.emergencyContacts.relationship
+                      : ""
+                  }
+                  style={{ marginTop: "20px" }}
+                  {...register("employeeEmergencyContactRelationship", {
+                    required: true,
+                    maxLength: 20,
+                    pattern: /^[A-Za-z]+$/i,
+                  })}
+                  size="small"
+                  id="name-input"
+                  erro
+                  error={!!errors?.employeeEmergencyContactRelationship}
+                  helperText={
+                    errors?.employeeEmergencyContactRelationship?.type
+                      ? errorToPropMapping[
+                          errors?.employeeEmergencyContactRelationship?.type
+                        ]
+                      : ""
+                  }
+                />
+              </FormControl>
+            </div>
 
             <article
               style={{
@@ -1153,7 +1158,6 @@ export default function application(props) {
                 {watchemployeeWorkAuth !== "Citizen" &&
                 watchemployeeWorkAuth !== "GreenCard" ? (
                   <>
-                 
                     <FormControl variant="standard" fullWidth>
                       <InputLabel shrink htmlFor="bootstrap-input">
                         Start Date:
@@ -1230,62 +1234,61 @@ export default function application(props) {
                 <></>
               )}
 
-            {watchemployeeWorkAuth === "Others" ?          
-              (
-              <FormControl variant="standard" fullWidth>
-                <InputLabel shrink htmlFor="bootstrap-input">
-                Please specify your visa type:
-                </InputLabel>
-                <TextField
-                  defaultValue={
-                    employee.personalProfile
-                      ? employee.personalProfile.visaTitle
-                      : ""
+              {watchemployeeWorkAuth === "Others" ? (
+                <FormControl variant="standard" fullWidth>
+                  <InputLabel shrink htmlFor="bootstrap-input">
+                    Please specify your visa type:
+                  </InputLabel>
+                  <TextField
+                    defaultValue={
+                      employee.personalProfile
+                        ? employee.personalProfile.visaTitle
+                        : ""
+                    }
+                    style={{ marginTop: "20px" }}
+                    {...register("employeeVisaTitle", {
+                      maxLength: 20,
+                      pattern: /^[A-Za-z]+$/i,
+                    })}
+                    size="small"
+                    id="name-input"
+                    erro
+                    error={!!errors?.employeeVisaTitle}
+                    helperText={
+                      errors?.employeeVisaTitle?.type
+                        ? errorToPropMapping[errors?.employeeVisaTitle?.type]
+                        : ""
+                    }
+                  />
+                </FormControl>
+              ) : (
+                <></>
+              )}
+            </article>
+            <Button variant="contained" type="submit" fullWidth>
+              Submit Application
+            </Button>
+            {props.editMode ? (
+              <Button
+                variant="contained"
+                onClick={(e) => {
+                  e.preventDefault;
+                  if (
+                    window.confirm("Are you sure want discard all changes?")
+                  ) {
+                    props.editMode(false);
                   }
-                  style={{ marginTop: "20px" }}
-                  {...register("employeeVisaTitle", {
-                 
-                    maxLength: 20,
-                    pattern: /^[A-Za-z]+$/i,
-                  })}
-                  size="small"
-                  id="name-input"
-                  erro
-                  error={!!errors?.employeeVisaTitle}
-                  helperText={
-                    errors?.employeeVisaTitle?.type
-                      ? errorToPropMapping[
-                          errors?.employeeVisaTitle?.type
-                        ]
-                      : ""
-                  }
-                /> 
-              </FormControl>
-              )
-              :
-              <></>
-            }
-       
-             
-              </article>
-              <Button  variant="contained" type = "submit" fullWidth>
-                Submit Application
-              </Button>
-              {props.editMode?( <Button variant="contained" onClick={(e)=>{e.preventDefault
-               if(window.confirm("Are you sure want discard all changes?"))
-               {
-                props.editMode(false)
-              }
-              
-              }} fullWidth>
-                
+                }}
+                fullWidth
+              >
                 Undo Changes
-              </Button>):"" }
-            </Box>
-          </div>
+              </Button>
+            ) : (
+              ""
+            )}
+          </Box>
         </div>
       </div>
-    );
-
-  
+    </div>
+  );
 }

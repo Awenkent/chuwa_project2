@@ -66,7 +66,7 @@ export default function hrViewApplicationPage(props) {
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h2>Personel Information</h2>
+      <h2>Personal Information</h2>
       <div
         style={{
           padding: "20px 50px",
@@ -109,21 +109,35 @@ export default function hrViewApplicationPage(props) {
           <div> Reference Middle Name: {employee.reference?.middleName} </div>
           <div> Reference Last Name: {employee.reference?.lastName} </div>
 
-          <div>
-           
-            Reference Relationship: {employee.reference?.relationship}
-          </div>
+          <div>Reference Relationship: {employee.reference?.relationship}</div>
         </div>
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
-              </div>
-              <div style={{textAlign:"left"}}>
-              <div> First Name:   {employee.personalProfile?.emergencyContacts?.firstName} </div>
-  <div>Middle Name:   {employee.personalProfile?.reference?.emergencyContacts?.middleName} </div>
-  <div> Last Name:    {employee.personalProfile?.reference?.emergencyContacts?.lastName} </div>
+          <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
+        </div>
+        <div style={{ textAlign: "left" }}>
+          <div>
+            {" "}
+            First Name: {
+              employee.emergencyContacts?.firstName
+            }{" "}
+          </div>
+          <div>
+            Middle Name:{" "}
+            {employee.emergencyContacts?.middleName}{" "}
+          </div>
+          <div>
+            {" "}
+            Last Name:{" "}
+            {
+              employee.emergencyContacts?.lastName
+            }{" "}
+          </div>
 
-  <div>Relationship:    {employee.personalProfile?.emergencyContacts?.relationship} </div>
-  </div>
+          <div>
+            Relationship:{" "}
+            {employee.emergencyContacts?.relationship}{" "}
+          </div>
+        </div>
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
           <h3 style={{ margin: "10px 0" }}>Documents</h3>
           {employee.documents?.length > 0 ? (

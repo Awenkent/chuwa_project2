@@ -10,7 +10,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useParams } from "react-router-dom";
@@ -18,7 +18,6 @@ import { useNavigate } from "react-router-dom";
 import { selectAllEmployees, fetchAllEmployees } from "../redux/employeeSlice";
 
 const getAllEmployee = async (parameters) => {
-
   const token = localStorage.getItem("token");
   const response = await fetch("http://localhost:4000/hr/allProfiles", {
     method: "GET",
@@ -85,12 +84,9 @@ export default function hrEditApplicationPage(props) {
     const employeeObj = {
       ...employee,
       applicationStatus: "Approved",
-      feedback:feedback,
+      feedback: feedback,
     };
-    if (
-      employeeObj.workAuth?.type === "F1(CPT/OPT)"
-     
-    ) {
+    if (employeeObj.workAuth?.type === "F1(CPT/OPT)") {
       employeeObj.nextSteps = "waiting for hr to approve OPT receipt";
     } else {
       employeeObj.nextSteps = "No Action required";
@@ -104,10 +100,10 @@ export default function hrEditApplicationPage(props) {
     const employeeObj = {
       ...employee,
       applicationStatus: "Rejected",
-      nextSteps:"Please resubmit the onboarding application",
-      feedback:feedback,
+      nextSteps: "Please resubmit the onboarding application",
+      feedback: feedback,
     };
-    
+
     updateAnyEmployee(employeeObj);
     navigate("/hiringManagement");
   };
@@ -127,7 +123,7 @@ export default function hrEditApplicationPage(props) {
 
   return (
     <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h2>Personel Information</h2>
+      <h2>Personal Information</h2>
       <div
         style={{
           padding: "20px 50px",
@@ -170,21 +166,35 @@ export default function hrEditApplicationPage(props) {
           <div> Reference Middle Name: {employee.reference?.middleName} </div>
           <div> Reference Last Name: {employee.reference?.lastName} </div>
 
-          <div>
-            
-            Reference Relationship: {employee.reference?.relationship}
-          </div>
+          <div>Reference Relationship: {employee.reference?.relationship}</div>
         </div>
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-                <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
-              </div>
-              <div style={{textAlign:"left"}}>
-              <div> First Name:   {employee.personalProfile?.emergencyContacts?.firstName} </div>
-  <div>Middle Name:   {employee.personalProfile?.reference?.emergencyContacts?.middleName} </div>
-  <div> Last Name:    {employee.personalProfile?.reference?.emergencyContacts?.lastName} </div>
+          <h3 style={{ margin: "10px 0" }}>Emergency Contact</h3>
+        </div>
+        <div style={{ textAlign: "left" }}>
+          <div>
+            {" "}
+            First Name: {
+              employee.emergencyContacts?.firstName
+            }{" "}
+          </div>
+          <div>
+            Middle Name:{" "}
+            {employee.emergencyContacts?.middleName}{" "}
+          </div>
+          <div>
+            {" "}
+            Last Name:{" "}
+            {
+              employee.emergencyContacts?.lastName
+            }{" "}
+          </div>
 
-  <div>Relationship:    {employee.personalProfile?.emergencyContacts?.relationship} </div>
-  </div>
+          <div>
+            Relationship:{" "}
+            {employee.emergencyContacts?.relationship}{" "}
+          </div>
+        </div>
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>
           <h3 style={{ margin: "10px 0" }}>Documents</h3>
           {employee.documents?.length > 0 ? (
@@ -200,7 +210,21 @@ export default function hrEditApplicationPage(props) {
                   filesize,
                 } = data;
                 return (
-                  <div className="file-atc-box" style={!matches?{ marginTop: "20px", display:"flex", flexDirection:"column", alignItems:"center", width:"100%"} : {}} key={index}>
+                  <div
+                    className="file-atc-box"
+                    style={
+                      !matches
+                        ? {
+                            marginTop: "20px",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            width: "100%",
+                          }
+                        : {}
+                    }
+                    key={index}
+                  >
                     {filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ? (
                       <div className="file-image">
                         {" "}
@@ -234,23 +258,24 @@ export default function hrEditApplicationPage(props) {
           ) : (
             ""
           )}
-                <div style={{marginTop:"10px", display:"flex", gap:"10px", justifyContent:"center"}}>
-                     HR FeedBack: 
-                    <input value={feedback} 
-                        
-                          
-                          onChange={(e) => setFeedback(e.target.value)}
-                        
-                        ></input>
-                    <button onClick={()=>handleApprove()}>Approved</button><button onClick={()=>handleReject()}>Reject</button>
-                    </div>
-
-    </div>
+          <div
+            style={{
+              marginTop: "10px",
+              display: "flex",
+              gap: "10px",
+              justifyContent: "center",
+            }}
+          >
+            HR FeedBack:
+            <input
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+            ></input>
+            <button onClick={() => handleApprove()}>Approved</button>
+            <button onClick={() => handleReject()}>Reject</button>
+          </div>
         </div>
       </div>
-
-    
-
-          
+    </div>
   );
 }
