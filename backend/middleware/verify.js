@@ -20,7 +20,6 @@ module.exports = async (req, res, next) => {
         console.log("The token is not registration token");
         res.status(400).json({ msg: "The token is not registration token" });
     } 
-    
     console.log(decoded);
     next();
   } catch (err) {

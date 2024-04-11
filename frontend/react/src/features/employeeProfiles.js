@@ -209,7 +209,7 @@ const getAllEmployee = async (parameters) => {
                     >
                       <StyledTableCell component="th" scope="row">
                         {employee.firstName && employee.lastName
-                          ? employee.firstName + " " + employee.lastName
+                          ? employee.firstName + " " + employee.middleName + " " + employee.lastName
                           : "Not provided"}
                       </StyledTableCell>
                       <StyledTableCell align="right">

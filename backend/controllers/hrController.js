@@ -59,6 +59,7 @@ const sendSignupEmail = async (req, res) => {
         userName: req.employee?.userName,
         role: req.employee?.role,
       },
+      email:req.body.email,
     };
     const token = await jwt.sign(payload, process.env.SECRET, {
       expiresIn: "3h",
@@ -114,7 +115,7 @@ const sendNotification = async (req, res) => {
     const mailOptions = {
       from: "weizhouwen5@gmail.com",
       to: req.body.email, // Email address from the request body
-      subject: req.body.name + ", Sign up for application",
+      subject: req.body.name + ", Notification from HR",
       text: `Hello ${req.body.name},\n\nPlease continue your application. The next step is:\n\n${req.body.nextSteps}\n\nPlease visit http://localhost:3000/signin to continue your application.`,
     };
     //Send the email
