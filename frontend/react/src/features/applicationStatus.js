@@ -51,8 +51,33 @@ export default function applicationStatus(props) {
           padding: "20px 50px",
           margin: "50px",
           backgroundColor: "white",
+          position: "relative",
         }}
       >
+        <div>
+          {employee.applicationStatus === "Rejected" ? (
+            <Button onClick={handleEdit}>Edit Application</Button>
+          ) : (
+            ""
+          )}
+          <div>
+            <Button
+              style={{
+                height: "35px",
+                width: "100px",
+                backgroundColor: "rgb(25,118,210)",
+                color: "white",
+                cursor: "pointer",
+                position: "absolute",
+                right: "5px",
+                top: "5px",
+              }}
+              onClick={handleSignOut}
+            >
+              Sign out
+            </Button>
+          </div>
+        </div>
         <div>Current Status: {employee.personalProfile?.applicationStatus}</div>
         {employee.personalProfile?.feedback ? (
           <div>Hr feedback: {employee.personalProfile?.feedback}</div>
@@ -193,38 +218,6 @@ export default function applicationStatus(props) {
             ""
           )}
         </div>
-      </div>
-      <div
-        style={{ display: "flex", gap: "30px", justifyContent: "space-around" }}
-      >
-        {employee.applicationStatus === "Rejected" ? (
-          <button
-            style={{
-              height: "50px",
-              width: "150px",
-              backgroundColor: "rgb(25,118,210)",
-              cursor: "pointer",
-              color: "white",
-            }}
-            onClick={handleEdit}
-          >
-            Edit Application
-          </button>
-        ) : (
-          ""
-        )}
-        <button
-          style={{
-            height: "50px",
-            width: "150px",
-            backgroundColor: "rgb(25,118,210)",
-            color: "white",
-            cursor: "pointer",
-          }}
-          onClick={handleSignOut}
-        >
-          Sign out
-        </button>
       </div>
     </div>
   );
