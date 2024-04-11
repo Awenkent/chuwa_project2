@@ -156,9 +156,42 @@ const getAllEmployee = async (parameters) => {
     const handleReject = (currentEmployee,index)=>{
      
      
-       currentEmployee.optStatus = "Never Submitted"
+
         
-          
+       switch(currentEmployee.optStage)
+       {
+           case "RECEIPT":
+           {
+             
+               currentEmployee.optStatus = "Never Submitted"
+               currentEmployee.nextSteps = "Please re-submit your RECEIPT file"
+               break;
+           }
+            case "EAD":
+           {
+         
+               currentEmployee.optStatus = "Never Submitted"
+   
+               currentEmployee.nextSteps = "Please re-submit your EAD file"
+               break;
+           }
+           case "I-983":
+           {
+            currentEmployee.optStatus = "Never Submitted"
+   
+            currentEmployee.nextSteps = "Please re-submit your I 983 file"
+               
+               break;
+           }
+           case "I-20":
+           {
+            currentEmployee.optStatus = "Never Submitted"
+   
+            currentEmployee.nextSteps = "Please re-submit your I-20 file"
+               break;
+           }
+           
+       }  
       
       currentEmployee.documents.forEach(document => {
         if(document.status === "Pending")
