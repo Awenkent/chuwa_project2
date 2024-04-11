@@ -121,14 +121,13 @@ export default function application(props) {
   }, []);
 
   const onSubmit = (data) => {
-    console.log("sbb");
     let next = "None";
 
     let obj = {
       firstName: data.employeeFirstName,
       middleName: data.employeeMiddleName,
       applicationStatus:
-        employee.applicationStatus === "Never Submitted"
+        employee.applicationStatus === "Never Submitted" || employee.applicationStatus === "Rejected"
           ? "Pending"
           : employee.applicationStatus,
       lastName: data.employeeLastName,
@@ -164,72 +163,81 @@ export default function application(props) {
         email: data.employeeReferenceEmail,
       },
 
-      documents: files,
-    };
-    if (employee.applicationStatus === "Never Submitted") {
-      (obj.optStage =
-        data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE"),
-        (obj.optStatus =
-          data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" : "APPROVED");
-      (obj.workAuth = {
-        type: data.employeeWorkAuth,
-        startDate: data.employeeWorkAuthStartDate,
-        endDate: data.employeeWorkAuthEndDate,
-      }),
-        (obj.nextSteps = "Wait for HR to approve the onboarding application");
+  
+    documents:files,
+   
+   
+  }
+  if(employee.applicationStatus === "Never Submitted")
+  {
+    obj.optStage = data.employeeWorkAuth === "F1(CPT/OPT)" ? "RECEIPT" : "NONE",
+    obj.optStatus = data.employeeWorkAuth === "F1(CPT/OPT)" ? "Pending" :"Approved"
+    obj.workAuth = {
+      type: data.employeeWorkAuth,
+      startDate: data.employeeWorkAuthStartDate,
+      endDate: data.employeeWorkAuthEndDate,
+    },
+    obj.nextSteps = "Wait for HR to approve the onboarding application"
+  }
+   
+  console.log(obj)
+  dispatch(updateEmployee(obj)).then(()=>{
+     alert("Update Successful!")
+    if(props.editMode)
+    {
+      props.editMode(false)
     }
+    else{
+      navigate("/profile")
+    }
+ 
 
-    console.log(obj);
-    dispatch(updateEmployee(obj))
-      .then(() => {
-        alert("Update Successful!");
-        if (props.editMode) {
-          props.editMode(false);
-        } else {
-          navigate("/profile");
-        }
-      })
 
-      .catch((error) => {
-        alert(error);
-      });
-  };
+})
+  
+  .catch((error)=>{
+    alert(error)
+  })
+ 
+}
 
-  return (
-    <div style={{ maxWidth: "800px", margin: "0 auto" }}>
-      <h2>Onboarding Application</h2>
-      <div
-        style={{
-          padding: "20px 50px",
-          margin: "50px",
-          backgroundColor: "white",
-        }}
-      >
-        <div style={{ textAlign: "center" }}>
-          <Box
-            component="form"
-            onSubmit={handleSubmit(onSubmit)}
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              gridTemplateColumns: { sm: "1fr 1fr" },
-              gap: 3,
-            }}
-          >
-            <div style={{ borderTop: "1px solid gray", width: "100%" }}>
-              <h3 style={{ margin: "10px 0" }}>Personal Information</h3>
-            </div>
-
-            <div
-              style={{
-                width: "100%",
-                display: matches ? "flex" : "block",
-                justifyContent: "start",
-                gap: "20px",
+  
+    return (
+      <div style={{maxWidth:"800px", margin:"0 auto"}}>
+        <h2>{props.editMode? "Edit Profile" : "Onboarding Application"}</h2>
+        <div
+          style={{
+            padding: "20px 50px",
+            margin: "50px",
+            backgroundColor: "white",
+          }}
+        >
+          <div style={{ textAlign: "center" }}>
+            <Box
+              component="form"
+              onSubmit={handleSubmit(onSubmit)}
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gridTemplateColumns: { sm: "1fr 1fr" },
+                gap: 3,
               }}
             >
+                  <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
+              
+                  
+                
+                
+               <div 
+                style={{
+                  width: "100%",
+                  display: matches? "flex":"block" ,
+                  justifyContent: "start",
+                  gap: "20px",
+                }}>
+                   
               <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                   First Name
