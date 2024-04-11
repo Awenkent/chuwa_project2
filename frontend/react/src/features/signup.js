@@ -31,9 +31,7 @@ const verifySignupToken = async (signupToken) => {
       return response.json();
     } else {
       alert("invaild sign up link");
-      return response.text().then((text) => {
-        throw new Error(text);
-      });
+      return "";
     }
   });
   return email;
