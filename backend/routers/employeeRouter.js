@@ -4,6 +4,7 @@ const {
   createEmployee,
   getOneEmployee,
   updateEmployee,
+  verifySignupToken,
 } = require("../controllers/employeeController");
 
 const { doLogin } = require("../controllers/authenticationController");
@@ -17,5 +18,6 @@ router.post("/signup", verify, createEmployee);
 router.get("/", authentication, getOneEmployee); // get the profile for current employee
 router.put("/profile", authentication, updateEmployee);
 router.put("/personalInfo", authentication, updateEmployee);
+router.get("/signupToken",verifySignupToken);
 
 module.exports = router;
