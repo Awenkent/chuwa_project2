@@ -41,13 +41,11 @@ export default function Signin(props) {
   const navigate = useNavigate();
   console.log(employee);
 
-  useEffect(()=>{
-    if(employee.userName !== null)
-    {
+  useEffect(() => {
+    if (employee.userName !== null) {
       navigate("/profile");
     }
-  })
-
+  });
 
   const handleSignin = () => {
     var username = usernameRef.current.value;
@@ -94,11 +92,11 @@ export default function Signin(props) {
             console.log(JSON.stringify(json));
             localStorage.setItem("token", json.token);
             // localStorage.setItem("email", json.email);
-           
-            dispatch(fetchCurrentEmployee()).then(()=>{
+
+            dispatch(fetchCurrentEmployee()).then(() => {
               alert("Login successful!");
               navigate("/profile");
-            })
+            });
           });
         } else {
           return res.text().then((text) => {
@@ -110,7 +108,6 @@ export default function Signin(props) {
         alert(error);
       });
   };
-
 
   return (
     <div
@@ -179,7 +176,7 @@ export default function Signin(props) {
             <Button variant="contained" fullWidth onClick={handleSignin}>
               Sign In
             </Button>
-            <h5 style={{ width: "100%", textAlign: "left" }}>
+            {/* <h5 style={{ width: "100%", textAlign: "left" }}>
               Don't have an account?
               <a
                 className="clickable"
@@ -194,7 +191,7 @@ export default function Signin(props) {
                 {" "}
                 Signup
               </a>
-            </h5>
+            </h5> */}
           </Box>
         </form>
       </div>
