@@ -1,6 +1,7 @@
 import React from "react";
 import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -122,9 +123,9 @@ export default function HiringManagementPage() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Application</TableCell>
+                    <TableCell key={1}>Name</TableCell>
+                    <TableCell key={2}>Email</TableCell>
+                    <TableCell key={3}>Application</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -134,7 +135,7 @@ export default function HiringManagementPage() {
                     )
                     .map((employee) => (
                       <TableRow key={employee._id}>
-                        <TableCell>{`${employee.firstName} ${employee.lastName}`}</TableCell>
+                        <TableCell >{`${employee.firstName} ${employee.lastName}`}</TableCell>
                         <TableCell>{employee.email}</TableCell>
                         <TableCell>
                           <Button
@@ -204,9 +205,9 @@ export default function HiringManagementPage() {
               <Table>
                 <TableHead>
                   <TableRow>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Application</TableCell>
+                  <TableCell key={1}>Name</TableCell>
+                    <TableCell key={2}>Email</TableCell>
+                    <TableCell key={3}>Application</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

@@ -26,6 +26,7 @@ import {
 } from "../redux/employeeSlice";
 export default function personalProfile(props) {
   const location = useLocation();
+  const matches = useMediaQuery("(min-width:600px)");
   const [editMode, setEditMode] = useState(false);
   // const employee = useSelector(selectEmployee);
 
@@ -118,7 +119,7 @@ export default function personalProfile(props) {
                     filesize,
                   } = data;
                   return (
-                    <div className="file-atc-box" key={index}>
+                    <div className="file-atc-box" style={!matches?{ marginTop: "20px", display:"flex", flexDirection:"column", alignItems:"center", width:"100%"} : {}} key={index}>
                       {filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ? (
                         <div className="file-image">
                           {" "}

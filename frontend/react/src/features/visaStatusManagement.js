@@ -20,6 +20,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import {
     setEmployee,
@@ -122,13 +123,13 @@ export default function visaStatus(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  
+  const matches = useMediaQuery("(min-width:600px)");
   const [files,setFiles] = useState([]);
 
   
  
 
-  const matches = useMediaQuery("(min-width:600px)");
+
   useEffect(() => {
     if (employee.employeeName === null) {
       // dispatch(fetchEmployee());
@@ -154,7 +155,20 @@ console.log(files)
 }
     if(employee.personalProfile?.workAuth?.type !== "F1(CPT/OPT)" || employee.personalProfile?.optStatus ==="Approved")
     {
-      return <div>No action required</div>
+      return (
+        <div style={{maxWidth:"800px", margin:"0 auto"}}>
+        <h2>Visa Status</h2>
+        <div
+          style={{
+            padding: "20px 50px",
+            margin: "50px",
+            backgroundColor: "white",
+          }}
+         
+        >
+           No action require for your work authorization
+          </div></div>
+      )
     }
     else
     {
@@ -188,7 +202,7 @@ console.log(files)
                                                 employee.personalProfile?.documents?.map((data, index) => {
                                                     const { id, filename, filetype, fileimage, datetime, filesize } = data;
                                                     return (
-                                                        <div className="file-atc-box" key={index}>
+                                                        <div className="file-atc-box" style={!matches?{ marginTop: "20px", display:"flex", flexDirection:"column", alignItems:"center", width:"100%"} : {}} key={index}>
                                                             {
                                                                 filename.match(/.(jpg|jpeg|png|gif|svg)$/i) ?
                                                                     <div className="file-image"> <img src={fileimage} alt="" /></div> :
@@ -208,12 +222,15 @@ console.log(files)
                                             }
                                         </div>
                                         : ''}
+                         {employee.personalProfile.optStatus === "Never Submitted" ? <div>FeedBack: {employee.personalProfile.feedback}</div> : ""}                
            <FormControl variant="standard" fullWidth>
                 <InputLabel shrink htmlFor="bootstrap-input">
                 Next Step: {employee.personalProfile?.nextSteps}
+                  {employee.personalProfile.optStatus === "Never Submitted" && employee.personalProfile.optStage === "I-983"? <><a target="blank" href = "https://docs.google.com/document/d/1YyI13eOmkMDgiVI1wk2O7EOOkhq7pr-aV5y41N92d08/edit?usp=sharing">Empty template</a> <a target="blank" href = "https://docs.google.com/document/d/1mq1lh5F_v9FPt-6A40Kx-c2XP5CAx5uUl0vVZ8PAHro/edit?usp=sharing">Sample template</a></>:"" }
+              
                 </InputLabel>
+              
                 {employee.personalProfile.optStatus === "Never Submitted" ? <FileUpload fileHandler = {setFiles}/> : ""}
-                 
               </FormControl>
               {employee.personalProfile.optStatus === "Never Submitted" ? 
            <Button variant="contained" type = "submit" fullWidth>
