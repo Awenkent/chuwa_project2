@@ -43,6 +43,7 @@ export default function signup(props) {
   let { signupToken } = useParams();
   const [email, setEmail] = useState([]);
   useEffect(() => {
+    localStorage.removeItem("token");
     verifySignupToken(signupToken)
         .then((res) => {
           setEmail((prev) => res);

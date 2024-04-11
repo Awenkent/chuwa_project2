@@ -13,7 +13,7 @@ export default function HrProtectLayer({ children }) {
 
   console.log(employee)
   if (employee.role !== "hr") {
-    return <Navigate to="/" />;
+    return <Navigate to="/profile" />;
   }
     return <div>{children}</div>;
 }

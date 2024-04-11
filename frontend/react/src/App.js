@@ -74,23 +74,23 @@ export default function App() {
                 />
                 <Route
                   path="/hrViewApplicationPage/:employeeId"
-                  element={<HrViewApplicationPage />}
+                  element={  <HrProtectLayer><HrViewApplicationPage /></HrProtectLayer>}
                 />
                 <Route
                   path="/hrEditApplicationPage/:employeeId"
-                  element={<HrEditApplicationPage />}
+                  element={<HrProtectLayer><HrEditApplicationPage /></HrProtectLayer>}
                 />
                 <Route
                   path="/hrEmployeeProfiles"
-                  element={<EmployeeProfiles />}
+                  element={<HrProtectLayer><EmployeeProfiles /></HrProtectLayer>}
                 />
                 <Route
                   path="/generateRegistrationEmail"
-                  element={<SendRegistrationEmail />}
+                  element={<HrProtectLayer><SendRegistrationEmail /></HrProtectLayer>}
                 />
                 <Route
                   path="/registrationHistory"
-                  element={<RegistrationHistoryPage />}
+                  element={<HrProtectLayer><RegistrationHistoryPage /></HrProtectLayer>}
                 />
               </Route>
               <Route path="/signup/:signupToken" element={<Signup />} />
