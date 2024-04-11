@@ -29,6 +29,34 @@ import {
     selectEmployee,
   } from "../redux/employeeSlice";
   
+  const sendNotification = async (employee) => {
+    const mailContent = {
+      email:employee.email,
+      name : employee.lastName + " " + employee.middleName + " " + employee.firstName,
+      nextSteps : employee.nextSteps
+
+    }
+    const token = localStorage.getItem("token");
+    const response = await fetch("http://localhost:4000/HR/notification", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json;charset=UTF-8",
+      },
+      body: JSON.stringify(mailContent),
+      mode: "cors",
+      cache: "default",
+    }).then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        return response.text().then((text) => {
+          throw new Error(text);
+        });
+      }
+    });
+    return response;
+  }
  
   const updateEmployee = async (employee) => {
     const token = localStorage.getItem("token");
@@ -265,8 +293,8 @@ const getAllEmployee = async (parameters) => {
               if(current.workAuth?.type === "F1(CPT/OPT)")
               {
             return (
-                <>
-               <div key = {index} style={{textAlign:"left"}}>
+                <div key = {index} >
+               <div style={{textAlign:"left", margin:"20px"}}>
                 <div>Employee: {current.firstName} {current.middleName} {current.lastName}</div>
                 <div>Email: {current.email}</div>
                 <div>Work Authorization:{current.workAuth?.type} Start Date: {current.workAuth?.startDate} End Date:{current.workAuth?.endDate}</div>
@@ -316,9 +344,21 @@ const getAllEmployee = async (parameters) => {
                     </div>
                 ):""
                 }
+
+{current.optStatus === "Never Submitted"? 
+                (
+                    
+                    <div style={{marginTop:"10px", display:"flex", gap:"10px", justifyContent:"center"}}>
+                  
+                   <button onClick={()=>sendNotification(current)}>Send Notification</button>
+                    </div>
+                ):""
+                }
+
+
                 </details>
                 <div style={{marginTop:"10px", borderBottom : "1px solid gray"}}></div>
-                </>
+                </div>
              
             )
         }

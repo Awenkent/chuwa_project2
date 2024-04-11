@@ -7,7 +7,9 @@ const hrRouter = require("./routers/hrRouter");
 const employeeRouter = require("./routers/employeeRouter");
 connectDB();
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
+
+
+app.use(express.urlencoded({limit: '50mb', extended: false }));
 app.use(express.json());
 app.use("/HR", hrRouter);
 app.use("/employee", employeeRouter);

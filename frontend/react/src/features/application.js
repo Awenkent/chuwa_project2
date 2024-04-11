@@ -20,6 +20,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+
 import { useNavigate, useLocation } from "react-router-dom";
 import {
   setEmployee,
@@ -85,6 +86,7 @@ export default function application(props) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
+  const matches = useMediaQuery("(min-width:600px)");
   const watchemployeeWorkAuth = watch(
     "employeeWorkAuth",
     employee.personalProfile?.workAuth
@@ -111,7 +113,7 @@ export default function application(props) {
     setImagePreview(watchProfilePicture);
   };
 
-  const matches = useMediaQuery("(min-width:600px)");
+
   useEffect(() => {
     if (employee.userName === null) {
       navigate("/profile");
@@ -203,7 +205,7 @@ export default function application(props) {
   
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>{location.state ?"Update Product" : "Create Product"}</h2>
+        <h2>Onboarding Application</h2>
         <div
           style={{
             padding: "20px 50px",
@@ -225,10 +227,14 @@ export default function application(props) {
               }}
             >
                   <div style={{ borderTop:"1px solid gray", width:"100%"}}><h3 style={{margin:"10px 0"}}>Personal Information</h3></div>
-               <div
+              
+                  
+                
+                
+               <div 
                 style={{
                   width: "100%",
-                  display: "flex",
+                  display: matches? "flex":"block" ,
                   justifyContent: "start",
                   gap: "20px",
                 }}>
@@ -347,7 +353,7 @@ export default function application(props) {
             <div
               style={{
                 width: "100%",
-                display: "flex",
+                display: matches? "flex":"block" ,
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -414,7 +420,7 @@ export default function application(props) {
             <div
               style={{
                 width: "100%",
-                display: "flex",
+                display: matches? "flex":"block" ,
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -516,7 +522,7 @@ export default function application(props) {
                 }
                 {...register("employeeProfilePicture", {
                   required: true,
-                  maxLength: 120,
+                  maxLength: 12000,
                 })}
                 size="small"
                 id="name-input"
@@ -606,7 +612,7 @@ export default function application(props) {
               <div
                 style={{
                   width: "100%",
-                  display: "flex",
+                  display: matches? "flex":"block" ,
                   justifyContent: "start",
                   gap: "20px",
                 }}
@@ -695,7 +701,7 @@ export default function application(props) {
             <div
               style={{
                 width: "100%",
-                display: "flex",
+                display: matches? "flex":"block" ,
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -793,7 +799,7 @@ export default function application(props) {
               <div
               style={{
                 width: "100%",
-                display: "flex",
+                display: matches? "flex":"block" ,
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -892,7 +898,7 @@ export default function application(props) {
 <div
   style={{
     width: "100%",
-    display: "flex",
+    display: matches? "flex":"block" ,
     justifyContent: "start",
     gap: "20px",
   }}
@@ -989,7 +995,7 @@ export default function application(props) {
   <div
               style={{
                 width: "100%",
-                display: "flex",
+                display: matches? "flex":"block" ,
                 justifyContent: "start",
                 gap: "20px",
               }}
@@ -1147,7 +1153,7 @@ export default function application(props) {
                 {watchemployeeWorkAuth !== "Citizen" &&
                 watchemployeeWorkAuth !== "GreenCard" ? (
                   <>
-                    {" "}
+                 
                     <FormControl variant="standard" fullWidth>
                       <InputLabel shrink htmlFor="bootstrap-input">
                         Start Date:
