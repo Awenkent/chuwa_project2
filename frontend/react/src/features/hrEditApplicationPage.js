@@ -10,7 +10,7 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
-
+import useMediaQuery from "@mui/material/useMediaQuery";
 import { useSelector, useDispatch } from "react-redux";
 
 import { useParams } from "react-router-dom";
@@ -175,24 +175,24 @@ export default function hrEditApplicationPage(props) {
           <div>
             {" "}
             First Name: {
-              employee.personalProfile?.emergencyContacts?.firstName
+              employee.emergencyContacts?.firstName
             }{" "}
           </div>
           <div>
             Middle Name:{" "}
-            {employee.personalProfile?.reference?.emergencyContacts?.middleName}{" "}
+            {employee.emergencyContacts?.middleName}{" "}
           </div>
           <div>
             {" "}
             Last Name:{" "}
             {
-              employee.personalProfile?.reference?.emergencyContacts?.lastName
+              employee.emergencyContacts?.lastName
             }{" "}
           </div>
 
           <div>
             Relationship:{" "}
-            {employee.personalProfile?.emergencyContacts?.relationship}{" "}
+            {employee.emergencyContacts?.relationship}{" "}
           </div>
         </div>
         <div style={{ borderTop: "1px solid gray", width: "100%" }}>

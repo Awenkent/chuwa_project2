@@ -125,13 +125,13 @@ export default function applicationStatus(props) {
           </div>
           <div>
             Middle Name:{" "}
-            {employee.personalProfile?.reference?.emergencyContacts?.middleName}{" "}
+            {employee.personalProfile?.emergencyContacts?.middleName}{" "}
           </div>
           <div>
             {" "}
             Last Name:{" "}
             {
-              employee.personalProfile?.reference?.emergencyContacts?.lastName
+              employee.personalProfile?.emergencyContacts?.lastName
             }{" "}
           </div>
 

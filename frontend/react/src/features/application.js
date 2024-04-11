@@ -121,14 +121,13 @@ export default function application(props) {
   }, []);
 
   const onSubmit = (data) => {
-    console.log("sbb");
     let next = "None";
 
     let obj = {
       firstName: data.employeeFirstName,
       middleName: data.employeeMiddleName,
       applicationStatus:
-        employee.applicationStatus === "Never Submitted"
+        employee.applicationStatus === "Never Submitted" || employee.applicationStatus === "Rejected"
           ? "Pending"
           : employee.applicationStatus,
       lastName: data.employeeLastName,
@@ -205,7 +204,7 @@ export default function application(props) {
   
     return (
       <div style={{maxWidth:"800px", margin:"0 auto"}}>
-        <h2>Onboarding Application</h2>
+        <h2>{props.editMode? "Edit Profile" : "Onboarding Application"}</h2>
         <div
           style={{
             padding: "20px 50px",
